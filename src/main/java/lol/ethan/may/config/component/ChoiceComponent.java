@@ -77,7 +77,7 @@ public class ChoiceComponent extends Component {
     public void onKeyPress(char c, int code) {
         for (Component component : this.children) {
             if (!(component instanceof TextBox)) continue;
-            TextBox tb = (TextBox) component;
+            TextBox<?> tb = (TextBox<?>) component;
             if (!tb.drawingField) continue;
             tb.onKeyPress(c, code);
             return;

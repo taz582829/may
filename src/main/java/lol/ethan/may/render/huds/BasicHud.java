@@ -21,7 +21,7 @@ public abstract class BasicHud {
     public int bgAlpha = 50;
     public int padding = 2;
     public boolean rightAlign = false;
-    public transient List<String> lineCache = new ArrayList<>();
+    public List<String> lineCache = new ArrayList<>();
 
     public BasicHud(boolean enabled, float x, float y) {
         this.enabled = enabled;

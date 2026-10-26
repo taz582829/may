@@ -70,7 +70,7 @@ public class HypixelAPI {
             }
             if (rankField.equalsIgnoreCase("monthlyPackageRank")) {
                 boolean aquaPlus;
-                boolean bl = aquaPlus = player.monthlyRankColor != null && player.monthlyRankColor.equalsIgnoreCase("aqua");
+                boolean bl = aquaPlus = "aqua".equalsIgnoreCase(player.monthlyRankColor);
                 if (aquaPlus) {
                     builder.append("§b[MVP");
                 } else {

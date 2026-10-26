@@ -38,8 +38,7 @@ public class GuiIngameHook implements ITransformer {
                 method.instructions.insert(preInsnList);
                 AbstractInsnNode[] abstractInsnNodeArray = method.instructions.toArray();
                 int n = abstractInsnNodeArray.length;
-                for (int i = 0; i < n; i++) {
-                    AbstractInsnNode insnNode = abstractInsnNodeArray[i];
+                for (AbstractInsnNode insnNode : abstractInsnNodeArray) {
                     if (insnNode.getOpcode() < Opcodes.IRETURN || insnNode.getOpcode() > Opcodes.RETURN) continue;
                     InsnList postInsnList = new InsnList();
                     postInsnList.add(new TypeInsnNode(Opcodes.NEW, Type.getInternalName(RenderGameOverlayEvent.Post.class)));

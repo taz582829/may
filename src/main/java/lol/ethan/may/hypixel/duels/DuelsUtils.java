@@ -246,8 +246,8 @@ public class DuelsUtils {
         public static DuelsMode getModeFromString(String k) {
             for (DuelsMode mode : DuelsMode.values()) {
                 boolean matches;
-                String key = mode.getModeKey();
-                String display = mode.getDisplayName();
+                String key = mode.modeKey;
+                String display = mode.displayName;
                 boolean bl = matches = key.equalsIgnoreCase(k.toLowerCase()) || display.equalsIgnoreCase(k.toLowerCase());
                 if (!matches && mode.getAlternatives() != null) {
                     for (String alt : mode.getAlternatives()) {
@@ -272,7 +272,7 @@ public class DuelsUtils {
 
         public String[] getAlternatives() {
             if (this.alternatives == null || this.alternatives.length == 0) {
-                return new String[]{this.getDisplayName()};
+                return new String[]{this.displayName};
             }
             return this.alternatives;
         }

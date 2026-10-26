@@ -35,7 +35,12 @@ public class AnticheatData {
             double dz = player.posZ - player.prevPosZ;
             data.moveSpeed = Math.sqrt(dx * dx + dz * dz) * 20.0;
             data.breakDelay = Math.max(0, data.breakDelay - 1);
-            data.useItemTicks = player.isUsingItem() ? ++data.useItemTicks : 0;
+            if (player.isUsingItem()) {
+                ++data.useItemTicks;
+                data.useItemTicks = data.useItemTicks;
+            } else {
+                data.useItemTicks = 0;
+            }
             long time = System.currentTimeMillis();
             if (player.isSneaking() && !data.wasShifting) {
                 ShiftEvent shiftEvent = new ShiftEvent(ShiftEvent.Type.START, time, player.posX, player.posY, player.posZ);
