@@ -1,0 +1,53 @@
+package lol.ethan.may.utils;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
+
+import java.util.Collections;
+import java.util.List;
+
+public class ItemUtils {
+
+    public static List<String> getLore(ItemStack item) {
+        if (item == null) {
+            return Collections.emptyList();
+        }
+        return item.getTooltip(Minecraft.getMinecraft().thePlayer, true);
+    }
+
+    public static List<String> getLore(ItemStack item, boolean advancedTooltips) {
+        if (item == null) {
+            return Collections.emptyList();
+        }
+        return item.getTooltip(Minecraft.getMinecraft().thePlayer, advancedTooltips);
+    }
+
+    public static NBTTagCompound getFullNBT(ItemStack item) {
+        NBTTagCompound base = new NBTTagCompound();
+        item.writeToNBT(base);
+        return base;
+    }
+
+    public static void setLore(ItemStack item, String line) {
+        NBTTagCompound display = new NBTTagCompound();
+        NBTTagList lore = new NBTTagList();
+        for (String part : line.split("\\n")) {
+            lore.appendTag(new NBTTagString(part));
+        }
+        display.setTag("Lore", lore);
+        item.setTagInfo("display", display);
+    }
+
+    public static void setName(ItemStack item, String name) {
+        NBTTagCompound display = new NBTTagCompound();
+        NBTTagString nbtName = new NBTTagString(name);
+        display.setTag("Name", nbtName);
+        item.setTagInfo("display", display);
+    }
+}
+

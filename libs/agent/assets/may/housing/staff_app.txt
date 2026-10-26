@@ -1,0 +1,17 @@
+{id:"minecraft:writable_book",Count:1b,tag:{generation:0,pages:[0:"Reasons I should be staff:
+
+#1: I own a freebuild
+- I own a freebuild with a peak of about 50 players. I have good staff, and a good blacklist that I coded myself.
+
+#2: I have experience
+- I've been playing Housing since it first...",1:"released, and specifically freebuilds. I've been staffing different kinds of FBs for a long time and currently have staff on FBs like superyacht, lonewy, abc6, and more.
+
+#3: I have a custom mod
+- I have a mod that can notify me of innapropriate items...",2:"being placed that a blacklist can't catch, making me the most valuable asset as a staff member
+
+#4: I like to catch and ban griefers
+- I think it's always been fun to catch and ban griefers for the stuff they do. I know people like to build without...",3:"being disturbed by griefers-so do I.
+
+If you have anything you would like to say, just talk to me! I can answer any questions you have.
+
+- ethavn"],display:{Name:"app"},resolved:0b},Damage:0s}

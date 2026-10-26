@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id("com.gradleup.shadow") version "9.6.1"
+}
+
+group = 'lol.ethan'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.hypixel.net/repository/Hypixel/' }
+    maven { url = 'https://libraries.minecraft.net/' }
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    compileOnly files('libs/lunar.jar')
+    implementation files('libs/forgeBin-1.8.9-11.15.1.2318-1.8.9.jar')
+    implementation files('libs/tools.jar')
+    implementation 'org.ow2.asm:asm:9.6'
+    implementation 'org.ow2.asm:asm-tree:9.6'
+    implementation 'org.ow2.asm:asm-util:9.5'
+    implementation 'org.ow2.asm:asm-commons:9.6'
+
+    implementation 'net.hypixel:mod-api:1.0.2'
+
+    // Mojang
+    compileOnly 'com.mojang:authlib:1.5.21'
+    compileOnly 'com.mojang:realms:1.7.59'
+    compileOnly 'com.ibm.icu:icu4j-core-mojang:51.2'
+    compileOnly 'tv.twitch:twitch:6.5'
+
+    // Networking / util
+    compileOnly 'io.netty:netty-all:4.0.23.Final'
+    compileOnly 'com.google.guava:guava:17.0'
+    compileOnly 'com.google.code.gson:gson:2.2.4'
+    compileOnly 'org.apache.commons:commons-lang3:3.3.2'
+    compileOnly 'org.apache.commons:commons-compress:1.8.1'
+    compileOnly 'commons-io:commons-io:2.4'
+    compileOnly 'commons-codec:commons-codec:1.9'
+    compileOnly 'commons-logging:commons-logging:1.1.3'
+    compileOnly 'org.apache.httpcomponents:httpclient:4.3.3'
+    compileOnly 'org.apache.httpcomponents:httpcore:4.3.2'
+    compileOnly 'net.sf.jopt-simple:jopt-simple:4.6'
+
+    // Logging
+    compileOnly 'org.apache.logging.log4j:log4j-api:2.0-beta9'
+    compileOnly 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+
+    // LWJGL / input
+    compileOnly 'org.lwjgl.lwjgl:lwjgl:2.9.4-nightly-20150209'
+    compileOnly 'org.lwjgl.lwjgl:lwjgl_util:2.9.4-nightly-20150209'
+    compileOnly 'net.java.jinput:jinput:2.0.5'
+    compileOnly 'net.java.jutils:jutils:1.0.0'
+
+    // Sound (PaulsCode)
+    compileOnly 'com.paulscode:codecjorbis:20101023'
+    compileOnly 'com.paulscode:codecwav:20101023'
+    compileOnly 'com.paulscode:libraryjavasound:20101123'
+    compileOnly 'com.paulscode:librarylwjglopenal:20100824'
+    compileOnly 'com.paulscode:soundsystem:20120107'
+}
+
+test {
+    useJUnitPlatform()
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+jar {
+    manifest {
+        attributes(
+                'Manifest-Version': '1.0',
+                'Agent-Class': 'lol.ethan.idk.Main',
+                'Can-Redefine-Classes': 'true',
+                'Can-Retransform-Classes': 'true'
+        )
+    }
+}
