@@ -20,7 +20,7 @@ public class ChoiceComponent extends Component {
     public ChoiceComponent(String name, Category category, Consumer<Integer> consumer, String... children) {
         super(name, category);
         this.consumer = consumer;
-        for (int i = 0; i < children.length; ++i) {
+        for (int i = 0; i < children.length; i++) {
             String childName = children[i];
             Button newBtn = new Button(childName, category, this.choice == i);
             this.children.add(newBtn);
@@ -55,7 +55,7 @@ public class ChoiceComponent extends Component {
         this.clipBottom = guiY + guiHeight;
         this.mc.fontRendererObj.drawStringWithShadow(this.name, (float) componentX, (float) componentY + 5.5f, -1);
         int childY = componentY + 20;
-        for (int i = 0; i < this.children.size(); ++i) {
+        for (int i = 0; i < this.children.size(); i++) {
             if (this.scrollOffset > i) continue;
             Component comp = this.children.get(i);
             comp.x = componentX + 10;
@@ -89,7 +89,7 @@ public class ChoiceComponent extends Component {
         Button btn;
 
         boolean disableAll = false;
-        for (int i = 0; i < this.children.size(); ++i) {
+        for (int i = 0; i < this.children.size(); i++) {
             if (ClickGUI.scrollOffset - this.scrollOffset > i) continue;
             btn = this.children.get(i);
             if (btn.y >= (float) this.clipBottom) continue;
@@ -109,7 +109,7 @@ public class ChoiceComponent extends Component {
             btn.onRightClick();
         }
         if (disableAll) {
-            for (int i = 0; i < this.children.size(); ++i) {
+            for (int i = 0; i < this.children.size(); i++) {
                 btn = this.children.get(i);
                 if (this.choice == i) continue;
                 btn.enabled = false;
@@ -130,7 +130,7 @@ public class ChoiceComponent extends Component {
     @Override
     public void load(JsonElement element) {
         this.choice = element.getAsInt();
-        for (int i = 0; i < this.children.size(); ++i) {
+        for (int i = 0; i < this.children.size(); i++) {
             this.children.get(i).enabled = i == this.choice;
         }
     }

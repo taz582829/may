@@ -38,9 +38,9 @@ public class BedNuker {
     }
 
     private BlockPos getNearbyBed(BlockPos pos) {
-        for (int x = -1; x <= 1; ++x) {
-            for (int y = -1; y <= 1; ++y) {
-                for (int z = -1; z <= 1; ++z) {
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -1; z <= 1; z++) {
                     BlockPos check = pos.add(x, y, z);
                     if (this.mc.theWorld.getBlockState(check).getBlock() != Blocks.bed) continue;
                     return check;

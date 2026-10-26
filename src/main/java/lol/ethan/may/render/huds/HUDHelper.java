@@ -22,7 +22,7 @@ public class HUDHelper {
         for (String line : lines) {
             maxWidth = Math.max(maxWidth, fr.getStringWidth(line));
         }
-        for (int i = 0; i < lines.length; ++i) {
+        for (int i = 0; i < lines.length; i++) {
             fr.drawStringWithShadow(lines[i], x, y + (float) (i * lineHeight) + 2.0f, color.getRGB());
         }
     }
@@ -36,7 +36,7 @@ public class HUDHelper {
             maxWidth = Math.max(maxWidth, fr.getStringWidth(line));
         }
         Gui.drawRect((int) x - padding, (int) y - padding, (int) x + maxWidth + padding, (int) y + lines.length * lineHeight - 2 + padding, bgColor.getRGB());
-        for (int i = 0; i < lines.length; ++i) {
+        for (int i = 0; i < lines.length; i++) {
             fr.drawStringWithShadow(lines[i], x, y + (float) (i * lineHeight) + 2.0f, -1);
         }
     }
@@ -50,7 +50,7 @@ public class HUDHelper {
             maxWidth = Math.max(maxWidth, measured);
         }
         Gui.drawRect((int) x - padding, (int) y - padding, (int) x + maxWidth + padding, (int) y + lines.length * lineHeight - 2 + padding, 0x40000000);
-        for (int i = 0; i < lines.length; ++i) {
+        for (int i = 0; i < lines.length; i++) {
             fr.drawStringWithShadow(lines[i], x, y + (float) (i * lineHeight) + 2.0f, 0xFFFFFF);
         }
     }

@@ -32,7 +32,7 @@ public class JsonUtils {
         }
         String[] keys = key.split("\\.");
         JsonObject current = obj;
-        for (int i = 0; i < keys.length - 1; ++i) {
+        for (int i = 0; i < keys.length - 1; i++) {
             if (current == null || !current.has(keys[i])) {
                 return defaultValue;
             }
@@ -54,7 +54,7 @@ public class JsonUtils {
         }
         String[] keys = key.split("\\.");
         JsonObject current = obj;
-        for (int i = 0; i < keys.length - 1; ++i) {
+        for (int i = 0; i < keys.length - 1; i++) {
             if (current == null || !current.has(keys[i])) {
                 return defaultValue;
             }
@@ -76,7 +76,7 @@ public class JsonUtils {
         }
         String[] keys = key.split("\\.");
         JsonObject current = obj;
-        for (int i = 0; i < keys.length - 1; ++i) {
+        for (int i = 0; i < keys.length - 1; i++) {
             if (current == null || !current.has(keys[i])) {
                 return defaultValue;
             }
@@ -94,7 +94,7 @@ public class JsonUtils {
         }
         String[] keys = key.split("\\.");
         JsonObject current = obj;
-        for (int i = 0; i < keys.length - 1; ++i) {
+        for (int i = 0; i < keys.length - 1; i++) {
             if (current == null || !current.has(keys[i])) {
                 return defaultValue;
             }
@@ -112,7 +112,7 @@ public class JsonUtils {
         }
         String[] keys = key.split("\\.");
         JsonObject current = obj;
-        for (int i = 0; i < keys.length - 1; ++i) {
+        for (int i = 0; i < keys.length - 1; i++) {
             if (current == null || !current.has(keys[i])) {
                 return defaultValue;
             }
@@ -130,7 +130,7 @@ public class JsonUtils {
         }
         String[] keys = key.split("\\.");
         JsonObject current = obj;
-        for (int i = 0; i < keys.length - 1; ++i) {
+        for (int i = 0; i < keys.length - 1; i++) {
             if (current == null || !current.has(keys[i])) {
                 return defaultValue;
             }

@@ -2,8 +2,7 @@ package lol.ethan.may.asm;
 
 import java.util.Collections;
 import java.util.List;
-import lol.ethan.may.asm.ASMUtils;
-import lol.ethan.may.asm.ITransformer;
+
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.RenderGameOverlayEvent;
 import lol.ethan.may.events.RenderXPEvent;
@@ -40,7 +39,7 @@ implements ITransformer {
                 method.instructions.insert(preInsnList);
                 AbstractInsnNode[] abstractInsnNodeArray = method.instructions.toArray();
                 int n = abstractInsnNodeArray.length;
-                for (int i = 0; i < n; ++i) {
+                for (int i = 0; i < n; i++) {
                     AbstractInsnNode insnNode = abstractInsnNodeArray[i];
                     if (insnNode.getOpcode() < Opcodes.IRETURN || insnNode.getOpcode() > Opcodes.RETURN) continue;
                     InsnList postInsnList = new InsnList();
@@ -80,8 +79,9 @@ implements ITransformer {
     public static boolean isScoreboardCancelled(Object ci) {
         try {
             return (Boolean)ci.getClass().getMethod("isCancelled", new Class[0]).invoke(ci, new Object[0]);
-        }
-        catch (Exception e) {
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
             return false;
         }
     }

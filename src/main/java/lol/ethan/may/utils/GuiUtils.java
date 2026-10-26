@@ -74,7 +74,7 @@ public class GuiUtils {
 
     public static int searchInventory(Predicate<ItemStack> p) {
         InventoryPlayer playerInventory = Minecraft.getMinecraft().thePlayer.inventory;
-        for (int i = 0; i < playerInventory.getSizeInventory(); ++i) {
+        for (int i = 0; i < playerInventory.getSizeInventory(); i++) {
             ItemStack item = playerInventory.getStackInSlot(i);
             if (!p.test(item)) continue;
             return i;

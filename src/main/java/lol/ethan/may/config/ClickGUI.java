@@ -92,11 +92,11 @@ public class ClickGUI extends GuiScreen {
         this.fontRendererObj.drawStringWithShadow("May", (float) (this.x + 10), (float) (this.y + 10), this.frostTextColor.getRGB());
         Category[] categories = Category.values();
         for (Component comp : this.getCurrentComponents()) {
-            if (!(comp instanceof TextBox) || !((TextBox) comp).drawingField) continue;
+            if (!(comp instanceof TextBox) || !((TextBox<?>) comp).drawingField) continue;
             ((TextBox) comp).drawField(this.x, this.y, 300 - sidebarWidth, 185);
             return;
         }
-        for (int i = 0; i < this.categoryInfo.size(); ++i) {
+        for (int i = 0; i < this.categoryInfo.size(); i++) {
             CategoryInfo info = this.categoryInfo.get(i);
             if (this.categorySelected == i) {
                 HUDHelper.drawRect(this.x, info.startingPoint, sidebarWidth, 20, this.selectedColor);
@@ -173,7 +173,7 @@ public class ClickGUI extends GuiScreen {
                 continue;
             GuiUtils.openCustomScreen(new DragElement(String.join("\n", hud.lineCache), hud.x, hud.y, hud));
         }
-        for (int i = 0; i < this.categoryInfo.size(); ++i) {
+        for (int i = 0; i < this.categoryInfo.size(); i++) {
             CategoryInfo info = this.categoryInfo.get(i);
             if (!this.hoveringOn(mx, my, this.x, info.startingPoint, sidebarWidth, 20)) continue;
             this.categorySelected = i;

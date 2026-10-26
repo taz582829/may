@@ -34,7 +34,7 @@ implements ITransformer {
                 }
                 if (!(insnNode instanceof InvokeDynamicInsnNode)) continue;
                 InvokeDynamicInsnNode dynamic = (InvokeDynamicInsnNode)insnNode;
-                for (int i = 0; i < dynamic.bsmArgs.length; ++i) {
+                for (int i = 0; i < dynamic.bsmArgs.length; i++) {
                     if (!(dynamic.bsmArgs[i] instanceof Handle)) continue;
                     Handle h = (Handle)dynamic.bsmArgs[i];
                     String name = h.getTag() <= 4 ? Mappings.mapFieldInHierarchy(h.getOwner(), h.getName(), h.getName()) : Mappings.mapMethodInHierarchy(h.getOwner(), h.getName(), h.getDesc(), h.getName());

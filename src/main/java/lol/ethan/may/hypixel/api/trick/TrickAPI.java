@@ -9,7 +9,7 @@ public class TrickAPI {
 
     public static CompletableFuture<TrickDenickResponse> denick(boolean solo, String... info) {
         StringBuilder args = new StringBuilder();
-        for (int i = 0; i < info.length; ++i) {
+        for (int i = 0; i < info.length; i++) {
             String part = info[i];
             if (i == 0) {
                 args.append("?");

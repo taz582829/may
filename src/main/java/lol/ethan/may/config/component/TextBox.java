@@ -52,7 +52,7 @@ public abstract class TextBox<T> extends Component {
 
     private static String hide(String s) {
         StringBuilder sb = new StringBuilder(s.length());
-        for (int i = 0; i < s.length(); ++i) {
+        for (int i = 0; i < s.length(); i++) {
             sb.append("*");
         }
         return sb.toString();

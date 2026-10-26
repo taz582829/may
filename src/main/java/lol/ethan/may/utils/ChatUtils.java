@@ -47,7 +47,7 @@ public class ChatUtils {
         Minecraft mc = Minecraft.getMinecraft();
         int length = mc.fontRendererObj.getStringWidth(text);
         int times = mc.ingameGUI.getChatGUI().getChatWidth() / length;
-        for (int i = 0; i < times; ++i) {
+        for (int i = 0; i < times; i++) {
             res.append(text);
         }
         return res.toString();

@@ -191,7 +191,7 @@ public class HypixelAPI {
                 scheme = PrestigeSchemes.SCHEMES.get(key);
             }
         }
-        for (int i = 0; i < text.length(); ++i) {
+        for (int i = 0; i < text.length(); i++) {
             value.append("§").append(scheme.colors.get(i % scheme.colors.size())).append(text.charAt(i));
         }
         return HypixelAPI.formatBedwarsBrackets(activeBrackets, value.toString());

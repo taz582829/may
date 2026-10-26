@@ -49,7 +49,7 @@ public class ItemStorage extends GuiChest {
     }
 
     public static void addItem(ItemStack item) {
-        for (int i = 0; i < 54; ++i) {
+        for (int i = 0; i < 54; i++) {
             if (items.get(i) != null) continue;
             items.set(i, item);
             storage.setInventorySlotContents(i, item);
@@ -69,7 +69,7 @@ public class ItemStorage extends GuiChest {
         try (FileInputStream is = new FileInputStream(file)) {
             NBTTagCompound nbt = CompressedStreamTools.readCompressed(is);
             NBTTagList items = nbt.getTagList("Items", 10);
-            for (int i = 0; i < items.tagCount(); ++i) {
+            for (int i = 0; i < items.tagCount(); i++) {
                 NBTTagCompound item = items.getCompoundTagAt(i);
                 int slot = item.getByte("Slot") & 0xFF;
                 if (slot >= storage.getSizeInventory()) continue;
@@ -85,7 +85,7 @@ public class ItemStorage extends GuiChest {
         try {
             NBTTagCompound root = new NBTTagCompound();
             NBTTagList items = new NBTTagList();
-            for (int i = 0; i < storage.getSizeInventory(); ++i) {
+            for (int i = 0; i < storage.getSizeInventory(); i++) {
                 ItemStack stack = storage.getStackInSlot(i);
                 if (stack == null) continue;
                 NBTTagCompound item = new NBTTagCompound();

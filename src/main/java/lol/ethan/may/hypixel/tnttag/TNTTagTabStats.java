@@ -44,7 +44,7 @@ public class TNTTagTabStats extends TabStats {
             result.append(EnumChatFormatting.BLACK);
         } else {
             String[] RAINBOW_COLORS = new String[]{"c", "6", "e", "a", "b", "d", "5"};
-            for (int i = 0; i < w.length(); ++i) {
+            for (int i = 0; i < w.length(); i++) {
                 String part = String.valueOf(w.charAt(i));
                 String color = RAINBOW_COLORS[i % 7];
                 result.append("§").append(color).append(part);
