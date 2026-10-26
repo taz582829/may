@@ -22,38 +22,38 @@ public class DuelsStatsManager {
     DuelsTabStats tabStats = new DuelsTabStats();
 
     @SubscribeEvent
-    public void onChat(ChatEvent.Received event) {
-        String msg = event.getMessage().getUnformattedText().trim();
+    public void onChat(final ChatEvent.Received event) {
+        final String msg = event.getMessage().getUnformattedText().trim();
         if (msg.equals("Eliminate your opponents!")) {
             TimeUtils.setTickDelay(() -> {
-                for (NetworkPlayerInfo playerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-                    GameProfile profile = playerInfo.getGameProfile();
-                    if (profile.getId().equals(mc.thePlayer.getUniqueID())) continue;
-                    if (profile.getId().version() == 2) continue;
+                for (final NetworkPlayerInfo playerInfo : this.mc.getNetHandler().getPlayerInfoMap()) {
+                    final GameProfile profile = playerInfo.getGameProfile();
+                    if (profile.getId().equals(this.mc.thePlayer.getUniqueID())) continue;
+                    if (2 == profile.getId().version()) continue;
 
-                    UUID targetUUID;
+                    final UUID targetUUID;
 
-                    if (profile.getId().version() == 1) {
-                        Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
-                        if (denick == null) {
+                    if (1 == profile.getId().version()) {
+                        final Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
+                        if (null == denick) {
                             targetUUID = profile.getId();
 
-                            tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
+                            this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
                         } else {
                             targetUUID = UUID.fromString(denick.uuid);
                         }
                     } else {
                         targetUUID = profile.getId();
                     }
-                    IStats stats = tabStats.getStats(targetUUID);
+                    final IStats stats = this.tabStats.getStats(targetUUID);
 
-                    if (stats == null && profile.getId().version() == 4) {
+                    if (null == stats && 4 == profile.getId().version()) {
                         HypixelAPI.getPlayer(targetUUID).thenAccept(res ->
-                                mc.addScheduledTask(() -> {
+                                this.mc.addScheduledTask(() -> {
                                     try {
-                                        tabStats.refreshPlayer(profile.getId(), res.player);
+                                        this.tabStats.refreshPlayer(profile.getId(), res.player);
                                         DuelsUtils.showDuelsStats(res.player, DuelsUtils.getCurrentMode());
-                                    } catch (Exception e) {
+                                    } catch (final Exception e) {
                                         e.printStackTrace();
                                     }
                                 })
@@ -63,33 +63,33 @@ public class DuelsStatsManager {
             }, 5);
         } else if (msg.equals("Protect your bed and destroy the enemy bed.")) {
             TimeUtils.setTickDelay(() -> {
-                for (NetworkPlayerInfo playerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-                    GameProfile profile = playerInfo.getGameProfile();
-                    if (profile.getId().equals(mc.thePlayer.getUniqueID())) continue;
-                    if (profile.getId().version() == 2) continue;
+                for (final NetworkPlayerInfo playerInfo : this.mc.getNetHandler().getPlayerInfoMap()) {
+                    final GameProfile profile = playerInfo.getGameProfile();
+                    if (profile.getId().equals(this.mc.thePlayer.getUniqueID())) continue;
+                    if (2 == profile.getId().version()) continue;
 
-                    UUID targetUUID;
+                    final UUID targetUUID;
 
-                    if (profile.getId().version() == 1) {
-                        Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
-                        if (denick == null) {
+                    if (1 == profile.getId().version()) {
+                        final Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
+                        if (null == denick) {
                             targetUUID = profile.getId();
 
-                            tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
+                            this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
                         } else {
                             targetUUID = UUID.fromString(denick.uuid);
                         }
                     } else {
                         targetUUID = profile.getId();
                     }
-                    IStats stats = tabStats.getStats(targetUUID);
+                    final IStats stats = this.tabStats.getStats(targetUUID);
 
-                    if (stats == null && profile.getId().version() == 4) {
+                    if (null == stats && 4 == profile.getId().version()) {
                         HypixelAPI.getPlayer(targetUUID).thenAccept(res ->
-                                mc.addScheduledTask(() -> {
+                                this.mc.addScheduledTask(() -> {
                                     try {
-                                        tabStats.refreshPlayer(profile.getId(), res.player, "bedwars");
-                                    } catch (Exception e) {
+                                        this.tabStats.refreshPlayer(profile.getId(), res.player, "bedwars");
+                                    } catch (final Exception e) {
                                         e.printStackTrace();
                                     }
                                 })
@@ -100,45 +100,45 @@ public class DuelsStatsManager {
         }
     }
     @SubscribeEvent
-    public void onRenderPlayer(RenderPlayerInTabEvent event) {
+    public void onRenderPlayer(final RenderPlayerInTabEvent event) {
         if (DuelsUtils.isInDuels() || DuelsUtils.isInBwDuels()) {
-            GameProfile profile = event.playerInfo.getGameProfile();
-            if (profile.getId().equals(mc.getSession().getProfile().getId())) return;
-            if (profile.getId().version() == 2) return;
+            final GameProfile profile = event.playerInfo.getGameProfile();
+            if (profile.getId().equals(this.mc.getSession().getProfile().getId())) return;
+            if (2 == profile.getId().version()) return;
 
-            IStats stats = tabStats.getStats(profile.getId());
+            final IStats stats = this.tabStats.getStats(profile.getId());
 
-            event.text = tabStats.getDisplayName(event.playerInfo, stats);
+            event.text = this.tabStats.getDisplayName(event.playerInfo, stats);
         }
     }
 
     @SubscribeEvent
-    public void onPing(PlayerPingEvent event) {
+    public void onPing(final PlayerPingEvent event) {
         if (DuelsUtils.isInDuels() || DuelsUtils.isInBwDuels()) {
-            GameProfile profile = event.getPlayerInfo().getGameProfile();
-            if (profile.getId().equals(mc.getSession().getProfile().getId())) return;
-            if (profile.getId().version() == 2) return;
+            final GameProfile profile = event.getPlayerInfo().getGameProfile();
+            if (profile.getId().equals(this.mc.getSession().getProfile().getId())) return;
+            if (2 == profile.getId().version()) return;
 
-            IStats stats = tabStats.getStats(profile.getId());
+            final IStats stats = this.tabStats.getStats(profile.getId());
 
-            if (stats != null && stats.getPing() != 1) {
+            if (null != stats && 1 != stats.getPing()) {
                 event.setPing(stats.getPing());
             }
         }
     }
 
     @SubscribeEvent
-    public void onNameFormat(NameFormatEvent event) {
-        if (mc.getNetHandler() == null) return;
+    public void onNameFormat(final NameFormatEvent event) {
+        if (null == mc.getNetHandler()) return;
         if (DuelsUtils.isInDuels() || DuelsUtils.isInBwDuels()) {
-            EntityPlayer player = event.getPlayer();
-            if (player.getUniqueID().equals(mc.getSession().getProfile().getId())) return;
-            if (player.getUniqueID().version() == 2) return;
+            final EntityPlayer player = event.getPlayer();
+            if (player.getUniqueID().equals(this.mc.getSession().getProfile().getId())) return;
+            if (2 == player.getUniqueID().version()) return;
 
-            IStats stats = tabStats.getStats(player.getUniqueID());
-            NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(player.getUniqueID());
-            if (playerInfo == null) return;
-            event.setText(tabStats.getDisplayName(playerInfo, stats));
+            final IStats stats = this.tabStats.getStats(player.getUniqueID());
+            final NetworkPlayerInfo playerInfo = this.mc.getNetHandler().getPlayerInfo(player.getUniqueID());
+            if (null == playerInfo) return;
+            event.setText(this.tabStats.getDisplayName(playerInfo, stats));
         }
     }
 }

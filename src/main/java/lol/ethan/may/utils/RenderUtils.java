@@ -29,47 +29,47 @@ public class RenderUtils {
             renderPosXField = RenderManager.class.getDeclaredField("renderPosX");
             renderPosYField = RenderManager.class.getDeclaredField("renderPosY");
             renderPosZField = RenderManager.class.getDeclaredField("renderPosZ");
-        } catch (NoSuchFieldException e) {
+        } catch (final NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
     }
 
     private static Timer getTimer() {
         try {
-            Minecraft mc = Minecraft.getMinecraft();
+            final Minecraft mc = Minecraft.getMinecraft();
             return (Timer) mc.getClass().getDeclaredField("timer").get(mc);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     private static double[] getRenderPos() {
-        RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+        final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
         try {
             return new double[]{(Double) renderPosXField.get(manager), (Double) renderPosYField.get(manager), (Double) renderPosZField.get(manager)};
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static double[] posToRenderCoords(Entity entity) {
-        Timer timer = RenderUtils.getTimer();
-        float pt = timer.renderPartialTicks;
-        double renderX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) pt;
-        double renderY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) pt;
-        double renderZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) pt;
+    public static double[] posToRenderCoords(final Entity entity) {
+        final Timer timer = RenderUtils.getTimer();
+        final float pt = timer.renderPartialTicks;
+        final double renderX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) pt;
+        final double renderY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) pt;
+        final double renderZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) pt;
         return new double[]{renderX, renderY, renderZ};
     }
 
-    public static double[] posToRenderCoords(Number x, Number y, Number z) {
-        Minecraft mc = Minecraft.getMinecraft();
-        double viewerX = mc.getRenderManager().viewerPosX;
-        double viewerY = mc.getRenderManager().viewerPosY;
-        double viewerZ = mc.getRenderManager().viewerPosZ;
+    public static double[] posToRenderCoords(final Number x, final Number y, final Number z) {
+        final Minecraft mc = Minecraft.getMinecraft();
+        final double viewerX = mc.getRenderManager().viewerPosX;
+        final double viewerY = mc.getRenderManager().viewerPosY;
+        final double viewerZ = mc.getRenderManager().viewerPosZ;
         return new double[]{x.doubleValue() - viewerX, y.doubleValue() - viewerY, z.doubleValue() - viewerZ};
     }
 
-    public static double lerpDouble(double current, double previous, double t) {
+    public static double lerpDouble(final double current, final double previous, final double t) {
         return previous + (current - previous) * t;
     }
 
@@ -82,7 +82,7 @@ public class RenderUtils {
         GlStateManager.disableDepth();
     }
 
-    public static void enableRenderState(boolean throughWalls) {
+    public static void enableRenderState(final boolean throughWalls) {
         if (throughWalls) {
             RenderUtils.enableRenderState();
             return;
@@ -102,15 +102,15 @@ public class RenderUtils {
         GlStateManager.disableBlend();
     }
 
-    public static void drawBoundingBox(AxisAlignedBB axisAlignedBB, Color color, float lineWidth) {
-        if (axisAlignedBB == null) {
+    public static void drawBoundingBox(final AxisAlignedBB axisAlignedBB, final Color color, final float lineWidth) {
+        if (null == axisAlignedBB) {
             return;
         }
         RenderUtils.enableRenderState();
-        int red = color.getRed();
-        int green = color.getGreen();
-        int blue = color.getBlue();
-        int alpha = color.getAlpha();
+        final int red = color.getRed();
+        final int green = color.getGreen();
+        final int blue = color.getBlue();
+        final int alpha = color.getAlpha();
         GL11.glLineWidth(lineWidth);
         GL11.glEnable(2848);
         GL11.glHint(3154, 4354);
@@ -120,13 +120,13 @@ public class RenderUtils {
         RenderUtils.disableRenderState();
     }
 
-    public static void drawFilledBox(AxisAlignedBB axisAlignedBB, Color color) {
+    public static void drawFilledBox(final AxisAlignedBB axisAlignedBB, final Color color) {
         RenderUtils.enableRenderState();
-        int red = color.getRed();
-        int blue = color.getBlue();
-        int green = color.getGreen();
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        final int red = color.getRed();
+        final int blue = color.getBlue();
+        final int green = color.getGreen();
+        final Tessellator tessellator = Tessellator.getInstance();
+        final WorldRenderer worldRenderer = tessellator.getWorldRenderer();
         worldRenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
         worldRenderer.pos(axisAlignedBB.minX, axisAlignedBB.minY, axisAlignedBB.minZ).color(red, green, blue, 63).endVertex();
         worldRenderer.pos(axisAlignedBB.minX, axisAlignedBB.minY, axisAlignedBB.maxZ).color(red, green, blue, 63).endVertex();
@@ -156,35 +156,35 @@ public class RenderUtils {
         RenderUtils.disableRenderState();
     }
 
-    public static void drawEntityBoundingBox(Entity entity, Color color) {
+    public static void drawEntityBoundingBox(final Entity entity, final Color color) {
         RenderUtils.drawEntityBoundingBox(entity, color, 1.0f);
     }
 
-    public static void drawEntityBoundingBox(Entity entity, Color color, float lineWidth) {
-        Timer timer = RenderUtils.getTimer();
-        float partialTicks = timer.renderPartialTicks;
-        double d2 = RenderUtils.lerpDouble(entity.posX, entity.lastTickPosX, partialTicks);
-        double d3 = RenderUtils.lerpDouble(entity.posY, entity.lastTickPosY, partialTicks);
-        double d4 = RenderUtils.lerpDouble(entity.posZ, entity.lastTickPosZ, partialTicks);
-        double[] rp = RenderUtils.getRenderPos();
-        AxisAlignedBB bb = entity.getEntityBoundingBox().offset(d2 - entity.posX, d3 - entity.posY, d4 - entity.posZ).offset(-rp[0], -rp[1], -rp[2]);
+    public static void drawEntityBoundingBox(final Entity entity, final Color color, final float lineWidth) {
+        final Timer timer = RenderUtils.getTimer();
+        final float partialTicks = timer.renderPartialTicks;
+        final double d2 = RenderUtils.lerpDouble(entity.posX, entity.lastTickPosX, partialTicks);
+        final double d3 = RenderUtils.lerpDouble(entity.posY, entity.lastTickPosY, partialTicks);
+        final double d4 = RenderUtils.lerpDouble(entity.posZ, entity.lastTickPosZ, partialTicks);
+        final double[] rp = RenderUtils.getRenderPos();
+        final AxisAlignedBB bb = entity.getEntityBoundingBox().offset(d2 - entity.posX, d3 - entity.posY, d4 - entity.posZ).offset(-rp[0], -rp[1], -rp[2]);
         RenderUtils.enableRenderState();
         GL11.glLineWidth(lineWidth);
         RenderGlobal.drawOutlinedBoundingBox(bb, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         RenderUtils.disableRenderState();
     }
 
-    public static void drawTileEntityBox(TileEntity tileEntity, Color color) {
+    public static void drawTileEntityBox(final TileEntity tileEntity, final Color color) {
         AxisAlignedBB bb;
-        BlockPos pos = tileEntity.getPos();
+        final BlockPos pos = tileEntity.getPos();
         if (tileEntity instanceof TileEntitySign) {
-            IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(pos);
+            final IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(pos);
             bb = state.getBlock().getSelectedBoundingBox(Minecraft.getMinecraft().theWorld, pos);
         } else {
             bb = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
         }
         bb = bb.expand(0.1, 0.1, 0.1);
-        double[] rp = RenderUtils.getRenderPos();
+        final double[] rp = RenderUtils.getRenderPos();
         bb = bb.offset(-rp[0], -rp[1], -rp[2]);
         RenderUtils.enableRenderState();
         RenderUtils.drawFilledBox(bb, color);

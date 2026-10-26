@@ -17,19 +17,19 @@ public class AntiInvis {
     Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
-    public void onRenderPre(RenderLivingEvent.Pre event) {
+    public void onRenderPre(final RenderLivingEvent.Pre event) {
         if (!(event.getEntity() instanceof EntityPlayer)) {
             return;
         }
-        EntityPlayer player = (EntityPlayer) event.getEntity();
+        final EntityPlayer player = (EntityPlayer) event.getEntity();
         if (INVISIBLE.contains(player) && HousingUtils.isInHousing() && Config.antiInvis.enabled) {
             event.getRenderer().renderName(player, event.getX(), event.getY(), event.getZ());
         }
     }
 
     @SubscribeEvent(priority = Priority.LOW)
-    public void onNameRender(NameFormatEvent event) {
-        EntityPlayer player = event.getPlayer();
+    public void onNameRender(final NameFormatEvent event) {
+        final EntityPlayer player = event.getPlayer();
         if (INVISIBLE.contains(player) && HousingUtils.isInHousing() && Config.antiInvis.enabled) {
             event.setText(event.getText() + " §b[I]");
         }

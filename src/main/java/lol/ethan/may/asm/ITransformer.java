@@ -17,33 +17,33 @@ public interface ITransformer extends ClassFileTransformer {
 
     List<String> getTargets();
 
-    default boolean shouldTransform(String className) {
-        return this.getTargets().contains(className);
+    default boolean shouldTransform(final String className) {
+        return getTargets().contains(className);
     }
 
     @Override
-    default byte[] transform(final ClassLoader loader, String className, Class<?> target, ProtectionDomain prot, byte[] bytes) throws IllegalClassFormatException {
-        if (!this.shouldTransform(className.replace("/", "."))) {
+    default byte[] transform(final ClassLoader loader, final String className, final Class<?> target, final ProtectionDomain prot, final byte[] bytes) throws IllegalClassFormatException {
+        if (!shouldTransform(className.replace("/", "."))) {
             return null;
         }
         try {
-            ClassNode node = new ClassNode();
-            ClassReader reader = new ClassReader(bytes);
+            final ClassNode node = new ClassNode();
+            final ClassReader reader = new ClassReader(bytes);
             int flags = ClassWriter.COMPUTE_MAXS;
-            if (shouldComputeFrames()) flags |= ClassWriter.COMPUTE_FRAMES;
-            ClassWriter writer = new ClassWriter(reader, flags) {
+            if (this.shouldComputeFrames()) flags |= ClassWriter.COMPUTE_FRAMES;
+            final ClassWriter writer = new ClassWriter(reader, flags) {
                 @Override
-                protected String getCommonSuperClass(String type1, String type2) {
+                protected String getCommonSuperClass(final String type1, final String type2) {
                     Class<?> class1;
                     try {
                         class1 = Class.forName(type1.replace('/', '.'), false, loader);
-                    } catch (ClassNotFoundException e) {
+                    } catch (final ClassNotFoundException e) {
                         throw new TypeNotPresentException(type1, e);
                     }
-                    Class<?> class2;
+                    final Class<?> class2;
                     try {
                         class2 = Class.forName(type2.replace('/', '.'), false, loader);
-                    } catch (ClassNotFoundException e) {
+                    } catch (final ClassNotFoundException e) {
                         throw new TypeNotPresentException(type2, e);
                     }
                     if (class1.isAssignableFrom(class2)) {
@@ -63,15 +63,15 @@ public interface ITransformer extends ClassFileTransformer {
                 }
             };
             node.accept(writer);
-            byte[] transformed = writer.toByteArray();
-            File file = new File(new File(Entry.FILE_PATH, "debug"), target.getSimpleName() + "_transformed.class");
+            final byte[] transformed = writer.toByteArray();
+            final File file = new File(new File(Entry.FILE_PATH, "debug"), target.getSimpleName() + "_transformed.class");
             if (!file.exists()) {
                 file.mkdirs();
             }
             Files.write(file.toPath(), transformed);
             return transformed;
-        } catch (Exception e) {
-            System.out.println(target.getName() + " failed to transform! (" + this.getClass().getName() + ")");
+        } catch (final Exception e) {
+            System.out.println(target.getName() + " failed to transform! (" + getClass().getName() + ")");
             throw new RuntimeException(e);
         }
     }

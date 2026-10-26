@@ -17,11 +17,11 @@ public abstract class Component {
     public final Minecraft mc = Minecraft.getMinecraft();
     public float x, y;
 
-    public Component(String name, Category category) {
+    public Component(final String name, final Category category) {
         this.name = name;
         this.category = category;
     }
-    public Component(String name, Category category, String description) {
+    public Component(final String name, final Category category, final String description) {
         this.name = name;
         this.category = category;
         this.description = new ArrayList<>(Arrays.asList(description.split("\n")));
@@ -37,13 +37,13 @@ public abstract class Component {
     public abstract void onMouseClick(int x, int y, int button);
     public abstract void onScroll(int direction);
 
-    public boolean hoveringOn(int mx, int my, int targetX, int targetY, int width, int height) {
+    public boolean hoveringOn(final int mx, final int my, final int targetX, final int targetY, final int width, final int height) {
         return my >= targetY && my < targetY + height && mx >= targetX && mx < targetX + width;
     }
-    public boolean hoveringOn(int mx, int my, Component comp) {
+    public boolean hoveringOn(final int mx, final int my, final Component comp) {
         return my >= comp.y && my < comp.y + comp.componentHeight && mx >= comp.x && mx < comp.x + (300 - ClickGUI.sidebarWidth);
     }
-    public boolean hoveringOn(int mx, int my, Component comp, int indent) {
+    public boolean hoveringOn(final int mx, final int my, final Component comp, final int indent) {
         return my >= comp.y && my < comp.y + comp.componentHeight && mx >= comp.x && mx < comp.x + (300 - ClickGUI.sidebarWidth - indent);
     }
     public abstract JsonElement serialize();

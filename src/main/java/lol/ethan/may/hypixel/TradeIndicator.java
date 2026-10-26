@@ -27,13 +27,13 @@ public class TradeIndicator extends BasicHud {
     private boolean winning;
 
     @Override
-    public float[] overrideCoords(float x, float y) {
-        if (centered.enabled && shouldShow()) {
-            if (lineCache.size() == 0) return new float[]{ x, y };
-            String line = lineCache.get(0);
+    public float[] overrideCoords(final float x, final float y) {
+        if (this.centered.enabled && this.shouldShow()) {
+            if (0 == lineCache.size()) return new float[]{ x, y };
+            final String line = this.lineCache.get(0);
             return new float[]{
-                    HUDHelper.getCenteredX(line) / scale,
-                    y / scale
+                    HUDHelper.getCenteredX(line) / this.scale,
+                    y / this.scale
             };
         }
         return new float[]{ x, y };
@@ -41,34 +41,34 @@ public class TradeIndicator extends BasicHud {
 
     @Override
     public int getTextColor() {
-        return winning ? winningTextColor.color : losingTextColor.color;
+        return this.winning ? this.winningTextColor.color : this.losingTextColor.color;
     }
 
     @SubscribeEvent
-    public void onPacket(PacketEvent.Send event) {
+    public void onPacket(final PacketEvent.Send event) {
         if (event.getPacket() instanceof C02PacketUseEntity) {
-            C02PacketUseEntity packet = (C02PacketUseEntity) event.getPacket();
-            if (packet.getAction() != C02PacketUseEntity.Action.ATTACK) return;
-            if (!(packet.getEntityFromWorld(mc.theWorld) instanceof EntityPlayer)) return;
-            lastAttacked = (EntityPlayer) packet.getEntityFromWorld(mc.theWorld);
-            lastAttackTime = System.currentTimeMillis();
+            final C02PacketUseEntity packet = (C02PacketUseEntity) event.getPacket();
+            if (C02PacketUseEntity.Action.ATTACK != packet.getAction()) return;
+            if (!(packet.getEntityFromWorld(this.mc.theWorld) instanceof EntityPlayer)) return;
+            this.lastAttacked = (EntityPlayer) packet.getEntityFromWorld(this.mc.theWorld);
+            this.lastAttackTime = System.currentTimeMillis();
         }
 
     }
     @Override
     public boolean shouldShow() {
-        return super.shouldShow() && mc.thePlayer != null && mc.theWorld != null && lastAttacked != null && System.currentTimeMillis() - lastAttackTime < 2000;
+        return super.shouldShow() && null != mc.thePlayer && null != mc.theWorld && null != lastAttacked && 2000 > System.currentTimeMillis() - lastAttackTime;
     }
 
     @Override
-    protected List<String> getLines(boolean example) {
+    protected List<String> getLines(final boolean example) {
         if (example) {
-            winning = true;
-            return Collections.singletonList("+11.4" + (showHeart.enabled ? "❤" : ""));
+            this.winning = true;
+            return Collections.singletonList("+11.4" + (this.showHeart.enabled ? "❤" : ""));
         }
-        float healthDifference = (lastAttacked.getHealth() + lastAttacked.getAbsorptionAmount()) / 2 - (mc.thePlayer.getHealth() + mc.thePlayer.getAbsorptionAmount()) / 2;
-        if (healthDifference == 0) return Collections.emptyList();
-        winning = (mc.thePlayer.getHealth() + mc.thePlayer.getAbsorptionAmount()) > (lastAttacked.getHealth() + lastAttacked.getAbsorptionAmount());
-        return Collections.singletonList((winning ? "+" : "-") + String.format("%.2f", Math.abs(healthDifference)) + "❤");
+        final float healthDifference = (this.lastAttacked.getHealth() + this.lastAttacked.getAbsorptionAmount()) / 2 - (this.mc.thePlayer.getHealth() + this.mc.thePlayer.getAbsorptionAmount()) / 2;
+        if (0 == healthDifference) return Collections.emptyList();
+        this.winning = (this.mc.thePlayer.getHealth() + this.mc.thePlayer.getAbsorptionAmount()) > (this.lastAttacked.getHealth() + this.lastAttacked.getAbsorptionAmount());
+        return Collections.singletonList((this.winning ? "+" : "-") + String.format("%.2f", Math.abs(healthDifference)) + "❤");
     }
 }

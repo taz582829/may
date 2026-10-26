@@ -13,10 +13,10 @@ import static lol.ethan.may.asm.ASMUtils.*;
 
 public class GuiNewChatTransformer implements ITransformer {
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             if (method.name.equals("printChatMessageWithOptionalDeletion")) {
-                int eventSlot = method.maxLocals;
+                final int eventSlot = method.maxLocals;
                 method.maxLocals++;
                 method.instructions.insert(asm(a -> {
                     a.anew(Type.getType(ChatEvent.Received.class));

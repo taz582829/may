@@ -16,13 +16,13 @@ import net.minecraft.network.play.server.S3FPacketCustomPayload;
 
 import java.util.logging.Logger;
 
-@SuppressWarnings(value = "ApiStatus.Internal")
+@SuppressWarnings("ApiStatus.Internal")
 public class ModAPI implements HypixelModAPIImplementation {
     private static final Logger LOGGER = Logger.getLogger("frost-hypixel-modapi");
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static boolean isOnHypixel = false;
+    private static boolean isOnHypixel;
 
-    public static void setIsOnHypixel(boolean isOnHypixel) {
+    public static void setIsOnHypixel(final boolean isOnHypixel) {
         ModAPI.isOnHypixel = isOnHypixel;
     }
 
@@ -31,17 +31,17 @@ public class ModAPI implements HypixelModAPIImplementation {
     }
 
     @SubscribeEvent
-    public void onPacket(PacketEvent.Receive event) {
+    public void onPacket(final PacketEvent.Receive event) {
         if (event.getPacket() instanceof S3FPacketCustomPayload) {
-            S3FPacketCustomPayload packet = (S3FPacketCustomPayload) event.getPacket();
-            String channel = packet.getChannelName();
+            final S3FPacketCustomPayload packet = (S3FPacketCustomPayload) event.getPacket();
+            final String channel = packet.getChannelName();
 
             if (!HypixelModAPI.getInstance().getRegistry().isRegistered(channel)) return;
-            PacketBuffer buffer = packet.getBufferData();
+            final PacketBuffer buffer = packet.getBufferData();
             mc.addScheduledTask(() -> {
                 try {
                     HypixelModAPI.getInstance().handle(channel, new PacketSerializer(buffer));
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 } finally {
                     buffer.release();
@@ -51,7 +51,7 @@ public class ModAPI implements HypixelModAPIImplementation {
     }
 
     @SubscribeEvent
-    public void onDisconnect(lol.ethan.may.events.ClientDisconnectFromServerEvent event) {
+    public void onDisconnect(final lol.ethan.may.events.ClientDisconnectFromServerEvent event) {
         isOnHypixel = false;
     }
 
@@ -62,13 +62,13 @@ public class ModAPI implements HypixelModAPIImplementation {
     }
 
     @Override
-    public boolean sendPacket(HypixelPacket packet) {
+    public boolean sendPacket(final HypixelPacket packet) {
         if (!isOnHypixel) return false;
 
-        PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
-        PacketSerializer serializer = new PacketSerializer(buffer);
+        final PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+        final PacketSerializer serializer = new PacketSerializer(buffer);
         packet.write(serializer);
-        C17PacketCustomPayload payload = new C17PacketCustomPayload(packet.getIdentifier(), buffer);
+        final C17PacketCustomPayload payload = new C17PacketCustomPayload(packet.getIdentifier(), buffer);
 
         mc.getNetHandler().addToSendQueue(payload);
         return true;

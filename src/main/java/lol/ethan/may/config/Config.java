@@ -131,27 +131,27 @@ public class Config {
         return configFile;
     }
 
-    public static void setConfigFile(File configFile) {
+    public static void setConfigFile(final File configFile) {
         Config.configFile = configFile;
     }
 
     public static JsonObject serialize() {
-        JsonObject obj = new JsonObject();
+        final JsonObject obj = new JsonObject();
         try {
-            for (Field field : Config.class.getFields()) {
-                Object value;
+            for (final Field field : Config.class.getFields()) {
+                final Object value;
                 if (field.isSynthetic() || !((value = field.get(null)) instanceof Component)) continue;
-                Component comp = (Component) value;
-                String category = comp.category.name();
+                final Component comp = (Component) value;
+                final String category = comp.category.name();
                 if (!obj.has(category)) {
                     obj.add(category, new JsonObject());
                 }
-                JsonObject compInfo = obj.getAsJsonObject(category);
-                JsonElement result = comp.serialize();
-                if (result == null) continue;
+                final JsonObject compInfo = obj.getAsJsonObject(category);
+                final JsonElement result = comp.serialize();
+                if (null == result) continue;
                 compInfo.add(field.getName(), result);
             }
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             e.printStackTrace();
         }
         return obj;
@@ -160,16 +160,16 @@ public class Config {
     public static void save() {
         executor.execute(() -> {
             try {
-                File newConfig = new File(new File(Minecraft.getMinecraft().mcDataDir, "May"), "config.json");
-                File parent = configFile.getParentFile();
-                if (parent != null && !parent.exists()) {
+                final File newConfig = new File(new File(Minecraft.getMinecraft().mcDataDir, "May"), "config.json");
+                final File parent = configFile.getParentFile();
+                if (null != parent && !parent.exists()) {
                     parent.mkdirs();
                 }
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                try (OutputStreamWriter writer = new OutputStreamWriter(Files.newOutputStream(newConfig.toPath()), StandardCharsets.UTF_8)) {
+                final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                try (final OutputStreamWriter writer = new OutputStreamWriter(Files.newOutputStream(newConfig.toPath()), StandardCharsets.UTF_8)) {
                     gson.toJson(Config.serialize(), writer);
                 }
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 e.printStackTrace();
             }
         });
@@ -180,60 +180,60 @@ public class Config {
             Config.save();
             return;
         }
-        File newConfig = new File(new File(Minecraft.getMinecraft().mcDataDir, "May"), "config.json");
+        final File newConfig = new File(new File(Minecraft.getMinecraft().mcDataDir, "May"), "config.json");
         if (!newConfig.exists()) {
             Config.save();
             return;
         }
-        try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(newConfig.toPath()), StandardCharsets.UTF_8)) {
-            JsonObject object = JsonUtils.parse(reader).getAsJsonObject();
+        try (final InputStreamReader reader = new InputStreamReader(Files.newInputStream(newConfig.toPath()), StandardCharsets.UTF_8)) {
+            final JsonObject object = JsonUtils.parse(reader).getAsJsonObject();
             if (object.entrySet().isEmpty()) {
                 Config.save();
                 return;
             }
-            for (Field field : Config.class.getFields()) {
+            for (final Field field : Config.class.getFields()) {
                 if (field.isSynthetic() || !Modifier.isStatic(field.getModifiers())) continue;
                 try {
-                    JsonElement saved;
-                    Component comp = (Component) field.get(null);
-                    JsonObject categoryObject = object.getAsJsonObject(comp.category.name());
-                    if (categoryObject == null || (saved = categoryObject.get(field.getName())) == null || saved.isJsonNull())
+                    final JsonElement saved;
+                    final Component comp = (Component) field.get(null);
+                    final JsonObject categoryObject = object.getAsJsonObject(comp.category.name());
+                    if (null == categoryObject || null == (saved = categoryObject.get(field.getName())) || saved.isJsonNull())
                         continue;
                     comp.load(saved);
-                } catch (Throwable e) {
+                } catch (final Throwable e) {
                     e.printStackTrace();
                 }
             }
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             e.printStackTrace();
         }
     }
 
-    public static String getReadableKeybind(int key) {
-        if (key == 0) {
+    public static String getReadableKeybind(final int key) {
+        if (0 == key) {
             return "NONE";
         }
-        if (key < 0) {
-            int mouseButton = -key - 1;
+        if (0 > key) {
+            final int mouseButton = -key - 1;
             return "MB" + (mouseButton + 1);
         }
-        String name = Keyboard.getKeyName(key);
-        if (name == null || name.isEmpty()) {
+        final String name = Keyboard.getKeyName(key);
+        if (null == name || name.isEmpty()) {
             return "NONE";
         }
         return name;
     }
 
     public static List<Component> getAllComponents() {
-        ArrayList<Component> comps = new ArrayList<>();
+        final ArrayList<Component> comps = new ArrayList<>();
         try {
-            for (Field field : Config.class.getDeclaredFields()) {
-                Object value;
+            for (final Field field : Config.class.getDeclaredFields()) {
+                final Object value;
                 if (field.isSynthetic() || !Modifier.isPublic(field.getModifiers()) || !Modifier.isStatic(field.getModifiers()) || !((value = field.get(null)) instanceof Component))
                     continue;
                 comps.add((Component) value);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
@@ -244,7 +244,7 @@ public class Config {
         return debugLogging;
     }
 
-    public static void setDebugLogging(boolean debugLogging) {
+    public static void setDebugLogging(final boolean debugLogging) {
         Config.debugLogging = debugLogging;
     }
 }

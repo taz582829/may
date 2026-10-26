@@ -7,21 +7,21 @@ public class PlayerPingEvent extends Event {
     private final NetworkPlayerInfo playerInfo;
     private int ping;
 
-    public PlayerPingEvent(int ping, NetworkPlayerInfo playerInfo) {
+    public PlayerPingEvent(final int ping, final NetworkPlayerInfo playerInfo) {
         this.ping = ping;
         this.playerInfo = playerInfo;
     }
 
     public int getPing() {
-        return this.ping;
+        return ping;
     }
 
-    public void setPing(int ping) {
+    public void setPing(final int ping) {
         this.ping = ping;
     }
 
     public NetworkPlayerInfo getPlayerInfo() {
-        return this.playerInfo;
+        return playerInfo;
     }
 }
 

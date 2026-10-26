@@ -9,22 +9,22 @@ import lol.ethan.may.utils.GuiUtils;
 
 public class HUDMove extends Component {
     public BasicHud hud;
-    public HUDMove(String name, Category category, BasicHud hud) {
+    public HUDMove(final String name, final Category category, final BasicHud hud) {
         super(name, category);
         this.hud = hud;
     }
 
     @Override
-    public void init(ClickGUI clickGUI) {
+    public void init(final ClickGUI clickGUI) {
 
     }
 
     @Override
-    public void drawComponent(int componentX, int componentY, int guiX, int guiY, int guiWidth, int guiHeight) {
-        mc.fontRendererObj.drawStringWithShadow(
+    public void drawComponent(final int componentX, final int componentY, final int guiX, final int guiY, final int guiWidth, final int guiHeight) {
+        this.mc.fontRendererObj.drawStringWithShadow(
                 "§aClick to move this HUD!",
                 componentX + 12,
-                componentY + (componentHeight - mc.fontRendererObj.FONT_HEIGHT) / 2f,
+                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2f,
                 -1
         );
     }
@@ -33,9 +33,9 @@ public class HUDMove extends Component {
     public void onClick() {
         GuiUtils.openCustomScreen(new DragElement(
                 "moving this hud",
-                hud.x,
-                hud.y,
-                hud
+                this.hud.x,
+                this.hud.y,
+                this.hud
         ));
     }
 
@@ -45,17 +45,17 @@ public class HUDMove extends Component {
     }
 
     @Override
-    public void onKeyPress(char c, int code) {
+    public void onKeyPress(final char c, final int code) {
 
     }
 
     @Override
-    public void onMouseClick(int x, int y, int button) {
+    public void onMouseClick(final int x, final int y, final int button) {
 
     }
 
     @Override
-    public void onScroll(int direction) {
+    public void onScroll(final int direction) {
 
     }
 
@@ -65,7 +65,7 @@ public class HUDMove extends Component {
     }
 
     @Override
-    public void load(JsonElement element) {
+    public void load(final JsonElement element) {
 
     }
 }

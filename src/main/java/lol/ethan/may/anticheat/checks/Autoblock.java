@@ -19,27 +19,27 @@ public class Autoblock extends AnticheatFlag {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.Post event) {
+    public void onTick(final TickEvent.Post event) {
         if (!Config.autoblockFlags.enabled) return;
-        Minecraft mc = Minecraft.getMinecraft();
-        WorldClient world = mc.theWorld;
-        if (world == null) return;
+        final Minecraft mc = Minecraft.getMinecraft();
+        final WorldClient world = mc.theWorld;
+        if (null == world) return;
 
-        for (EntityPlayer player : world.playerEntities) {
-            if (player == null) continue;
+        for (final EntityPlayer player : world.playerEntities) {
+            if (null == player) continue;
             if (player == mc.thePlayer) continue;
-            ItemStack heldItem = player.getHeldItem();
-            if (heldItem == null) continue;
+            final ItemStack heldItem = player.getHeldItem();
+            if (null == heldItem) continue;
             if (heldItem.getItem() instanceof ItemSword) {
-                AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
-                if (data != null) {
-                    int useItemTicks = data.useItemTicks;
-                    if (useItemTicks > 5 && player.isBlocking() && player.isSwingInProgress) {
+                final AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
+                if (null != data) {
+                    final int useItemTicks = data.useItemTicks;
+                    if (5 < useItemTicks && player.isBlocking() && player.isSwingInProgress) {
 
-                        this.addFlag(player, 5);
-                        Entry.debug(player.getName() + ": " + getFlags(player) + "/" + threshold + " flags");
-                    } else if (useItemTicks == 0) {
-                        this.removeFlag(player, 2);
+                        addFlag(player, 5);
+                        Entry.debug(player.getName() + ": " + this.getFlags(player) + "/" + this.threshold + " flags");
+                    } else if (0 == useItemTicks) {
+                        removeFlag(player, 2);
                     }
                 }
             }

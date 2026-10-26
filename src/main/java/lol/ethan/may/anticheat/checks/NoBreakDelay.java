@@ -20,24 +20,24 @@ public class NoBreakDelay extends AnticheatFlag {
     }
 
     @SubscribeEvent
-    public void onPacket(PacketEvent.Receive event) {
+    public void onPacket(final PacketEvent.Receive event) {
         if (!Config.noBreakDelayFlags.enabled) return;
-        Packet<?> raw = event.getPacket();
-        WorldClient world = Minecraft.getMinecraft().theWorld;
-        if (world == null) return;
+        final Packet<?> raw = event.getPacket();
+        final WorldClient world = Minecraft.getMinecraft().theWorld;
+        if (null == world) return;
         if (raw instanceof S25PacketBlockBreakAnim) {
-            S25PacketBlockBreakAnim packet = (S25PacketBlockBreakAnim) raw;
-            if (packet.getProgress() != 0) return;
-            Entity breakerEntity = world.getEntityByID(packet.getBreakerId());
+            final S25PacketBlockBreakAnim packet = (S25PacketBlockBreakAnim) raw;
+            if (0 != packet.getProgress()) return;
+            final Entity breakerEntity = world.getEntityByID(packet.getBreakerId());
             if (breakerEntity instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer) breakerEntity;
-                AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
-                if (data != null) {
+                final EntityPlayer player = (EntityPlayer) breakerEntity;
+                final AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
+                if (null != data) {
                     Entry.debug(player.getName() + " is breaking a block: " + data.breakDelay + " ticks left on break");
-                    if (data.breakDelay > 0) {
-                        this.addFlag(player, 2);
+                    if (0 < data.breakDelay) {
+                        addFlag(player, 2);
                     } else {
-                        this.removeFlag(player);
+                        removeFlag(player);
                     }
 
                 }

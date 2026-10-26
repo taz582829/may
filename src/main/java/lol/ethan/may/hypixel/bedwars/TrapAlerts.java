@@ -8,9 +8,9 @@ import net.minecraft.potion.Potion;
 
 public class TrapAlerts {
     @SubscribeEvent
-    public void onPacket(PacketEvent.Receive event) {
+    public void onPacket(final PacketEvent.Receive event) {
         if (event.getPacket() instanceof S1DPacketEntityEffect && BedwarsUtils.isInBedwars()) {
-            S1DPacketEntityEffect packet = (S1DPacketEntityEffect) event.getPacket();
+            final S1DPacketEntityEffect packet = (S1DPacketEntityEffect) event.getPacket();
             if (packet.getEffectId() == Potion.digSlowdown.getId()) {
                 Entry.chat(Entry.PREFIX + "§cYou activated a Mining Fatigue trap!");
             }

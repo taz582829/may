@@ -10,24 +10,24 @@ import java.util.concurrent.CompletableFuture;
 
 public class MojangAPI {
 
-    public static CompletableFuture<List<ShortProfile>> bulkRequest(List<String> igns) {
-        List<CompletableFuture<Void>> futures = new ArrayList<>();
-        List<ShortProfile> profiles = Collections.synchronizedList(new ArrayList<>());
+    public static CompletableFuture<List<ShortProfile>> bulkRequest(final List<String> igns) {
+        final List<CompletableFuture<Void>> futures = new ArrayList<>();
+        final List<ShortProfile> profiles = Collections.synchronizedList(new ArrayList<>());
 
-        int batchSize = 10;
+        final int batchSize = 10;
         for (int i = 0; i < igns.size(); i += batchSize) {
-            int end = Math.min(i + batchSize, igns.size());
+            final int end = Math.min(i + batchSize, igns.size());
 
-            List<String> sublist = igns.subList(i, end);
-            JsonArray arr = new JsonArray();
-            for (String ign : sublist) {
+            final List<String> sublist = igns.subList(i, end);
+            final JsonArray arr = new JsonArray();
+            for (final String ign : sublist) {
                 arr.add(ign);
             }
-            CompletableFuture<Void> future = HttpUtils.post("https://api.mojang.com/profiles/minecraft", arr)
+            final CompletableFuture<Void> future = HttpUtils.post("https://api.mojang.com/profiles/minecraft", arr)
                     .thenAccept((res) -> {
                         if (!res.isJsonArray()) return;
-                        JsonArray responseArray = res.getAsJsonArray();
-                        ShortProfile profile = JsonUtils.gson.fromJson(responseArray, ShortProfile.class);
+                        final JsonArray responseArray = res.getAsJsonArray();
+                        final ShortProfile profile = JsonUtils.gson.fromJson(responseArray, ShortProfile.class);
                         profiles.add(profile);
                     });
             futures.add(future);
@@ -36,16 +36,16 @@ public class MojangAPI {
                 .thenApply(v -> profiles);
     }
 
-    public static CompletableFuture<Profile> getProfile(String identifier) {
+    public static CompletableFuture<Profile> getProfile(final String identifier) {
         return HttpUtils.get("https://mowojang.seraph.si/" + identifier).thenApply(r -> JsonUtils.gson.fromJson(r, Profile.class));
 
     }
 
-    public static CompletableFuture<String> getIGN(String uuid) {
+    public static CompletableFuture<String> getIGN(final String uuid) {
         return getProfile(uuid).thenApply(p -> p.name);
     }
 
-    public static CompletableFuture<String> getUUID(String ign) {
+    public static CompletableFuture<String> getUUID(final String ign) {
         return getProfile(ign).thenApply(p -> p.id);
     }
 
@@ -79,7 +79,7 @@ public class MojangAPI {
         public List<String> properties;
 
         public String getDashedUUID() {
-            return UUIDUtils.dashUUID(id);
+            return UUIDUtils.dashUUID(this.id);
         }
     }
 

@@ -19,34 +19,34 @@ public class HousingESP {
     Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
-    public void onRenderWorldLast(RenderWorldEvent event) {
-        if (!Config.housingEsp.enabled || this.mc.thePlayer == null || !this.mc.thePlayer.capabilities.isCreativeMode) {
+    public void onRenderWorldLast(final RenderWorldEvent event) {
+        if (!Config.housingEsp.enabled || null == this.mc.thePlayer || !mc.thePlayer.capabilities.isCreativeMode) {
             return;
         }
         if (HousingUtils.isInHousing()) {
-            for (Entity entity : this.mc.theWorld.loadedEntityList) {
+            for (final Entity entity : mc.theWorld.loadedEntityList) {
                 if (entity instanceof EntityPlayer) {
-                    EntityPlayer player = (EntityPlayer) entity;
-                    if (player.equals(this.mc.thePlayer) || player.getUniqueID().version() == 2 || Config.housingEspInvisOnly.enabled && !AntiInvis.INVISIBLE.contains(player))
+                    final EntityPlayer player = (EntityPlayer) entity;
+                    if (player.equals(mc.thePlayer) || 2 == player.getUniqueID().version() || Config.housingEspInvisOnly.enabled && !AntiInvis.INVISIBLE.contains(player))
                         continue;
                     String hex = "FFFFFF";
-                    if (player.getTeam() != null) {
-                        ScorePlayerTeam team = (ScorePlayerTeam) player.getTeam();
+                    if (null != player.getTeam()) {
+                        final ScorePlayerTeam team = (ScorePlayerTeam) player.getTeam();
                         hex = ColorUtils.colorToHex(String.valueOf(ColorUtils.getLastColorCode(team.getColorSuffix())));
                     }
-                    int c = Integer.parseInt(hex, 16);
-                    Color _c = new Color(c);
-                    Color color = new Color(_c.getRed(), _c.getGreen(), _c.getBlue(), 100);
+                    final int c = Integer.parseInt(hex, 16);
+                    final Color _c = new Color(c);
+                    final Color color = new Color(_c.getRed(), _c.getGreen(), _c.getBlue(), 100);
                     RenderUtils.drawEntityBoundingBox(player, color);
                     continue;
                 }
                 if (!(entity instanceof EntityItemFrame)) continue;
-                EntityItemFrame frame = (EntityItemFrame) entity;
-                if (frame.getDisplayedItem() == null) {
-                    RenderUtils.drawEntityBoundingBox(frame, this.EMPTY_FRAME_COLOR);
+                final EntityItemFrame frame = (EntityItemFrame) entity;
+                if (null == frame.getDisplayedItem()) {
+                    RenderUtils.drawEntityBoundingBox(frame, EMPTY_FRAME_COLOR);
                     continue;
                 }
-                RenderUtils.drawEntityBoundingBox(frame, this.FULL_FRAME_COLOR);
+                RenderUtils.drawEntityBoundingBox(frame, FULL_FRAME_COLOR);
             }
         }
     }

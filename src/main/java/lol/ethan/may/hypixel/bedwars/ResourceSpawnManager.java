@@ -4,11 +4,11 @@ public class ResourceSpawnManager {
 
     public static int timeUntilEmerald = -1;
     public static int timeUntilDiamond = -1;
-    public static int emeraldSpawnCount = 0;
-    public static int diamondSpawnCount = 0;
-    public static int emeraldStage = 0;
-    public static int diamondStage = 0;
-    public static int secondsSinceGameStart = 0;
+    public static int emeraldSpawnCount;
+    public static int diamondSpawnCount;
+    public static int emeraldStage;
+    public static int diamondStage;
+    public static int secondsSinceGameStart;
 
     public static void resetSpawnCounts() {
         timeUntilEmerald = -1;
@@ -20,53 +20,53 @@ public class ResourceSpawnManager {
     }
 
     public static void updateTimers() {
-        if (BedwarsUtils.ticksSinceGameStart % 20 != 0) return;
+        if (0 != BedwarsUtils.ticksSinceGameStart % 20) return;
 
-        if (secondsSinceGameStart >= 0 && emeraldStage != 1) {
+        if (0 <= secondsSinceGameStart && 1 != emeraldStage) {
             emeraldStage = 1;
             diamondStage = 1;
             timeUntilDiamond = 1;
             timeUntilEmerald = 31;
-        } else if (secondsSinceGameStart == 720) {
+        } else if (720 == secondsSinceGameStart) {
             emeraldStage = 2;
             timeUntilEmerald = 0;
-        } else if (secondsSinceGameStart == 1440) {
+        } else if (1440 == secondsSinceGameStart) {
             emeraldStage = 3;
             timeUntilEmerald = 0;
-        } else if (secondsSinceGameStart == 360) {
+        } else if (360 == secondsSinceGameStart) {
             diamondStage = 2;
             timeUntilDiamond = 23;
-        } else if (secondsSinceGameStart == 1080) {
+        } else if (1080 == secondsSinceGameStart) {
             diamondStage = 3;
             timeUntilDiamond = 12;
         }
 
-        if (timeUntilDiamond == 0) {
+        if (0 == timeUntilDiamond) {
             diamondSpawnCount++;
 
-            if (diamondStage == 1) {
+            if (1 == diamondStage) {
                 timeUntilDiamond = 30;
-            } else if (diamondStage == 2) {
+            } else if (2 == diamondStage) {
                 timeUntilDiamond = 23;
-            } else if (diamondStage == 3) {
+            } else if (3 == diamondStage) {
                 timeUntilDiamond = 12;
             }
         }
 
-        if (timeUntilEmerald == 0) {
-            BedwarsUtils.Mode mode = BedwarsUtils.currentMode;
+        if (0 == timeUntilEmerald) {
+            final BedwarsUtils.Mode mode = BedwarsUtils.currentMode;
 
             emeraldSpawnCount++;
 
-            if (emeraldStage == 1) {
-                if (mode == BedwarsUtils.Mode.SOLO || mode == BedwarsUtils.Mode.DOUBLES) timeUntilEmerald = 65;
-                else if (mode == BedwarsUtils.Mode.FOURS || mode == BedwarsUtils.Mode.THREES) timeUntilEmerald = 55;
-            } else if (emeraldStage == 2) {
-                if (mode == BedwarsUtils.Mode.SOLO || mode == BedwarsUtils.Mode.DOUBLES) timeUntilEmerald = 50;
-                else if (mode == BedwarsUtils.Mode.FOURS || mode == BedwarsUtils.Mode.THREES) timeUntilEmerald = 40;
-            } else if (emeraldStage == 3) {
-                if (mode == BedwarsUtils.Mode.SOLO || mode == BedwarsUtils.Mode.DOUBLES) timeUntilEmerald = 35;
-                else if (mode == BedwarsUtils.Mode.FOURS || mode == BedwarsUtils.Mode.THREES) timeUntilEmerald = 27;
+            if (1 == emeraldStage) {
+                if (BedwarsUtils.Mode.SOLO == mode || BedwarsUtils.Mode.DOUBLES == mode) timeUntilEmerald = 65;
+                else if (BedwarsUtils.Mode.FOURS == mode || BedwarsUtils.Mode.THREES == mode) timeUntilEmerald = 55;
+            } else if (2 == emeraldStage) {
+                if (BedwarsUtils.Mode.SOLO == mode || BedwarsUtils.Mode.DOUBLES == mode) timeUntilEmerald = 50;
+                else if (BedwarsUtils.Mode.FOURS == mode || BedwarsUtils.Mode.THREES == mode) timeUntilEmerald = 40;
+            } else if (3 == emeraldStage) {
+                if (BedwarsUtils.Mode.SOLO == mode || BedwarsUtils.Mode.DOUBLES == mode) timeUntilEmerald = 35;
+                else if (BedwarsUtils.Mode.FOURS == mode || BedwarsUtils.Mode.THREES == mode) timeUntilEmerald = 27;
             }
         }
 

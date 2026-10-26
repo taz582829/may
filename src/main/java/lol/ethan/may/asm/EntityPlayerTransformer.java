@@ -17,11 +17,11 @@ import static lol.ethan.may.asm.ASMUtils.asm;
 
 public class EntityPlayerTransformer implements ITransformer {
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             if (!method.name.equals("getDisplayName") && !method.name.equals("func_145748_c_")) continue;
-            for (AbstractInsnNode insnNode : method.instructions.toArray()) {
-                if (insnNode.getOpcode() < Opcodes.IRETURN || insnNode.getOpcode() > Opcodes.RETURN) continue;
+            for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
+                if (Opcodes.IRETURN > insnNode.getOpcode() || Opcodes.RETURN < insnNode.getOpcode()) continue;
                 method.instructions.insertBefore(insnNode, asm(a -> {
                     a.load(0, Type.getType(EntityPlayer.class));
                     a.invokestatic(Type.getInternalName(EntityPlayerTransformer.class), "may$transformName",
@@ -31,8 +31,8 @@ public class EntityPlayerTransformer implements ITransformer {
         }
     }
 
-    public static IChatComponent may$transformName(EntityPlayer player, IChatComponent og) {
-        NameFormatEvent event = new NameFormatEvent(player, og.getFormattedText());
+    public static IChatComponent may$transformName(final EntityPlayer player, final IChatComponent og) {
+        final NameFormatEvent event = new NameFormatEvent(player, og.getFormattedText());
         EventBus.postEvent(event);
         return event.getTextAsComponent();
     }

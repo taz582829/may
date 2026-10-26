@@ -15,18 +15,18 @@ public class HypixelStats extends Command {
     }
 
     @Override
-    public void execute(String[] args) {
-        if (args.length < 1) {
+    public void execute(final String[] args) {
+        if (1 > args.length) {
             Entry.chat("§cUsage: /sc bw|duels *player* *mode*");
         }
-        String ign = args[1];
-        String subcommand = args[0].toLowerCase();
+        final String ign = args[1];
+        final String subcommand = args[0].toLowerCase();
         MojangAPI.getProfile(ign).thenAccept(profile -> {
-            if (profile == null) {
+            if (null == profile) {
                 Entry.chat("§cThis player does not exist!");
                 return;
             }
-            UUID id = UUID.fromString(profile.getDashedUUID());
+            final UUID id = UUID.fromString(profile.getDashedUUID());
             HypixelAPI.getPlayer(id).thenAccept(res -> {
                 if (!res.player.exists()) {
                     Entry.chat("§cThis player has no stats!");
@@ -38,9 +38,9 @@ public class HypixelStats extends Command {
                         break;
                     }
                     case "duels": {
-                        boolean doGamemode;
+                        final boolean doGamemode;
                         DuelsUtils.DuelsMode mode = null;
-                        boolean bl = doGamemode = args.length > 2;
+                        final boolean bl = doGamemode = 2 < args.length;
                         if (doGamemode) {
                             mode = DuelsUtils.DuelsMode.getModeFromString(args[2].toLowerCase());
                         }

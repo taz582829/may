@@ -13,39 +13,39 @@ public abstract class BasicHud {
     protected final Minecraft mc = Minecraft.getMinecraft();
 
     public boolean enabled = true;
-    public boolean background = false;
+    public boolean background;
     public boolean shadow = true;
     public float x;
     public float y;
     public float scale = 1.0F;
-    public int bgColor = 0;
+    public int bgColor;
     public int bgAlpha = 50;
     public int padding = 2;
-    public boolean rightAlign = false;
-    public transient List<String> lineCache = new ArrayList<>();
+    public boolean rightAlign;
+    public List<String> lineCache = new ArrayList<>();
 
     protected abstract List<String> getLines(boolean example);
     public boolean shouldShow() {
-        return enabled;
+        return this.enabled;
     }
-    public float[] overrideCoords(float x, float y) {
+    public float[] overrideCoords(final float x, final float y) {
         return new float[]{x, y};
     }
-    public BasicHud(boolean enabled, float x, float y) {
+    public BasicHud(final boolean enabled, final float x, final float y) {
         this.enabled = enabled;
         this.x = x;
         this.y = y;
     }
-    public BasicHud(float x, float y) {
+    public BasicHud(final float x, final float y) {
         this.x = x;
         this.y = y;
     }
-    public BasicHud(boolean enabled) {
+    public BasicHud(final boolean enabled) {
         this.enabled = enabled;
     }
 
     public int getBackgroundColor() {
-        return ColorUtils.setAlpha(bgColor, bgAlpha);
+        return ColorUtils.setAlpha(this.bgColor, this.bgAlpha);
     }
     public int getTextColor() {
         return 0xFFFFFF;
@@ -55,47 +55,47 @@ public abstract class BasicHud {
      * called every post tick
      */
     public void updateLineCache() {
-        this.lineCache = getLines(mc.currentScreen instanceof ClickGUI);
+        lineCache = this.getLines(this.mc.currentScreen instanceof ClickGUI);
     }
 
-    public void drawText(float x, float y) {
-        float textY = (y / scale) - padding;
-        for (String text : lineCache) {
-            int textWidth = mc.fontRendererObj.getStringWidth(text);
-            float textX = (rightAlign ? -padding - textWidth : padding) + (x / scale);
-            mc.fontRendererObj.drawString(text, textX, textY, getTextColor(), shadow);
-            textY += mc.fontRendererObj.FONT_HEIGHT + 1;
+    public void drawText(final float x, final float y) {
+        float textY = (y / this.scale) - this.padding;
+        for (final String text : this.lineCache) {
+            final int textWidth = this.mc.fontRendererObj.getStringWidth(text);
+            final float textX = (this.rightAlign ? -this.padding - textWidth : this.padding) + (x / this.scale);
+            this.mc.fontRendererObj.drawString(text, textX, textY, this.getTextColor(), this.shadow);
+            textY += this.mc.fontRendererObj.FONT_HEIGHT + 1;
         }
     }
     public void draw() {
-        if (!shouldShow()) return;
+        if (!this.shouldShow()) return;
 
-        Minecraft mc = Minecraft.getMinecraft();
-        if (mc.theWorld == null) return;
-        if (lineCache == null || lineCache.size() == 0) return;
+        final Minecraft mc = Minecraft.getMinecraft();
+        if (null == mc.theWorld) return;
+        if (null == lineCache || 0 == lineCache.size()) return;
 
         GlStateManager.pushMatrix();
-        float[] coords = overrideCoords(this.x, this.y);
-        GlStateManager.scale(scale, scale, 1.0f);
-        int padding = background ? this.padding : 0;
-        int bgHeight = lineCache.size() * 10 + padding;
-        int color = getBackgroundColor();
+        final float[] coords = this.overrideCoords(x, y);
+        GlStateManager.scale(this.scale, this.scale, 1.0f);
+        final int padding = this.background ? this.padding : 0;
+        final int bgHeight = this.lineCache.size() * 10 + padding;
+        final int color = this.getBackgroundColor();
         int bgWidth = 0;
-        for (String text : lineCache) {
+        for (final String text : this.lineCache) {
             bgWidth = Math.max(bgWidth, bgWidth + mc.fontRendererObj.getStringWidth(text));
         }
-        int left = (rightAlign ? -bgWidth : 0) + (int) (coords[0] / scale);
+        final int left = (this.rightAlign ? -bgWidth : 0) + (int) (coords[0] / this.scale);
         bgWidth += padding;
-        if (background) {
+        if (this.background) {
             Gui.drawRect(
                     left,
-                    (int) (coords[1] / scale),
+                    (int) (coords[1] / this.scale),
                     left + bgWidth,
                     bgHeight,
                     color
             );
         }
-        drawText(coords[0], coords[1]);
+        this.drawText(coords[0], coords[1]);
         GlStateManager.popMatrix();
     }
 }

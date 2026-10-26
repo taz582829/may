@@ -10,6 +10,6 @@ public class Players{
 	private List<AdditionalPropertyItem> additionalProperty;
 
 	public List<AdditionalPropertyItem> getAdditionalProperty(){
-		return additionalProperty;
+		return this.additionalProperty;
 	}
 }

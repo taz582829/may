@@ -8,6 +8,6 @@ public class BulkTagsResponse{
 	private Players players;
 
 	public Players getPlayers(){
-		return players;
+		return this.players;
 	}
 }

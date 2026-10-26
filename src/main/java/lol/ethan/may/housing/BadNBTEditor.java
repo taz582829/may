@@ -14,19 +14,19 @@ public class BadNBTEditor extends GuiScreen {
     private GuiButton loadFromName;
     private GuiTextField loadFromName_player;
 
-    public BadNBTEditor(ItemStack currentItem) {
-        this.sr = new ScaledResolution(this.mc);
+    public BadNBTEditor(final ItemStack currentItem) {
+        sr = new ScaledResolution(mc);
         this.currentItem = currentItem;
     }
 
-    public void drawScreen(int i, int i1, float v) {
-        if (this.currentItem == null) {
+    public void drawScreen(final int i, final int i1, final float v) {
+        if (null == this.currentItem) {
             return;
         }
-        if (this.currentItem.getItem() == Items.skull) {
-            ItemSkull skull = (ItemSkull) this.currentItem.getItem();
-            this.loadFromName = new GuiButton(1, this.sr.getScaledWidth() / 2 - 50, (int) ((double) this.sr.getScaledHeight() / 1.5), 50, 20, "Load");
-            this.buttonList.add(this.loadFromName);
+        if (currentItem.getItem() == Items.skull) {
+            final ItemSkull skull = (ItemSkull) currentItem.getItem();
+            loadFromName = new GuiButton(1, sr.getScaledWidth() / 2 - 50, (int) ((double) sr.getScaledHeight() / 1.5), 50, 20, "Load");
+            buttonList.add(loadFromName);
         }
     }
 

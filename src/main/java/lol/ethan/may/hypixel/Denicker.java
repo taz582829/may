@@ -27,35 +27,35 @@ public class Denicker {
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final Map<String, DenickResult> denickMap = new HashMap<>();
 
-    public static DenickResult getDenick(String nick) {
+    public static DenickResult getDenick(final String nick) {
         return denickMap.get(nick);
     }
-    public static DenickResult addDenick(String nick, DenickResult result) {
+    public static DenickResult addDenick(final String nick, final DenickResult result) {
         return denickMap.put(nick, result);
     }
 
     @SubscribeEvent
-    public void onPlayerJoin(PlayerListEvent.Add event) {
+    public void onPlayerJoin(final PlayerListEvent.Add event) {
         if (!HypixelUtils.isOnHypixel()) return;
-        S38PacketPlayerListItem.AddPlayerData data = event.getPlayerData();
-        GameProfile profile = data.getProfile();
-        if (profile.getId().version() != 1) return;
+        final S38PacketPlayerListItem.AddPlayerData data = event.getPlayerData();
+        final GameProfile profile = data.getProfile();
+        if (1 != profile.getId().version()) return;
 
-        NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(profile.getId());
-        if (playerInfo == null) return;
+        final NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(profile.getId());
+        if (null == playerInfo) return;
         final String displayName = ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName());
-        SkinDenickResult skinDenickResult = skinDenick(profile);
+        final SkinDenickResult skinDenickResult = skinDenick(profile);
         if (!skinDenickResult.canBeDenicked) {
             try {
                 tabDenick(profile).thenAccept(res -> {
-                    if (res == null) {
+                    if (null == res) {
                         Entry.chat(Entry.PREFIX + displayName + " §fis nicked!");
                         return;
                     }
-                    announceDenick(mc.getNetHandler().getPlayerInfo(profile.getId()), res);
+                    this.announceDenick(mc.getNetHandler().getPlayerInfo(profile.getId()), res);
                     denickMap.put(profile.getName(), res);
                 }).exceptionally(t -> {
-                    String msg = t.getMessage();
+                    final String msg = t.getMessage();
                     if (msg.equals("no denick found for " + profile.getId())) {
                         Entry.chat(Entry.PREFIX + displayName + " §fis nicked!");
                     } else if (msg.equals("could not tab denick because getNetHandler() or getPlayerInfoMap() are null")) {
@@ -65,20 +65,20 @@ public class Denicker {
                     }
                     return null;
                 });
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 Entry.chat(Entry.PREFIX + displayName + " §fis nicked!");
                 e.printStackTrace();
             }
         } else {
-            announceDenick(mc.getNetHandler().getPlayerInfo(profile.getId()), skinDenickResult);
+            this.announceDenick(mc.getNetHandler().getPlayerInfo(profile.getId()), skinDenickResult);
             denickMap.put(profile.getName(), skinDenickResult);
         }
     }
 
-    public void announceDenick(NetworkPlayerInfo playerInfo, DenickResult denick) {
+    public void announceDenick(final NetworkPlayerInfo playerInfo, final DenickResult denick) {
         final String displayName = ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName());
 
-        IChatComponent component = ChatUtils.createChatButton(
+        final IChatComponent component = ChatUtils.createChatButton(
                 Entry.PREFIX + displayName + " §fis nicked as §6" + denick.username + " §8(" + denick.uuid + ")",
                 "§aClick to suggest message in chat!",
                 ClickEvent.Action.SUGGEST_COMMAND,
@@ -87,17 +87,17 @@ public class Denicker {
         Entry.chat(component);
     }
 
-    public static CompletableFuture<DenickResult> tabDenick(GameProfile targetProfile) {
-        CompletableFuture<DenickResult> future = new CompletableFuture<>();
+    public static CompletableFuture<DenickResult> tabDenick(final GameProfile targetProfile) {
+        final CompletableFuture<DenickResult> future = new CompletableFuture<>();
 
-        if (mc.getNetHandler() == null || mc.getNetHandler().getPlayerInfoMap() == null) {
+        if (null == mc.getNetHandler() || null == mc.getNetHandler().getPlayerInfoMap()) {
             future.complete(null);
             return future;
         }
         boolean foundDenick = false;
-        for (NetworkPlayerInfo info : mc.getNetHandler().getPlayerInfoMap()) {
-            GameProfile profile = info.getGameProfile();
-            if (Objects.equals(profile.getName(), targetProfile.getName()) && profile.getId().version() == 4) {
+        for (final NetworkPlayerInfo info : mc.getNetHandler().getPlayerInfoMap()) {
+            final GameProfile profile = info.getGameProfile();
+            if (Objects.equals(profile.getName(), targetProfile.getName()) && 4 == profile.getId().version()) {
                 foundDenick = true;
                 MojangAPI.getIGN(profile.getId().toString()).thenAccept(ign -> future.complete(new DenickResult(ign, profile.getId().toString())));
                 break;
@@ -108,21 +108,21 @@ public class Denicker {
         return future;
     }
 
-    public static SkinDenickResult skinDenick(GameProfile profile) {
-        UUID uuid = profile.getId();
-        if (uuid.version() != 1) return new SkinDenickResult(profile.getName(), profile.getId().toString(), false);
-        Collection<Property> textureList = profile.getProperties().get("textures");
-        if (textureList == null || textureList.size() == 0) return new SkinDenickResult(profile.getName(), profile.getId().toString(), false);
-        Property textures = textureList.iterator().next();
-        String value = textures.getValue();
-        byte[] decoded = Base64.getDecoder().decode(value);
-        String json = new String(decoded, StandardCharsets.UTF_8);
+    public static SkinDenickResult skinDenick(final GameProfile profile) {
+        final UUID uuid = profile.getId();
+        if (1 != uuid.version()) return new SkinDenickResult(profile.getName(), profile.getId().toString(), false);
+        final Collection<Property> textureList = profile.getProperties().get("textures");
+        if (null == textureList || 0 == textureList.size()) return new SkinDenickResult(profile.getName(), profile.getId().toString(), false);
+        final Property textures = textureList.iterator().next();
+        final String value = textures.getValue();
+        final byte[] decoded = Base64.getDecoder().decode(value);
+        final String json = new String(decoded, StandardCharsets.UTF_8);
 
-        MojangAPI.SkinProfile skinProfile = JsonUtils.gson.fromJson(json, MojangAPI.SkinProfile.class);
-        String skinURL = skinProfile.textures.skin.url;
-        String[] parts = skinURL.split("/");
-        if (parts.length < 5) return new SkinDenickResult(profile.getName(), profile.getId().toString(), false);
-        String hash = parts[parts.length - 1];
+        final MojangAPI.SkinProfile skinProfile = JsonUtils.gson.fromJson(json, MojangAPI.SkinProfile.class);
+        final String skinURL = skinProfile.textures.skin.url;
+        final String[] parts = skinURL.split("/");
+        if (5 > parts.length) return new SkinDenickResult(profile.getName(), profile.getId().toString(), false);
+        final String hash = parts[parts.length - 1];
         if (NICK_SKIN_HASHES.contains(hash)) return new SkinDenickResult(profile.getName(), profile.getId().toString(), false);
 
         return new SkinDenickResult(skinProfile.profileName, UUIDUtils.dashUUID(skinProfile.profileId), true);
@@ -131,7 +131,7 @@ public class Denicker {
         public String username;
         public String uuid;
 
-        public DenickResult(String username, String uuid) {
+        public DenickResult(final String username, final String uuid) {
             this.username = username;
             this.uuid = uuid;
         }
@@ -139,17 +139,17 @@ public class Denicker {
     public static class SkinDenickResult extends DenickResult {
         public boolean canBeDenicked;
 
-        public SkinDenickResult(String username, String uuid, boolean canBeDenicked) {
+        public SkinDenickResult(final String username, final String uuid, final boolean canBeDenicked) {
             super(username, uuid);
             this.canBeDenicked = canBeDenicked;
         }
     }
     @SubscribeEvent
-    public void onNameRender(NameFormatEvent event) {
-        UUID uuid = event.getPlayer().getUniqueID();
-        if (HypixelUtils.isOnHypixel() && uuid.version() == 1) {
-            DenickResult result = getDenick(event.getPlayer().getName());
-            if (result == null) {
+    public void onNameRender(final NameFormatEvent event) {
+        final UUID uuid = event.getPlayer().getUniqueID();
+        if (HypixelUtils.isOnHypixel() && 1 == uuid.version()) {
+            final DenickResult result = getDenick(event.getPlayer().getName());
+            if (null == result) {
                 event.setText(event.getText() + " §c[N]");
             } else {
                 event.setText(event.getText() + " §8(" + result.username + ")");
@@ -158,11 +158,11 @@ public class Denicker {
 
     }
     @SubscribeEvent(priority = Priority.LOWEST)
-    public void onRenderTabEvent(RenderPlayerInTabEvent event) {
-        UUID uuid = event.getPlayerInfo().getGameProfile().getId();
-        if (HypixelUtils.isOnHypixel() && uuid.version() == 1) {
-            DenickResult result = getDenick(event.getPlayerInfo().getGameProfile().getName());
-            if (result == null) {
+    public void onRenderTabEvent(final RenderPlayerInTabEvent event) {
+        final UUID uuid = event.getPlayerInfo().getGameProfile().getId();
+        if (HypixelUtils.isOnHypixel() && 1 == uuid.version()) {
+            final DenickResult result = getDenick(event.getPlayerInfo().getGameProfile().getName());
+            if (null == result) {
                 event.setText(event.getText() + " §c[N]");
             } else {
                 event.setText(event.getText() + " §8(" + result.username + ")");

@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class GuiUtils {
-    public static boolean cancelMovement = false;
+    public static boolean cancelMovement;
 
-    public static String getTitle(Container container) {
+    public static String getTitle(final Container container) {
         if (!(container instanceof ContainerChest)) {
             return null;
         }
-        ContainerChest containerChest = (ContainerChest) container;
+        final ContainerChest containerChest = (ContainerChest) container;
         return containerChest.getLowerChestInventory().getDisplayName().getFormattedText();
     }
 
@@ -33,47 +33,47 @@ public class GuiUtils {
     }
 
     public static void openInventory() {
-        Minecraft mc = Minecraft.getMinecraft();
+        final Minecraft mc = Minecraft.getMinecraft();
         mc.thePlayer.sendQueue.addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
         mc.displayGuiScreen(new GuiInventory(mc.thePlayer));
     }
 
     public static void openInventoryPacket() {
-        Minecraft mc = Minecraft.getMinecraft();
+        final Minecraft mc = Minecraft.getMinecraft();
         mc.thePlayer.sendQueue.addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
     }
 
-    public static void clickSlot(int windowId, int slot, int mouseButton, int mode) {
-        Minecraft mc = Minecraft.getMinecraft();
+    public static void clickSlot(final int windowId, final int slot, final int mouseButton, final int mode) {
+        final Minecraft mc = Minecraft.getMinecraft();
         mc.playerController.windowClick(windowId, slot, mouseButton, mode, mc.thePlayer);
     }
 
-    public static void clickSlot(int slot, int mouseButton, int mode) {
-        Minecraft mc = Minecraft.getMinecraft();
+    public static void clickSlot(final int slot, final int mouseButton, final int mode) {
+        final Minecraft mc = Minecraft.getMinecraft();
         GuiUtils.clickSlot(mc.thePlayer.openContainer.windowId, slot, mouseButton, mode);
     }
 
-    public static void clickSlot(int slot, int mouseButton) {
+    public static void clickSlot(final int slot, final int mouseButton) {
         GuiUtils.clickSlot(slot, mouseButton, 0);
     }
 
-    public static void clickSlot(int slot) {
+    public static void clickSlot(final int slot) {
         GuiUtils.clickSlot(slot, 0);
     }
 
-    public static int searchContainer(GuiContainer container, Predicate<ItemStack> p) {
-        List<Slot> slots = container.inventorySlots.inventorySlots;
-        for (Slot slot : slots) {
+    public static int searchContainer(final GuiContainer container, final Predicate<ItemStack> p) {
+        final List<Slot> slots = container.inventorySlots.inventorySlots;
+        for (final Slot slot : slots) {
             if (slot.inventory == Minecraft.getMinecraft().thePlayer.inventory || !p.test(slot.getStack())) continue;
             return slot.slotNumber;
         }
         return -1;
     }
 
-    public static int searchInventory(Predicate<ItemStack> p) {
-        InventoryPlayer playerInventory = Minecraft.getMinecraft().thePlayer.inventory;
+    public static int searchInventory(final Predicate<ItemStack> p) {
+        final InventoryPlayer playerInventory = Minecraft.getMinecraft().thePlayer.inventory;
         for (int i = 0; i < playerInventory.getSizeInventory(); i++) {
-            ItemStack item = playerInventory.getStackInSlot(i);
+            final ItemStack item = playerInventory.getStackInSlot(i);
             if (!p.test(item)) continue;
             return i;
         }
@@ -85,7 +85,7 @@ public class GuiUtils {
         EventBus.subscribe(new Object() {
 
             @SubscribeEvent
-            public void onTick(TickEvent.Post event) {
+            public void onTick(final TickEvent.Post event) {
                 Minecraft.getMinecraft().displayGuiScreen(screen);
                 EventBus.unsubscribe(this);
             }

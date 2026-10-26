@@ -9,9 +9,9 @@ import net.minecraft.util.IChatComponent;
 
 public class ChatUtils {
 
-    public static IChatComponent createChatButton(String text, String hoverText, ClickEvent.Action clickEvent, String clickMessage) {
-        ChatStyle style = new ChatStyle();
-        ChatComponentText msg = new ChatComponentText(text);
+    public static IChatComponent createChatButton(final String text, final String hoverText, final ClickEvent.Action clickEvent, final String clickMessage) {
+        final ChatStyle style = new ChatStyle();
+        final ChatComponentText msg = new ChatComponentText(text);
         style.setChatClickEvent(new ClickEvent(clickEvent, clickMessage));
         if (!hoverText.isEmpty()) {
             style.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(hoverText)));
@@ -20,21 +20,21 @@ public class ChatUtils {
         return msg;
     }
 
-    public static IChatComponent createChatButton(String text, ClickEvent.Action clickEvent, String clickMessage) {
-        ChatStyle style = new ChatStyle();
-        ChatComponentText msg = new ChatComponentText(text);
+    public static IChatComponent createChatButton(final String text, final ClickEvent.Action clickEvent, final String clickMessage) {
+        final ChatStyle style = new ChatStyle();
+        final ChatComponentText msg = new ChatComponentText(text);
         style.setChatClickEvent(new ClickEvent(clickEvent, clickMessage));
         msg.setChatStyle(style);
         return msg;
     }
 
-    public static void editChat(int messageId, IChatComponent newMessage) {
-        Minecraft mc = Minecraft.getMinecraft();
+    public static void editChat(final int messageId, final IChatComponent newMessage) {
+        final Minecraft mc = Minecraft.getMinecraft();
         mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(newMessage, messageId);
     }
 
-    public static void delete(int messageId) {
-        Minecraft mc = Minecraft.getMinecraft();
+    public static void delete(final int messageId) {
+        final Minecraft mc = Minecraft.getMinecraft();
         mc.ingameGUI.getChatGUI().deleteChatLine(messageId);
     }
 
@@ -42,11 +42,11 @@ public class ChatUtils {
         return "§m" + ChatUtils.getChatBreak("-");
     }
 
-    public static String getChatBreak(String text) {
-        StringBuilder res = new StringBuilder();
-        Minecraft mc = Minecraft.getMinecraft();
-        int length = mc.fontRendererObj.getStringWidth(text);
-        int times = mc.ingameGUI.getChatGUI().getChatWidth() / length;
+    public static String getChatBreak(final String text) {
+        final StringBuilder res = new StringBuilder();
+        final Minecraft mc = Minecraft.getMinecraft();
+        final int length = mc.fontRendererObj.getStringWidth(text);
+        final int times = mc.ingameGUI.getChatGUI().getChatWidth() / length;
         for (int i = 0; i < times; i++) {
             res.append(text);
         }

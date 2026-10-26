@@ -6,28 +6,28 @@ import java.awt.*;
 
 public class ColorUtils {
 
-    public static char getLastColorCode(String text) {
-        for (int i = text.length() - 1; i >= 0; --i) {
-            char format;
-            int index;
-            if (text.charAt(i) != '§' || i + 1 >= text.length() || (index = "0123456789abcdefklmnorABCDEFKLMNOR".indexOf(format = text.charAt(i + 1))) == -1)
+    public static char getLastColorCode(final String text) {
+        for (int i = text.length() - 1; 0 <= i; --i) {
+            final char format;
+            final int index;
+            if ('§' != text.charAt(i) || i + 1 >= text.length() || -1 == (index = "0123456789abcdefklmnorABCDEFKLMNOR".indexOf(format = text.charAt(i + 1))))
                 continue;
-            return index < 22 ? format : "0123456789abcdefklmnorABCDEFKLMNOR".charAt(index - 12);
+            return 22 > index ? format : "0123456789abcdefklmnorABCDEFKLMNOR".charAt(index - 12);
         }
         return '\u0000';
     }
 
-    public static Color setAlpha(Color color, int newAlpha) {
+    public static Color setAlpha(final Color color, final int newAlpha) {
         return new Color(color.getRed(), color.getGreen(), color.getBlue(), newAlpha);
     }
 
-    public static int setAlpha(int color, int newAlpha) {
+    public static int setAlpha(final int color, final int newAlpha) {
         return color & 0xFFFF0000 | (newAlpha & 0xFF) << 24;
     }
 
-    public static String colorToHex(String color) {
-        String c;
-        String string = c = color.length() == 1 ? color : String.valueOf(color.charAt(1));
+    public static String colorToHex(final String color) {
+        final String c;
+        final String string = c = 1 == color.length() ? color : String.valueOf(color.charAt(1));
         if (c.equalsIgnoreCase("0")) {
             return "000000";
         }
@@ -79,11 +79,11 @@ public class ColorUtils {
         return "FFFFFF";
     }
 
-    public static String getColorFromTeam(ScorePlayerTeam team) {
-        if (team == null) {
+    public static String getColorFromTeam(final ScorePlayerTeam team) {
+        if (null == team) {
             return "FFFFFF";
         }
-        String c = String.valueOf(ColorUtils.getLastColorCode(team.getColorPrefix()));
+        final String c = String.valueOf(ColorUtils.getLastColorCode(team.getColorPrefix()));
         return ColorUtils.colorToHex(c);
     }
 }

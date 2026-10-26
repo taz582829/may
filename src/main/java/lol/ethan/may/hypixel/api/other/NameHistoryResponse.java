@@ -16,14 +16,14 @@ public class NameHistoryResponse{
 	private boolean cached;
 
 	public List<NamesItem> getNames(){
-		return names;
+		return this.names;
 	}
 
 	public boolean isSuccess(){
-		return success;
+		return this.success;
 	}
 
 	public boolean isCached(){
-		return cached;
+		return this.cached;
 	}
 }

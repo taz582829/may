@@ -31,45 +31,45 @@ public class LocationData {
         INSTANCE = this;
         HypixelModAPI.getInstance().subscribeToEventPacket(ClientboundLocationPacket.class);
         HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket.class, packet -> {
-            server = packet.getServerName();
-            serverType = packet.getServerType().orElse(null);
-            gameType = serverType == null ? null : GameType.valueOf(serverType.name());
-            lobbyName = packet.getLobbyName().orElse(null);
-            mode = packet.getMode().orElse(null);
-            map = packet.getMap().orElse(null);
-            EventBus.postEvent(new LocationEvent(server, serverType, gameType, lobbyName, mode, map));
+            this.server = packet.getServerName();
+            this.serverType = packet.getServerType().orElse(null);
+            this.gameType = null == serverType ? null : GameType.valueOf(this.serverType.name());
+            this.lobbyName = packet.getLobbyName().orElse(null);
+            this.mode = packet.getMode().orElse(null);
+            this.map = packet.getMap().orElse(null);
+            EventBus.postEvent(new LocationEvent(this.server, this.serverType, this.gameType, this.lobbyName, this.mode, this.map));
         });
     }
 
     public static String getServer() {
-        return INSTANCE == null ? null : INSTANCE.server;
+        return null == INSTANCE ? null : INSTANCE.server;
     }
 
     public static GameType getGameType() {
-        return INSTANCE == null ? null : INSTANCE.gameType;
+        return null == INSTANCE ? null : INSTANCE.gameType;
     }
 
     public static String getLobbyName() {
-        return INSTANCE == null ? null : INSTANCE.lobbyName;
+        return null == INSTANCE ? null : INSTANCE.lobbyName;
     }
 
     public static String getMode() {
-        return INSTANCE == null ? null : INSTANCE.mode;
+        return null == INSTANCE ? null : INSTANCE.mode;
     }
 
     public static String getMap() {
-        return INSTANCE == null ? null : INSTANCE.map;
+        return null == INSTANCE ? null : INSTANCE.map;
     }
 
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-                .add("server", server)
-                .add("gameType", gameType)
-                .add("serverType", serverType)
-                .add("lobbyName", lobbyName)
-                .add("mode", mode)
-                .add("map", map)
+                .add("server", this.server)
+                .add("gameType", this.gameType)
+                .add("serverType", this.serverType)
+                .add("lobbyName", this.lobbyName)
+                .add("mode", this.mode)
+                .add("map", this.map)
                 .toString();
     }
 }

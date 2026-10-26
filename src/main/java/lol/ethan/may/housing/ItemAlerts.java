@@ -33,95 +33,95 @@ import java.util.UUID;
 public class ItemAlerts {
     Minecraft mc = Minecraft.getMinecraft();
 
-    public void alert(EntityPlayer player, String itemDisplayName, ItemStack item, boolean wearing) {
-        String displayName = ScorePlayerTeam.formatPlayerName(player.getTeam(), player.getName());
-        List<String> lore = ItemUtils.getLore(item);
-        UUID itemId = HousingUtils.addToItemMap(item);
-        String internalCommand = Entry.addInternalCommand(() -> HousingUtils.spawnItem(itemId));
-        IChatComponent button = ChatUtils.createChatButton("§dMay §8» §r" + displayName + " §fis " + (wearing ? "wearing" : "holding") + " " + itemDisplayName, String.join("\n", lore), ClickEvent.Action.RUN_COMMAND, internalCommand);
-        IChatComponent copyNBTButton = ChatUtils.createChatButton("§b[Copy NBT]", ClickEvent.Action.RUN_COMMAND, Entry.addInternalCommand(() -> GuiScreen.setClipboardString(ItemUtils.getFullNBT(item).toString())));
-        IChatComponent tpButton = ChatUtils.createChatButton("§5[Teleport]", ClickEvent.Action.RUN_COMMAND, "/tp " + player.getName());
+    public void alert(final EntityPlayer player, final String itemDisplayName, final ItemStack item, final boolean wearing) {
+        final String displayName = ScorePlayerTeam.formatPlayerName(player.getTeam(), player.getName());
+        final List<String> lore = ItemUtils.getLore(item);
+        final UUID itemId = HousingUtils.addToItemMap(item);
+        final String internalCommand = Entry.addInternalCommand(() -> HousingUtils.spawnItem(itemId));
+        final IChatComponent button = ChatUtils.createChatButton("§dMay §8» §r" + displayName + " §fis " + (wearing ? "wearing" : "holding") + " " + itemDisplayName, String.join("\n", lore), ClickEvent.Action.RUN_COMMAND, internalCommand);
+        final IChatComponent copyNBTButton = ChatUtils.createChatButton("§b[Copy NBT]", ClickEvent.Action.RUN_COMMAND, Entry.addInternalCommand(() -> GuiScreen.setClipboardString(ItemUtils.getFullNBT(item).toString())));
+        final IChatComponent tpButton = ChatUtils.createChatButton("§5[Teleport]", ClickEvent.Action.RUN_COMMAND, "/tp " + player.getName());
         button.appendText(" ").appendSibling(copyNBTButton).appendText(" ").appendSibling(tpButton);
         Entry.chat(button);
     }
 
-    public void alert(Entity user, String itemDisplayName, ItemStack item) {
-        List<String> lore = ItemUtils.getLore(item);
-        UUID itemId = HousingUtils.addToItemMap(item);
-        String internalCommand = Entry.addInternalCommand(() -> HousingUtils.spawnItem(itemId));
-        IChatComponent button = ChatUtils.createChatButton("§dMay §8» §r§6Item Frame §fhas " + itemDisplayName, String.join("\n", lore), ClickEvent.Action.RUN_COMMAND, internalCommand);
-        IChatComponent copyNBTButton = ChatUtils.createChatButton("§b[Copy NBT]", ClickEvent.Action.RUN_COMMAND, Entry.addInternalCommand(() -> GuiScreen.setClipboardString(ItemUtils.getFullNBT(item).toString())));
-        IChatComponent tpButton = ChatUtils.createChatButton("§5[Teleport]", ClickEvent.Action.RUN_COMMAND, "/tp " + user.posX + " " + user.posY + " " + user.posZ);
+    public void alert(final Entity user, final String itemDisplayName, final ItemStack item) {
+        final List<String> lore = ItemUtils.getLore(item);
+        final UUID itemId = HousingUtils.addToItemMap(item);
+        final String internalCommand = Entry.addInternalCommand(() -> HousingUtils.spawnItem(itemId));
+        final IChatComponent button = ChatUtils.createChatButton("§dMay §8» §r§6Item Frame §fhas " + itemDisplayName, String.join("\n", lore), ClickEvent.Action.RUN_COMMAND, internalCommand);
+        final IChatComponent copyNBTButton = ChatUtils.createChatButton("§b[Copy NBT]", ClickEvent.Action.RUN_COMMAND, Entry.addInternalCommand(() -> GuiScreen.setClipboardString(ItemUtils.getFullNBT(item).toString())));
+        final IChatComponent tpButton = ChatUtils.createChatButton("§5[Teleport]", ClickEvent.Action.RUN_COMMAND, "/tp " + user.posX + " " + user.posY + " " + user.posZ);
         button.appendText(" ").appendSibling(copyNBTButton).appendText(" ").appendSibling(tpButton);
         Entry.chat(button);
     }
 
     @SubscribeEvent
-    public void onPacket(PacketEvent.Receive event) {
+    public void onPacket(final PacketEvent.Receive event) {
         if (!HousingUtils.isInHousing()) {
             return;
         }
         if (event.getPacket() instanceof S04PacketEntityEquipment) {
-            S04PacketEntityEquipment packet = (S04PacketEntityEquipment) event.getPacket();
-            ItemStack item = packet.getItemStack();
-            if (item == null) {
+            final S04PacketEntityEquipment packet = (S04PacketEntityEquipment) event.getPacket();
+            final ItemStack item = packet.getItemStack();
+            if (null == item) {
                 return;
             }
-            Entity entity = this.mc.theWorld.getEntityByID(packet.getEntityID());
+            final Entity entity = mc.theWorld.getEntityByID(packet.getEntityID());
             if (!(entity instanceof EntityPlayer)) {
                 return;
             }
-            EntityPlayer player = (EntityPlayer) entity;
-            Item i = item.getItem();
+            final EntityPlayer player = (EntityPlayer) entity;
+            final Item i = item.getItem();
             if (i instanceof ItemPotion) {
                 if (ItemPotion.isSplash(item.getItemDamage())) {
-                    this.alert(player, "§cSplash Potion", item, packet.getEquipmentSlot() != 0);
+                    alert(player, "§cSplash Potion", item, 0 != packet.getEquipmentSlot());
                 } else {
-                    this.alert(player, "§aPotion", item, packet.getEquipmentSlot() != 0);
+                    alert(player, "§aPotion", item, 0 != packet.getEquipmentSlot());
                 }
             } else if (Block.getBlockFromItem(i) == Blocks.barrier) {
-                this.alert(player, "§cBarrier", item, packet.getEquipmentSlot() != 0);
+                alert(player, "§cBarrier", item, 0 != packet.getEquipmentSlot());
             } else if (i == Items.writable_book) {
-                this.alert(player, "§4Signed Book", item, packet.getEquipmentSlot() != 0);
+                alert(player, "§4Signed Book", item, 0 != packet.getEquipmentSlot());
             } else if (Block.getBlockFromItem(i) == Blocks.dispenser) {
-                this.alert(player, "§eDispenser", item, packet.getEquipmentSlot() != 0);
+                alert(player, "§eDispenser", item, 0 != packet.getEquipmentSlot());
             } else if (Block.getBlockFromItem(i) == Blocks.skull) {
-                this.alert(player, "§4Skull", item, packet.getEquipmentSlot() != 0);
+                alert(player, "§4Skull", item, 0 != packet.getEquipmentSlot());
             } else if (Config.itemLogging.enabled) {
-                this.alert(player, item.getDisplayName(), item, packet.getEquipmentSlot() != 0);
+                alert(player, item.getDisplayName(), item, 0 != packet.getEquipmentSlot());
             }
         } else if (event.getPacket() instanceof S1CPacketEntityMetadata) {
-            S1CPacketEntityMetadata packet = (S1CPacketEntityMetadata) event.getPacket();
-            this.mc.addScheduledTask(() -> {
-                Entity entity = this.mc.theWorld.getEntityByID(packet.getEntityId());
+            final S1CPacketEntityMetadata packet = (S1CPacketEntityMetadata) event.getPacket();
+            mc.addScheduledTask(() -> {
+                final Entity entity = mc.theWorld.getEntityByID(packet.getEntityId());
                 if (entity instanceof EntityItemFrame) {
-                    EntityItemFrame frame = (EntityItemFrame) entity;
+                    final EntityItemFrame frame = (EntityItemFrame) entity;
                     ItemStack item = null;
-                    if (packet.func_149376_c().size() == 0) {
+                    if (0 == packet.func_149376_c().size()) {
                         return;
                     }
-                    for (DataWatcher.WatchableObject obj : packet.func_149376_c()) {
-                        Object val = obj.getObject();
+                    for (final DataWatcher.WatchableObject obj : packet.func_149376_c()) {
+                        final Object val = obj.getObject();
                         if (!(val instanceof ItemStack)) continue;
                         item = (ItemStack) val;
                         break;
                     }
-                    if (item == null) {
+                    if (null == item) {
                         return;
                     }
-                    this.alert(frame, item.getDisplayName(), item);
+                    alert(frame, item.getDisplayName(), item);
                 }
             });
         }
     }
 
     @SubscribeEvent
-    public void onChat(ChatEvent.Received event) {
+    public void onChat(final ChatEvent.Received event) {
         if (event.getMessage().getUnformattedText().startsWith("Unable to locate sign at ")) {
             event.setCancelled(true);
         } else if (event.getMessage().getUnformattedText().trim().equals("* First person to type /collect will earn free coins!")) {
-            int randomTime = RandomUtils.nextInt(100, 500);
-            TimeUtils.setTimeout(() -> this.mc.addScheduledTask(() -> this.mc.thePlayer.sendChatMessage("/collect")), randomTime);
+            final int randomTime = RandomUtils.nextInt(100, 500);
+            TimeUtils.setTimeout(() -> mc.addScheduledTask(() -> mc.thePlayer.sendChatMessage("/collect")), randomTime);
         }
     }
 }

@@ -9,7 +9,7 @@ public class HypixelLocation extends Command {
     }
 
     @Override
-    public void execute(String[] strings) {
+    public void execute(final String[] strings) {
         Entry.chat(LocationData.INSTANCE.toString());
     }
 }

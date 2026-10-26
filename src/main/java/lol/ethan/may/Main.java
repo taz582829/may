@@ -16,79 +16,79 @@ public class Main {
     public static Instrumentation inst;
     public static ClassLoader targetLoader;
 
-    public static void agentmain(String args, Instrumentation inst) {
+    public static void agentmain(final String args, final Instrumentation inst) {
         Main.inst = inst;
         try {
-            ClassLoader mc = Main.findMinecraftLoader(inst);
+            final ClassLoader mc = Main.findMinecraftLoader(inst);
             Thread.currentThread().setContextClassLoader(mc);
             Main.openJavaLang();
             Main.defineAll(mc);
             targetLoader = mc;
             Class.forName("lol.ethan.may.Entry", true, mc).getMethod("load", Instrumentation.class, ClassLoader.class).invoke(null, inst, mc);
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             t.printStackTrace();
         }
     }
 
-    public static ClassLoader findMinecraftLoader(Instrumentation inst) {
+    public static ClassLoader findMinecraftLoader(final Instrumentation inst) {
         try {
-            for (Class clazz : inst.getAllLoadedClasses()) {
+            for (final Class clazz : inst.getAllLoadedClasses()) {
                 if (!clazz.getName().replace("/", ".").equals("net.minecraft.client.Minecraft")) continue;
                 return clazz.getClassLoader();
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
         return null;
     }
 
     static void openJavaLang() {
-        Method getModule;
+        final Method getModule;
         try {
             getModule = Class.class.getMethod("getModule");
-        } catch (NoSuchMethodException e) {
+        } catch (final NoSuchMethodException e) {
             return;
         }
         try {
-            Class<?> moduleCls = Class.forName("java.lang.Module");
-            Object base = getModule.invoke(Object.class);
-            Object me = getModule.invoke(Main.class);
-            HashMap<String, Set<Object>> opens = new HashMap<>();
+            final Class<?> moduleCls = Class.forName("java.lang.Module");
+            final Object base = getModule.invoke(Object.class);
+            final Object me = getModule.invoke(Main.class);
+            final HashMap<String, Set<Object>> opens = new HashMap<>();
             opens.put("java.lang", Collections.singleton(me));
-            Method redefine = Instrumentation.class.getMethod("redefineModule", moduleCls, Set.class, Map.class, Map.class, Set.class, Map.class);
+            final Method redefine = Instrumentation.class.getMethod("redefineModule", moduleCls, Set.class, Map.class, Map.class, Set.class, Map.class);
             redefine.invoke(inst, base, Collections.emptySet(), Collections.emptyMap(), opens, Collections.emptySet(), Collections.emptyMap());
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             t.printStackTrace();
         }
     }
 
-    static byte[] readAll(InputStream in) throws IOException {
+    static byte[] readAll(final InputStream in) throws IOException {
         int n;
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buf = new byte[8192];
-        while ((n = in.read(buf)) != -1) {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final byte[] buf = new byte[8192];
+        while (-1 != (n = in.read(buf))) {
             out.write(buf, 0, n);
         }
         return out.toByteArray();
     }
 
-    static void defineAll(ClassLoader target) throws Exception {
+    static void defineAll(final ClassLoader target) throws Exception {
         Main.openJavaLang();
-        Method define = ClassLoader.class.getDeclaredMethod("defineClass", String.class, byte[].class, Integer.TYPE, Integer.TYPE, ProtectionDomain.class);
+        final Method define = ClassLoader.class.getDeclaredMethod("defineClass", String.class, byte[].class, Integer.TYPE, Integer.TYPE, ProtectionDomain.class);
         define.setAccessible(true);
-        File agent = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        LinkedHashMap<String, byte[]> pending = new LinkedHashMap<>();
-        try (JarFile jar = new JarFile(agent)) {
-            Enumeration<JarEntry> e = jar.entries();
+        final File agent = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        final LinkedHashMap<String, byte[]> pending = new LinkedHashMap<>();
+        try (final JarFile jar = new JarFile(agent)) {
+            final Enumeration<JarEntry> e = jar.entries();
             while (e.hasMoreElements()) {
-                JarEntry je = e.nextElement();
-                String n = je.getName();
+                final JarEntry je = e.nextElement();
+                final String n = je.getName();
                 if (!n.endsWith(".class") || n.equals("lol/ethan/may/Main.class")) continue;
-                InputStream in = jar.getInputStream(je);
+                final InputStream in = jar.getInputStream(je);
                 try {
                     pending.put(n.substring(0, n.length() - 6).replace('/', '.'), Main.readAll(in));
                 } finally {
-                    if (in == null) continue;
+                    if (null == in) continue;
                     in.close();
                 }
             }
@@ -96,15 +96,15 @@ public class Main {
         boolean progress = true;
         while (!pending.isEmpty() && progress) {
             progress = false;
-            Iterator<Map.Entry<String, byte[]>> it = pending.entrySet().iterator();
+            final Iterator<Map.Entry<String, byte[]>> it = pending.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry<String, byte[]> en = it.next();
+                final Map.Entry<String, byte[]> en = it.next();
                 try {
                     define.invoke((Object) target, en.getKey(), en.getValue(), 0, en.getValue().length, null);
                     it.remove();
                     progress = true;
-                } catch (InvocationTargetException ex) {
-                    Throwable c = ex.getCause();
+                } catch (final InvocationTargetException ex) {
+                    final Throwable c = ex.getCause();
                     if (c instanceof NoClassDefFoundError) continue;
                     if (c instanceof LinkageError && String.valueOf(c.getMessage()).contains("duplicate")) {
                         it.remove();

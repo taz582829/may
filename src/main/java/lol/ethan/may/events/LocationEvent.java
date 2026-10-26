@@ -11,7 +11,7 @@ public class LocationEvent extends Event {
     private final String mode;
     private final String map;
 
-    public LocationEvent(String server, ServerType serverType, GameType gameType, String lobbyName, String mode, String map) {
+    public LocationEvent(final String server, final ServerType serverType, final GameType gameType, final String lobbyName, final String mode, final String map) {
         this.server = server;
         this.serverType = serverType;
         this.gameType = gameType;
@@ -21,31 +21,31 @@ public class LocationEvent extends Event {
     }
 
     public String getServer() {
-        return this.server;
+        return server;
     }
 
     public ServerType getServerType() {
-        return this.serverType;
+        return serverType;
     }
 
     public GameType getGameType() {
-        return this.gameType;
+        return gameType;
     }
 
     public String getLobbyName() {
-        return this.lobbyName;
+        return lobbyName;
     }
 
     public String getMode() {
-        return this.mode;
+        return mode;
     }
 
     public String getMap() {
-        return this.map;
+        return map;
     }
 
     public boolean isLobby() {
-        return this.lobbyName != null;
+        return null != this.lobbyName;
     }
 }
 

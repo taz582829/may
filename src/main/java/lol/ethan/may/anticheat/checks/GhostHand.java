@@ -16,16 +16,16 @@ public class GhostHand extends AnticheatFlag {
     }
 
     @SubscribeEvent
-    public void onPacket(PacketEvent.Receive event) {
+    public void onPacket(final PacketEvent.Receive event) {
         if (event.getPacket() instanceof S0BPacketAnimation) {
-            S0BPacketAnimation packet = (S0BPacketAnimation) event.getPacket();
-            int entityId = packet.getEntityID();
+            final S0BPacketAnimation packet = (S0BPacketAnimation) event.getPacket();
+            final int entityId = packet.getEntityID();
 
-            Entity entity = mc.theWorld.getEntityByID(entityId);
+            final Entity entity = this.mc.theWorld.getEntityByID(entityId);
             if (!(entity instanceof EntityPlayer)) return;
 
-            EntityPlayer player = (EntityPlayer) entity;
-            MovingObjectPosition mop = player.rayTrace(
+            final EntityPlayer player = (EntityPlayer) entity;
+            final MovingObjectPosition mop = player.rayTrace(
                     4.5,
                     1
             );

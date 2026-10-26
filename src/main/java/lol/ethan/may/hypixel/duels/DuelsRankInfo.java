@@ -20,56 +20,56 @@ public class DuelsRankInfo {
     PlayerCount playerCount;
 
     @SubscribeEvent
-    public void onPacket(PacketEvent.Receive event) {
+    public void onPacket(final PacketEvent.Receive event) {
         if (!DuelsUtils.isInDuels()) return;
         if (event.getPacket() instanceof S38PacketPlayerListItem) {
-            S38PacketPlayerListItem packet = (S38PacketPlayerListItem) event.getPacket();
-            if (packet.getAction() == S38PacketPlayerListItem.Action.ADD_PLAYER) {
-                for (S38PacketPlayerListItem.AddPlayerData data : packet.getEntries()) {
+            final S38PacketPlayerListItem packet = (S38PacketPlayerListItem) event.getPacket();
+            if (S38PacketPlayerListItem.Action.ADD_PLAYER == packet.getAction()) {
+                for (final S38PacketPlayerListItem.AddPlayerData data : packet.getEntries()) {
                     if (!data.getProfile().getName().startsWith("§k")) continue;
-                    Rank rankProfile = getRankByIGN("§r" + data.getProfile().getName());
-                    if (rankProfile != null) {
+                    final Rank rankProfile = this.getRankByIGN("§r" + data.getProfile().getName());
+                    if (null != rankProfile) {
                         rankProfile.uuid = data.getProfile().getId().toString();
                     } else {
-                        updateRankData(data.getProfile().getId().toString(), "§r" + data.getProfile().getName(), "", -1);
+                        this.updateRankData(data.getProfile().getId().toString(), "§r" + data.getProfile().getName(), "", -1);
                     }
                 }
-            } else if (packet.getAction() == S38PacketPlayerListItem.Action.REMOVE_PLAYER) {
-                for (S38PacketPlayerListItem.AddPlayerData data : packet.getEntries()) {
+            } else if (S38PacketPlayerListItem.Action.REMOVE_PLAYER == packet.getAction()) {
+                for (final S38PacketPlayerListItem.AddPlayerData data : packet.getEntries()) {
 
-                    Rank rankProfile = getRankByUUID(data.getProfile().getId().toString());
-                    if (rankProfile != null) {
-                        rankList.remove(rankProfile);
+                    final Rank rankProfile = this.getRankByUUID(data.getProfile().getId().toString());
+                    if (null != rankProfile) {
+                        this.rankList.remove(rankProfile);
                     }
                 }
             }
         } else if (event.getPacket() instanceof S0CPacketSpawnPlayer) {
-            S0CPacketSpawnPlayer packet = (S0CPacketSpawnPlayer) event.getPacket();
-            Rank rankProfile = getRankByUUID(packet.getPlayer().toString());
-            if (rankProfile != null) {
+            final S0CPacketSpawnPlayer packet = (S0CPacketSpawnPlayer) event.getPacket();
+            final Rank rankProfile = this.getRankByUUID(packet.getPlayer().toString());
+            if (null != rankProfile) {
                 rankProfile.entityId = packet.getEntityID();
             }
         } else if (event.getPacket() instanceof S3EPacketTeams) {
-            S3EPacketTeams packet = (S3EPacketTeams) event.getPacket();
-            PlayerCount playerCount = parsePlayerCount(packet);
-            if (playerCount != null) {
+            final S3EPacketTeams packet = (S3EPacketTeams) event.getPacket();
+            final PlayerCount playerCount = this.parsePlayerCount(packet);
+            if (null != playerCount) {
                 this.playerCount = playerCount;
             }
 
-            if (packet.getPlayers().size() != 0 && packet.getName().startsWith("§")) {
-                for (String ign : packet.getPlayers()) {
+            if (0 != packet.getPlayers().size() && packet.getName().startsWith("§")) {
+                for (final String ign : packet.getPlayers()) {
                     if (ign.startsWith("§r§k")) {
-                        Rank rankProfile = getRankByIGN(ign);
-                        if (rankProfile != null) {
+                        final Rank rankProfile = this.getRankByIGN(ign);
+                        if (null != rankProfile) {
                             rankProfile.rank = packet.getName();
                         } else {
-                            rankList.add(new Rank("", ign, packet.getName(), -1));
+                            this.rankList.add(new Rank("", ign, packet.getName(), -1));
                         }
                         String msg = Entry.PREFIX + "You are queuing a " + Rank.parseRank(packet.getName());
-                        if (playerCount != null) {
-                            int nicks = Math.max(0, playerCount.current - rankList.size());
+                        if (null != playerCount) {
+                            final int nicks = Math.max(0, playerCount.current - this.rankList.size());
 
-                            if (nicks == 1) {
+                            if (1 == nicks) {
                                 msg += " §c[N]";
                             }
                         }
@@ -78,38 +78,38 @@ public class DuelsRankInfo {
                 }
             }
         } else if (event.getPacket() instanceof S13PacketDestroyEntities) {
-            S13PacketDestroyEntities packet = (S13PacketDestroyEntities) event.getPacket();
-            rankList.removeIf(rank -> ArrayUtils.contains(packet.getEntityIDs(), rank.entityId));
+            final S13PacketDestroyEntities packet = (S13PacketDestroyEntities) event.getPacket();
+            this.rankList.removeIf(rank -> ArrayUtils.contains(packet.getEntityIDs(), rank.entityId));
         }
     }
 
-    private PlayerCount parsePlayerCount(S3EPacketTeams packet) {
-        if (packet.getPrefix() == null || packet.getSuffix() == null) return null;
-        String text = packet.getPrefix() + packet.getSuffix();
-        String clean = text.replaceAll("[^a-zA-Z0-9\\s:§]", "");
-        Matcher matcher = playerCountPattern.matcher(clean);
+    private PlayerCount parsePlayerCount(final S3EPacketTeams packet) {
+        if (null == packet.getPrefix() || null == packet.getSuffix()) return null;
+        final String text = packet.getPrefix() + packet.getSuffix();
+        final String clean = text.replaceAll("[^a-zA-Z0-9\\s:§]", "");
+        final Matcher matcher = this.playerCountPattern.matcher(clean);
         if (matcher.find()) {
-            int current = Integer.parseInt(matcher.group(1));
-            int max = Integer.parseInt(matcher.group(2));
+            final int current = Integer.parseInt(matcher.group(1));
+            final int max = Integer.parseInt(matcher.group(2));
             return new PlayerCount(current, max);
         }
         return null;
     }
-    public Rank getRankByIGN(String ign) {
-        for (Rank rank : rankList) {
+    public Rank getRankByIGN(final String ign) {
+        for (final Rank rank : this.rankList) {
             if (rank.ign.equals(ign)) return rank;
         }
         return null;
     }
-    public Rank getRankByUUID(String uuid) {
-        for (Rank rank : rankList) {
+    public Rank getRankByUUID(final String uuid) {
+        for (final Rank rank : this.rankList) {
             if (rank.uuid.equals(uuid)) return rank;
         }
         return null;
     }
 
-    private void updateRankData(String uuid, String IGN, String rank, int entityId) {
-        for (Rank data: rankList) {
+    private void updateRankData(final String uuid, final String IGN, final String rank, final int entityId) {
+        for (final Rank data: this.rankList) {
             if (data.uuid.equals(uuid)) {
                 data.ign = IGN;
                 data.rank = rank;
@@ -117,7 +117,7 @@ public class DuelsRankInfo {
                 return;
             }
         }
-        rankList.add(new Rank(uuid, IGN, rank, entityId));
+        this.rankList.add(new Rank(uuid, IGN, rank, entityId));
     }
     public static class Rank {
         public String uuid;
@@ -125,14 +125,14 @@ public class DuelsRankInfo {
         public String rank;
         public int entityId;
 
-        public Rank(String uuid, String IGN, String rank, int entityId) {
+        public Rank(final String uuid, final String IGN, final String rank, final int entityId) {
             this.uuid = uuid;
-            this.ign = IGN;
+            ign = IGN;
             this.rank = rank;
             this.entityId = entityId;
         }
 
-        public static String parseRank(String color) {
+        public static String parseRank(final String color) {
             if (color.equals("§7")) return "§7Non";
             else if (color.equals("§a")) return "§aVIP§f/§aVIP§6+";
             else if (color.equals("§b")) return "§bMVP§f/§bMVP§c+";
@@ -145,7 +145,7 @@ public class DuelsRankInfo {
         public int current;
         public int max;
 
-        public PlayerCount(int current, int max) {
+        public PlayerCount(final int current, final int max) {
             this.current = current;
             this.max = max;
         }

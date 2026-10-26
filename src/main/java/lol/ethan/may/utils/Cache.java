@@ -11,34 +11,34 @@ public class Cache<K, V> {
     public Cache() {
     }
 
-    public Cache(long ttl) {
-        this.TIME_TO_LIVE = ttl;
+    public Cache(final long ttl) {
+        TIME_TO_LIVE = ttl;
     }
 
-    public boolean isExpired(CacheEntry<V> entry) {
+    public boolean isExpired(final CacheEntry<V> entry) {
         return System.currentTimeMillis() > entry.time;
     }
 
-    public V get(K key) {
-        CacheEntry<V> entry = this.cache.get(key);
-        if (entry == null || this.isExpired(entry)) {
+    public V get(final K key) {
+        final CacheEntry<V> entry = cache.get(key);
+        if (null == entry || isExpired(entry)) {
             return null;
         }
         return entry.value;
     }
 
-    public void put(K key, V value) {
-        this.cache.put(key, new CacheEntry<>(value));
+    public void put(final K key, final V value) {
+        cache.put(key, new CacheEntry<>(value));
     }
 
-    public boolean has(K key) {
-        CacheEntry<V> entry = this.cache.get(key);
-        return entry != null && !this.isExpired(entry);
+    public boolean has(final K key) {
+        final CacheEntry<V> entry = cache.get(key);
+        return null != entry && !isExpired(entry);
     }
 
-    public boolean hasValue(V value) {
-        for (CacheEntry<V> entry : this.cache.values()) {
-            if (entry == null || this.isExpired(entry) || !Objects.equals(entry.value, value)) continue;
+    public boolean hasValue(final V value) {
+        for (final CacheEntry<V> entry : cache.values()) {
+            if (null == entry || isExpired(entry) || !Objects.equals(entry.value, value)) continue;
             return true;
         }
         return false;
@@ -48,14 +48,14 @@ public class Cache<K, V> {
         public V value;
         public long time;
 
-        public CacheEntry(V value, long time) {
+        public CacheEntry(final V value, final long time) {
             this.value = value;
             this.time = time;
         }
 
-        public CacheEntry(V value) {
+        public CacheEntry(final V value) {
             this.value = value;
-            this.time = System.currentTimeMillis();
+            time = System.currentTimeMillis();
         }
     }
 }

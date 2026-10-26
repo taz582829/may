@@ -16,12 +16,12 @@ public enum BedwarsTeam {
     public final String displayName;
     public final String formattedDisplayName;
 
-    BedwarsTeam(String prefix) {
+    BedwarsTeam(final String prefix) {
         this.prefix = prefix;
 
-        String name = this.name();
-        displayName = StringUtils.stripControlCodes(String.valueOf(name.charAt(0)).toUpperCase() + name.substring(1).toLowerCase());
+        final String name = name();
+        this.displayName = StringUtils.stripControlCodes(String.valueOf(name.charAt(0)).toUpperCase() + name.substring(1).toLowerCase());
 
-        formattedDisplayName = prefix.substring(0, 2) + displayName;
+        this.formattedDisplayName = prefix.substring(0, 2) + this.displayName;
     }
 }

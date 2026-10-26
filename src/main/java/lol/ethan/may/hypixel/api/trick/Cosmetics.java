@@ -32,38 +32,38 @@ public class Cosmetics{
 	private String bed_destroy;
 
 	public String getFigurine(){
-		return figurine;
+		return this.figurine;
 	}
 
 	public String getGlyph(){
-		return glyph;
+		return this.glyph;
 	}
 
 	public String getKillEffect(){
-		return kill_effect;
+		return this.kill_effect;
 	}
 
 	public String getKillMessage(){
-		return kill_message;
+		return this.kill_message;
 	}
 
 	public String getWoodSkin(){
-		return wood_skin;
+		return this.wood_skin;
 	}
 
 	public String getVictoryDance(){
-		return victory_dance;
+		return this.victory_dance;
 	}
 
 	public String getIslandTopper(){
-		return island_topper;
+		return this.island_topper;
 	}
 
 	public String getNPCSkin(){
-		return npc_skin;
+		return this.npc_skin;
 	}
 
 	public String getBedDestroy(){
-		return bed_destroy;
+		return this.bed_destroy;
 	}
 }

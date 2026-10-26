@@ -26,15 +26,15 @@ public class SkywarsTabStats extends TabStats {
         return new SkywarsStats();
     }
 
-    public void setMini(boolean mini) {
+    public void setMini(final boolean mini) {
         isMini = mini;
     }
 
     @Override
-    protected String getDisplayName(NetworkPlayerInfo playerInfo, IStats stats) {
+    protected String getDisplayName(final NetworkPlayerInfo playerInfo, final IStats stats) {
         if (customDisplayNames.containsKey(playerInfo.getGameProfile().getId())) return customDisplayNames.get(playerInfo.getGameProfile().getId());
-        if (stats == null) return ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c?";
-        List<String> statList = stats.getDisplayStats(playerInfo);
+        if (null == stats) return ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c?";
+        final List<String> statList = stats.getDisplayStats(playerInfo);
         return String.join(" ", statList);
     }
 
@@ -45,62 +45,62 @@ public class SkywarsTabStats extends TabStats {
         public volatile int ping;
 
         @Override
-        public IStats buildStats(PlayerResponse.Player player, String mode) {
-            JsonObject genStats = player.stats;
-            if (genStats == null) return null;
-            JsonObject swStats = genStats.getAsJsonObject("SkyWars");
-            if (swStats == null) return null;
+        public IStats buildStats(final PlayerResponse.Player player, final String mode) {
+            final JsonObject genStats = player.stats;
+            if (null == genStats) return null;
+            final JsonObject swStats = genStats.getAsJsonObject("SkyWars");
+            if (null == swStats) return null;
 
-            this.stars = swStats.get("levelFormattedWithBrackets").getAsString().trim();
-            int kills = JsonUtils.getInt(swStats, "kills", 0);
-            int deaths = JsonUtils.getInt(swStats, "deaths", 0);
+            stars = swStats.get("levelFormattedWithBrackets").getAsString().trim();
+            final int kills = JsonUtils.getInt(swStats, "kills", 0);
+            final int deaths = JsonUtils.getInt(swStats, "deaths", 0);
 
-            this.kdr = (double) kills / (deaths == 0 ? 1 : deaths);
-            String rawKit = JsonUtils.getString(swStats, "activeKit_" + (isMini ? "MINI" : "SOLO"), "§cNone");
-            this.kit = rawKit.equals("§cNone") ? rawKit : formatKit(rawKit);
-            this.ping = 1;
+            kdr = (double) kills / (0 == deaths ? 1 : deaths);
+            final String rawKit = JsonUtils.getString(swStats, "activeKit_" + (isMini ? "MINI" : "SOLO"), "§cNone");
+            kit = rawKit.equals("§cNone") ? rawKit : this.formatKit(rawKit);
+            ping = 1;
             AuroraAPI.getPing(UUID.fromString(UUIDUtils.dashUUID(player.uuid))).whenComplete((res, err) -> {
                 if (!res.isSuccess()) return;
-                PingData data = res.getData().get(0);
-                this.ping = data.getAvg();
+                final PingData data = res.getData().get(0);
+                ping = data.getAvg();
             });
             return this;
         }
 
         @Override
-        public List<String> getDisplayStats(NetworkPlayerInfo playerInfo) {
-            if (playerInfo.getGameProfile().getId().version() == 1) {
+        public List<String> getDisplayStats(final NetworkPlayerInfo playerInfo) {
+            if (1 == playerInfo.getGameProfile().getId().version()) {
                 return new ArrayList<>(Arrays.asList(
                         ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()),
                         "§c[NICK]"
                 ));
             }
             return new ArrayList<>(Arrays.asList(
-                    stars,
+                    this.stars,
                     ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()),
-                    "§e" + String.format("%.2f", kdr),
-                    kit
+                    "§e" + String.format("%.2f", this.kdr),
+                    this.kit
             ));
         }
 
         @Override
         public int getPing() {
-            return ping;
+            return this.ping;
         }
 
-        public String formatKit(String rawKit) {
-            if (rawKit == null) return "None";
+        public String formatKit(final String rawKit) {
+            if (null == rawKit) return "None";
 
-            if (rawKit.split("_").length == 1) return capitalizeText(rawKit);
-            Stream<String> kitStream = Arrays.stream(rawKit.split("_"));
-            List<String> kitthing = kitStream
+            if (1 == rawKit.split("_").length) return this.capitalizeText(rawKit);
+            final Stream<String> kitStream = Arrays.stream(rawKit.split("_"));
+            final List<String> kitthing = kitStream
                     .skip(3)
                     .map(s -> String.valueOf(s.charAt(0)).toUpperCase() + s.substring(1))
                     .collect(Collectors.toList());
             return "§b" + String.join(" ", kitthing);
         }
-        public String capitalizeText(String text) {
-            Stream<String> stream = Arrays.stream(text.split("\\s"))
+        public String capitalizeText(final String text) {
+            final Stream<String> stream = Arrays.stream(text.split("\\s"))
                     .map(s -> String.valueOf(s.charAt(0)).toUpperCase() + s.substring(1));
 
             return String.join(" ", stream.collect(Collectors.toList()));

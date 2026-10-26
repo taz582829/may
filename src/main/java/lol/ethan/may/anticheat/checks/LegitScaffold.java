@@ -19,45 +19,45 @@ public class LegitScaffold extends AnticheatFlag {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.Post event) {
+    public void onTick(final TickEvent.Post event) {
         if (!Config.legitScaffFlags.enabled) return;
-        Minecraft mc = Minecraft.getMinecraft();
-        if (mc.theWorld == null || mc.thePlayer == null) return;
+        final Minecraft mc = Minecraft.getMinecraft();
+        if (null == mc.theWorld || null == mc.thePlayer) return;
 
-        for (EntityPlayer player : mc.theWorld.playerEntities) {
+        for (final EntityPlayer player : mc.theWorld.playerEntities) {
             if (player == mc.thePlayer) continue;
-            AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
+            final AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
 
-            if (data != null) {
-                boolean lookingDown = player.rotationPitch >= 45;
-                boolean moving = data.moveSpeed > 0.001;
-                boolean isPlacing = player.swingProgress > 0 && player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemBlock;
+            if (null != data) {
+                final boolean lookingDown = 45 <= player.rotationPitch;
+                final boolean moving = 0.001 < data.moveSpeed;
+                final boolean isPlacing = 0 < player.swingProgress && null != player.getHeldItem() && player.getHeldItem().getItem() instanceof ItemBlock;
 
                 if (moving) {
 
-                    double speed = data.moveSpeed;
-                    long time = System.currentTimeMillis();
-                    List<AnticheatData.ShiftEvent> recentShifts = data.shiftEvents.stream().filter(shiftEvent ->
-                            time - shiftEvent.timestamp < 2000 && shiftEvent.type == AnticheatData.ShiftEvent.Type.START
+                    final double speed = data.moveSpeed;
+                    final long time = System.currentTimeMillis();
+                    final List<AnticheatData.ShiftEvent> recentShifts = data.shiftEvents.stream().filter(shiftEvent ->
+                            2000 > time - shiftEvent.timestamp && AnticheatData.ShiftEvent.Type.START == shiftEvent.type
                     ).collect(Collectors.toList());
-                    List<Double> shiftDurations = data.shiftEvents.stream()
-                            .filter(s -> s.type == AnticheatData.ShiftEvent.Type.STOP && time - s.timestamp < 2000)
+                    final List<Double> shiftDurations = data.shiftEvents.stream()
+                            .filter(s -> AnticheatData.ShiftEvent.Type.STOP == s.type && 2000 > time - s.timestamp)
                             .map(s -> s.duration / 50)
                             .collect(Collectors.toList());
-                    int durationSize = shiftDurations.size();
-                    int shiftCount = recentShifts.size();
+                    final int durationSize = shiftDurations.size();
+                    final int shiftCount = recentShifts.size();
 
-                    boolean consistent = durationSize >= 3
-                            && shiftDurations.get(durationSize - 1) <= 2
-                            && shiftDurations.get(durationSize - 2) <= 2
-                            && shiftDurations.get(durationSize - 3) <= 2;
-                    boolean shiftingTooMuch = shiftCount > 3 && speed > 2.5;
-                    boolean isLegitScaff = shiftingTooMuch && isPlacing && lookingDown && consistent;
+                    final boolean consistent = 3 <= durationSize
+                            && 2 >= shiftDurations.get(durationSize - 1)
+                            && 2 >= shiftDurations.get(durationSize - 2)
+                            && 2 >= shiftDurations.get(durationSize - 3);
+                    final boolean shiftingTooMuch = 3 < shiftCount && 2.5 < speed;
+                    final boolean isLegitScaff = shiftingTooMuch && isPlacing && lookingDown && consistent;
 
                     if (isLegitScaff) {
-                        this.addFlag(player, 2);
+                        addFlag(player, 2);
                     } else {
-                        this.removeFlag(player, 3);
+                        removeFlag(player, 3);
                     }
                 }
             }

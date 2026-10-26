@@ -12,8 +12,8 @@ import java.util.List;
 
 public class NetworkManagerHook implements ITransformer {
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             LabelNode end;
             InsnList insnList;
             if (method.name.equals("sendPacket") || method.name.equals("func_179288_a") || method.name.equals("func_179290_a")) {

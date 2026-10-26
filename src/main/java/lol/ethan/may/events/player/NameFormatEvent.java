@@ -9,25 +9,25 @@ public class NameFormatEvent extends Event {
     private final EntityPlayer player;
     private String text;
 
-    public NameFormatEvent(EntityPlayer player, String text) {
+    public NameFormatEvent(final EntityPlayer player, final String text) {
         this.player = player;
         this.text = text;
     }
 
     public EntityPlayer getPlayer() {
-        return this.player;
+        return player;
     }
 
     public String getText() {
-        return this.text;
+        return text;
     }
 
-    public void setText(String text) {
+    public void setText(final String text) {
         this.text = text;
     }
 
     public IChatComponent getTextAsComponent() {
-        return new ChatComponentText(this.text);
+        return new ChatComponentText(text);
     }
 }
 

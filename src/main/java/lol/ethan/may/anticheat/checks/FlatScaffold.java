@@ -15,26 +15,26 @@ public class FlatScaffold extends AnticheatFlag {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.Post event) {
-        Minecraft mc = Minecraft.getMinecraft();
-        if (mc.theWorld == null || mc.thePlayer == null) return;
+    public void onTick(final TickEvent.Post event) {
+        final Minecraft mc = Minecraft.getMinecraft();
+        if (null == mc.theWorld || null == mc.thePlayer) return;
 
-        for (EntityPlayer player : mc.theWorld.playerEntities) {
+        for (final EntityPlayer player : mc.theWorld.playerEntities) {
             if (player == mc.thePlayer) continue;
-            AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
+            final AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
 
-            if (data == null) continue;
+            if (null == data) continue;
 
-            boolean lookingDown = player.rotationPitch >= 45;
-            boolean moving = data.moveSpeed > 0.001;
-            boolean isPlacing = player.swingProgress > 0 && player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemBlock;
-            boolean isJumping = System.currentTimeMillis() - data.lastAirTime < 1000 && System.currentTimeMillis() - data.lastAirTime > 2000;
+            final boolean lookingDown = 45 <= player.rotationPitch;
+            final boolean moving = 0.001 < data.moveSpeed;
+            final boolean isPlacing = 0 < player.swingProgress && null != player.getHeldItem() && player.getHeldItem().getItem() instanceof ItemBlock;
+            final boolean isJumping = 1000 > System.currentTimeMillis() - data.lastAirTime && 2000 < System.currentTimeMillis() - data.lastAirTime;
             if (moving) {
-                boolean isGoingFast = data.moveSpeed > (isJumping ? 2.5 : 4) && System.currentTimeMillis() - data.lastShiftEvent > 1000;
+                final boolean isGoingFast = data.moveSpeed > (isJumping ? 2.5 : 4) && 1000 < System.currentTimeMillis() - data.lastShiftEvent;
                 if (lookingDown && isPlacing && isGoingFast) {
-                    addFlag(player);
+                    this.addFlag(player);
                 } else {
-                    removeFlag(player);
+                    this.removeFlag(player);
                 }
             }
         }

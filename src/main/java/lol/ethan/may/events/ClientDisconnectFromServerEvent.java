@@ -5,15 +5,15 @@ import net.minecraft.util.IChatComponent;
 public class ClientDisconnectFromServerEvent extends Event {
     private IChatComponent reason;
 
-    public ClientDisconnectFromServerEvent(IChatComponent reason) {
+    public ClientDisconnectFromServerEvent(final IChatComponent reason) {
         this.reason = reason;
     }
 
     public IChatComponent getReason() {
-        return this.reason;
+        return reason;
     }
 
-    public void setReason(IChatComponent reason) {
+    public void setReason(final IChatComponent reason) {
         this.reason = reason;
     }
 }

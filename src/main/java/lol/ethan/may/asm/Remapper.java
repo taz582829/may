@@ -9,29 +9,29 @@ import java.util.List;
 
 public class Remapper implements ITransformer {
     @Override
-    public void transform(ClassNode node) {
-        if (Mappings.getMappingType() != Mappings.MappingType.MCP) {
+    public void transform(final ClassNode node) {
+        if (Mappings.MappingType.MCP != Mappings.getMappingType()) {
             return;
         }
         System.out.println("remapping...");
-        for (MethodNode method : node.methods) {
-            for (AbstractInsnNode insnNode : method.instructions) {
+        for (final MethodNode method : node.methods) {
+            for (final AbstractInsnNode insnNode : method.instructions) {
                 if (insnNode instanceof MethodInsnNode) {
-                    MethodInsnNode insn = (MethodInsnNode)insnNode;
+                    final MethodInsnNode insn = (MethodInsnNode)insnNode;
                     insn.name = Mappings.getMethod(insn.owner, insn.name, insn.desc);
                     continue;
                 }
                 if (insnNode instanceof FieldInsnNode) {
-                    FieldInsnNode f = (FieldInsnNode)insnNode;
+                    final FieldInsnNode f = (FieldInsnNode)insnNode;
                     f.name = Mappings.mapFieldInHierarchy(f.owner, f.name, f.name);
                     continue;
                 }
                 if (!(insnNode instanceof InvokeDynamicInsnNode)) continue;
-                InvokeDynamicInsnNode dynamic = (InvokeDynamicInsnNode)insnNode;
+                final InvokeDynamicInsnNode dynamic = (InvokeDynamicInsnNode)insnNode;
                 for (int i = 0; i < dynamic.bsmArgs.length; i++) {
                     if (!(dynamic.bsmArgs[i] instanceof Handle)) continue;
-                    Handle h = (Handle)dynamic.bsmArgs[i];
-                    String name = h.getTag() <= 4 ? Mappings.mapFieldInHierarchy(h.getOwner(), h.getName(), h.getName()) : Mappings.mapMethodInHierarchy(h.getOwner(), h.getName(), h.getDesc(), h.getName());
+                    final Handle h = (Handle)dynamic.bsmArgs[i];
+                    final String name = 4 >= h.getTag() ? Mappings.mapFieldInHierarchy(h.getOwner(), h.getName(), h.getName()) : Mappings.mapMethodInHierarchy(h.getOwner(), h.getName(), h.getDesc(), h.getName());
                     dynamic.bsmArgs[i] = new Handle(h.getTag(), h.getOwner(), name, h.getDesc(), h.isInterface());
                 }
             }
@@ -44,7 +44,7 @@ public class Remapper implements ITransformer {
     }
 
     @Override
-    public boolean shouldTransform(String name) {
+    public boolean shouldTransform(final String name) {
         return name.startsWith("lol.ethan.may.") && !name.startsWith("lol.ethan.may.mappings.") && !name.startsWith("lol.ethan.may.shaded") && !name.equals("lol.ethan.may.Main");
     }
 }

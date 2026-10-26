@@ -35,42 +35,42 @@ public class WinstreakData {
 	private long confirmed;
 
 	public int getEightOneWinstreak(){
-		return eightOneWinstreak;
+		return this.eightOneWinstreak;
 	}
 
 	public int getTwoFourWinstreak(){
-		return twoFourWinstreak;
+		return this.twoFourWinstreak;
 	}
 
 	public int getFourFourWinstreak(){
-		return fourFourWinstreak;
+		return this.fourFourWinstreak;
 	}
 
 	public Object getAccurateWinstreak(){
-		return accurateWinstreak;
+		return this.accurateWinstreak;
 	}
 
 	public int getWinstreak(){
-		return winstreak;
+		return this.winstreak;
 	}
 
 	public boolean isEstimated(){
-		return estimated;
+		return this.estimated;
 	}
 
 	public int getEightTwoWinstreak(){
-		return eightTwoWinstreak;
+		return this.eightTwoWinstreak;
 	}
 
 	public int getFourThreeWinstreak(){
-		return fourThreeWinstreak;
+		return this.fourThreeWinstreak;
 	}
 
 	public String getUuid(){
-		return uuid;
+		return this.uuid;
 	}
 
 	public long getConfirmed(){
-		return confirmed;
+		return this.confirmed;
 	}
 }

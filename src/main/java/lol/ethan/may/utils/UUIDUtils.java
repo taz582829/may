@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 public class UUIDUtils {
     public static final Pattern UUID_REGEX = Pattern.compile("(\\w{8})-?(\\w{4})-?(\\w{4})-?(\\w{4})-?(\\w{12})");
 
-    public static String dashUUID(String uuid) {
-        Matcher match = UUID_REGEX.matcher(uuid);
+    public static String dashUUID(final String uuid) {
+        final Matcher match = UUID_REGEX.matcher(uuid);
         if (!match.matches()) {
             return uuid;
         }

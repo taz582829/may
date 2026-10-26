@@ -23,50 +23,50 @@ public class BlacklistInfo {
     //private static final Map<String, String> seraphTagMap = new HashMap<>();
 
     @SubscribeEvent
-    public void onPlayerJoin(PlayerListEvent.Add event) {
-        if (Minecraft.getMinecraft().theWorld == null) return;
+    public void onPlayerJoin(final PlayerListEvent.Add event) {
+        if (null == Minecraft.getMinecraft().theWorld) return;
         if (!HypixelUtils.isOnHypixel()) return;
-        if (Config.urchinKey.value == null || Config.urchinKey.value.isEmpty()) return;
+        if (null == Config.urchinKey.value || Config.urchinKey.value.isEmpty()) return;
         final GameProfile profile = event.getPlayerData().getProfile();
-        if (profile.getId().version() == 2) return;
+        if (2 == profile.getId().version()) return;
 
         UUID uuid = profile.getId();
-        if (uuid.version() == 1) {
-            Denicker.DenickResult result = Denicker.getDenick(profile.getName());
-            if (result == null) return;
+        if (1 == uuid.version()) {
+            final Denicker.DenickResult result = Denicker.getDenick(profile.getName());
+            if (null == result) return;
             uuid = UUID.fromString(result.uuid);
         }
         UrchinAPI.getTag(uuid).whenComplete((res, err) -> {
-            if (err != null) {
+            if (null != err) {
                 err.printStackTrace();
                 return;
             }
-            if (res == null || res.getTags() == null) return;
-            if (res.getTags().size() == 0) return;
+            if (null == res || null == res.getTags()) return;
+            if (0 == res.getTags().size()) return;
             try {
-                NetworkPlayerInfo playerInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(profile.getId());
-                String displayName = ScorePlayerTeam.formatPlayerName(
+                final NetworkPlayerInfo playerInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(profile.getId());
+                final String displayName = ScorePlayerTeam.formatPlayerName(
                         playerInfo.getPlayerTeam(),
                         profile.getName()
                 );
                 Entry.chat(UrchinAPI.formatTags(res, displayName));
-                StringBuilder icon = new StringBuilder();
-                for (TagsItem tag : res.getTags()) {
+                final StringBuilder icon = new StringBuilder();
+                for (final TagsItem tag : res.getTags()) {
                     icon.append(UrchinAPI.getTagIcon(tag.getTagType()));
                 }
                 urchinTagMap.put(profile.getName().trim(), icon.toString());
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         });
     }
 
     @SubscribeEvent
-    public void onTabFormat(RenderPlayerInTabEvent event) {
+    public void onTabFormat(final RenderPlayerInTabEvent event) {
         if (!HypixelUtils.isOnHypixel()) return;
-        GameProfile profile = event.getPlayerInfo().getGameProfile();
-        if (profile == null) return;
-        String ign = profile.getName();
+        final GameProfile profile = event.getPlayerInfo().getGameProfile();
+        if (null == profile) return;
+        final String ign = profile.getName();
         if (ign.isEmpty()) return;
 
         if (urchinTagMap.containsKey(ign)) {
@@ -74,9 +74,9 @@ public class BlacklistInfo {
         }
     }
     @SubscribeEvent
-    public void onNameFormat(NameFormatEvent event) {
+    public void onNameFormat(final NameFormatEvent event) {
         if (!HypixelUtils.isOnHypixel()) return;
-        String ign = StringUtils.stripControlCodes(event.getPlayer().getName()).trim();
+        final String ign = StringUtils.stripControlCodes(event.getPlayer().getName()).trim();
         if (ign.isEmpty()) return;
         String text = event.getText();
 

@@ -6,15 +6,14 @@ import net.minecraft.entity.EntityLivingBase;
 
 public class RenderLivingEvent {
 
-    public static class Post
-            extends Event {
+    public static class Post extends Event {
         private final EntityLivingBase entity;
         private final RendererLivingEntity<EntityLivingBase> renderer;
         private final double x;
         private final double y;
         private final double z;
 
-        public Post(EntityLivingBase entity, RendererLivingEntity<EntityLivingBase> renderer, double x, double y, double z) {
+        public Post(final EntityLivingBase entity, final RendererLivingEntity<EntityLivingBase> renderer, final double x, final double y, final double z) {
             this.entity = entity;
             this.renderer = renderer;
             this.x = x;
@@ -23,35 +22,34 @@ public class RenderLivingEvent {
         }
 
         public EntityLivingBase getEntity() {
-            return this.entity;
+            return entity;
         }
 
         public RendererLivingEntity<EntityLivingBase> getRenderer() {
-            return this.renderer;
+            return renderer;
         }
 
         public double getX() {
-            return this.x;
+            return x;
         }
 
         public double getY() {
-            return this.y;
+            return y;
         }
 
         public double getZ() {
-            return this.z;
+            return z;
         }
     }
 
-    public static class Pre
-            extends Event {
+    public static class Pre extends Event {
         private final EntityLivingBase entity;
         private final RendererLivingEntity<EntityLivingBase> renderer;
         private final double x;
         private final double y;
         private final double z;
 
-        public Pre(EntityLivingBase entity, RendererLivingEntity<EntityLivingBase> renderer, double x, double y, double z) {
+        public Pre(final EntityLivingBase entity, final RendererLivingEntity<EntityLivingBase> renderer, final double x, final double y, final double z) {
             this.entity = entity;
             this.renderer = renderer;
             this.x = x;
@@ -60,23 +58,23 @@ public class RenderLivingEvent {
         }
 
         public EntityLivingBase getEntity() {
-            return this.entity;
+            return entity;
         }
 
         public RendererLivingEntity<EntityLivingBase> getRenderer() {
-            return this.renderer;
+            return renderer;
         }
 
         public double getX() {
-            return this.x;
+            return x;
         }
 
         public double getY() {
-            return this.y;
+            return y;
         }
 
         public double getZ() {
-            return this.z;
+            return z;
         }
     }
 }

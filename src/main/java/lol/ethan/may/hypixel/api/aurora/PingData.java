@@ -20,22 +20,22 @@ public class PingData {
 	private long timestamp;
 
 	public int getMin(){
-		return min;
+		return this.min;
 	}
 
 	public int getAvg(){
-		return avg;
+		return this.avg;
 	}
 
 	public int getMax(){
-		return max;
+		return this.max;
 	}
 
 	public String getDay(){
-		return day;
+		return this.day;
 	}
 
 	public long getTimestamp(){
-		return timestamp;
+		return this.timestamp;
 	}
 }

@@ -13,10 +13,10 @@ public class PingResponse{
 	private boolean success;
 
 	public List<PingData> getData(){
-		return data;
+		return this.data;
 	}
 
 	public boolean isSuccess(){
-		return success;
+		return this.success;
 	}
 }

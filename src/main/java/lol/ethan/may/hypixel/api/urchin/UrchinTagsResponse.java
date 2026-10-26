@@ -16,14 +16,14 @@ public class UrchinTagsResponse{
 	private List<TagsItem> tags;
 
 	public String getDisplayname(){
-		return displayname;
+		return this.displayname;
 	}
 
 	public String getUuid(){
-		return uuid;
+		return this.uuid;
 	}
 
 	public List<TagsItem> getTags(){
-		return tags;
+		return this.tags;
 	}
 }

@@ -26,30 +26,30 @@ public class AdditionalPropertyItem{
 	private long addedOn;
 
 	public String getReason(){
-		return reason;
+		return this.reason;
 	}
 
 	public long getExpiresAt(){
-		return expiresAt;
+		return this.expiresAt;
 	}
 
 	public long getAddedBy(){
-		return addedBy;
+		return this.addedBy;
 	}
 
 	public String getAddedByUsername(){
-		return addedByUsername;
+		return this.addedByUsername;
 	}
 
 	public boolean isHideUsername(){
-		return hideUsername;
+		return this.hideUsername;
 	}
 
 	public String getTagType(){
-		return tagType;
+		return this.tagType;
 	}
 
 	public long getAddedOn(){
-		return addedOn;
+		return this.addedOn;
 	}
 }

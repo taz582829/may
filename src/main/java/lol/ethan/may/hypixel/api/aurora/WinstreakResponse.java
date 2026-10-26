@@ -11,10 +11,10 @@ public class WinstreakResponse{
 	private boolean success;
 
 	public WinstreakData getData(){
-		return winstreakData;
+		return this.winstreakData;
 	}
 
 	public boolean isSuccess(){
-		return success;
+		return this.success;
 	}
 }

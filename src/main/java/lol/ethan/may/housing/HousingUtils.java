@@ -18,40 +18,40 @@ public class HousingUtils {
     private static final Map<UUID, ItemStack> itemMap = new HashMap<>();
     static Minecraft mc = Minecraft.getMinecraft();
 
-    public static UUID addToItemMap(ItemStack stack) {
-        UUID id = UUID.randomUUID();
+    public static UUID addToItemMap(final ItemStack stack) {
+        final UUID id = UUID.randomUUID();
         itemMap.put(id, stack);
         return id;
     }
 
     public static boolean isInHousing() {
-        return HypixelUtils.isOnHypixel() && LocationData.getGameType() == GameType.HOUSING && LocationData.getLobbyName() == null;
+        return HypixelUtils.isOnHypixel() && GameType.HOUSING == LocationData.getGameType() && null == LocationData.getLobbyName();
     }
 
     public static boolean isInCreative() {
-        if (HousingUtils.mc.thePlayer == null) {
+        if (null == HousingUtils.mc.thePlayer) {
             return false;
         }
-        if (mc.getNetHandler() == null || mc.getNetHandler().getPlayerInfo(HousingUtils.mc.thePlayer.getUniqueID()) == null) {
+        if (null == mc.getNetHandler() || null == mc.getNetHandler().getPlayerInfo(HousingUtils.mc.thePlayer.getUniqueID())) {
             return false;
         }
-        return mc.getNetHandler().getPlayerInfo(HousingUtils.mc.thePlayer.getUniqueID()).getGameType() == WorldSettings.GameType.CREATIVE;
+        return WorldSettings.GameType.CREATIVE == mc.getNetHandler().getPlayerInfo(HousingUtils.mc.thePlayer.getUniqueID()).getGameType();
     }
 
-    public static void spawnItem(ItemStack item) {
+    public static void spawnItem(final ItemStack item) {
         if (!HousingUtils.mc.thePlayer.capabilities.isCreativeMode) {
             return;
         }
-        int handSlot = HousingUtils.mc.thePlayer.inventory.currentItem;
+        final int handSlot = HousingUtils.mc.thePlayer.inventory.currentItem;
         HousingUtils.mc.thePlayer.sendQueue.addToSendQueue(new C10PacketCreativeInventoryAction(handSlot + 36, item));
     }
 
-    public static void spawnItem(UUID id) {
+    public static void spawnItem(final UUID id) {
         if (!HousingUtils.mc.thePlayer.capabilities.isCreativeMode) {
             return;
         }
-        int handSlot = HousingUtils.mc.thePlayer.inventory.currentItem;
-        ItemStack item = itemMap.getOrDefault(id, null);
+        final int handSlot = HousingUtils.mc.thePlayer.inventory.currentItem;
+        final ItemStack item = itemMap.getOrDefault(id, null);
         HousingUtils.mc.thePlayer.sendQueue.addToSendQueue(new C10PacketCreativeInventoryAction(handSlot + 36, item));
     }
 
@@ -64,7 +64,7 @@ public class HousingUtils {
         public final String ownerRank;
         public final String title;
 
-        public HouseInfo(String owner, String ownerRank, String title) {
+        public HouseInfo(final String owner, final String ownerRank, final String title) {
             this.owner = owner;
             this.ownerRank = ownerRank;
             this.title = title;

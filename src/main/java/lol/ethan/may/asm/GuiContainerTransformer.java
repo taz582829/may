@@ -14,10 +14,10 @@ public class GuiContainerTransformer implements ITransformer {
     private static final Type SLOT_CLICK_TYPE = Type.getType(SlotClickEvent.class);
 
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             if (!method.name.equals("handleMouseClick")) continue;
-            int eventLocal = method.maxLocals;
+            final int eventLocal = method.maxLocals;
             method.maxLocals++;
             method.instructions.insert(ASMUtils.asm(a -> {
                 a.anew(SLOT_CLICK_TYPE);

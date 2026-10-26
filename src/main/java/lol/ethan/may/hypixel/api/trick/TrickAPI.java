@@ -6,12 +6,12 @@ import lol.ethan.may.utils.JsonUtils;
 import java.util.concurrent.CompletableFuture;
 
 public class TrickAPI {
-    public static CompletableFuture<TrickDenickResponse> denick(boolean solo, String... info) {
+    public static CompletableFuture<TrickDenickResponse> denick(final boolean solo, final String... info) {
 
-        StringBuilder args = new StringBuilder();
+        final StringBuilder args = new StringBuilder();
         for (int i = 0; i < info.length; i++) {
-            String part = info[i];
-            if (i == 0) {
+            final String part = info[i];
+            if (0 == i) {
                 args.append("?");
             } else {
                 args.append("&");

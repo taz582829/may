@@ -40,40 +40,40 @@ public class PlayerResponse extends Response {
         public int achievementPoints;
 
         public String getRankField() {
-            if (prefix != null) return "prefix";
-            if (rank != null) return "rank";
-            if (monthlyPackageRank != null && !monthlyPackageRank.equalsIgnoreCase("NONE")) return "monthlyPackageRank";
-            if (newPackageRank != null) return "newPackageRank";
-            if (packageRank != null) return "packageRank";
+            if (null != prefix) return "prefix";
+            if (null != rank) return "rank";
+            if (null != monthlyPackageRank && !this.monthlyPackageRank.equalsIgnoreCase("NONE")) return "monthlyPackageRank";
+            if (null != newPackageRank) return "newPackageRank";
+            if (null != packageRank) return "packageRank";
             return null;
         }
         public LocalDateTime getFirstLogin() {
-            return LocalDateTime.ofInstant(Instant.ofEpochMilli(firstLogin), ZoneId.of("America/New_York"));
+            return LocalDateTime.ofInstant(Instant.ofEpochMilli(this.firstLogin), ZoneId.of("America/New_York"));
         }
         public LocalDateTime getLastLogin() {
-            if (lastLogin == 0) return null;
-            return LocalDateTime.ofInstant(Instant.ofEpochMilli(lastLogin), ZoneId.of("America/New_York"));
+            if (0 == lastLogin) return null;
+            return LocalDateTime.ofInstant(Instant.ofEpochMilli(this.lastLogin), ZoneId.of("America/New_York"));
         }
         public boolean exists() {
-            return hypixelId != null;
+            return null != hypixelId;
         }
         @Override
         public String toString() {
             return new ToStringBuilder(this)
-                    .append("hypixelId", hypixelId)
-                    .append("uuid", uuid)
-                    .append("firstLogin", firstLogin)
-                    .append("lastLogin", lastLogin)
-                    .append("achievementsOneTime", achievementsOneTime)
-                    .append("stats", stats)
-                    .append("achievements", achievements)
-                    .append("housingMeta", housingMeta)
-                    .append("channel", channel)
-                    .append("mostRecentGameType", mostRecentGameType)
-                    .append("giftingMeta", giftingMeta)
-                    .append("rankPlusColor", rankPlusColor)
-                    .append("monthlyPackageRank", monthlyPackageRank)
-                    .append("newPackageRank", newPackageRank)
+                    .append("hypixelId", this.hypixelId)
+                    .append("uuid", this.uuid)
+                    .append("firstLogin", this.firstLogin)
+                    .append("lastLogin", this.lastLogin)
+                    .append("achievementsOneTime", this.achievementsOneTime)
+                    .append("stats", this.stats)
+                    .append("achievements", this.achievements)
+                    .append("housingMeta", this.housingMeta)
+                    .append("channel", this.channel)
+                    .append("mostRecentGameType", this.mostRecentGameType)
+                    .append("giftingMeta", this.giftingMeta)
+                    .append("rankPlusColor", this.rankPlusColor)
+                    .append("monthlyPackageRank", this.monthlyPackageRank)
+                    .append("newPackageRank", this.newPackageRank)
                     .toString();
         }
     }
@@ -81,7 +81,7 @@ public class PlayerResponse extends Response {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("player", player)
+                .append("player", this.player)
                 .toString();
     }
 }

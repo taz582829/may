@@ -21,10 +21,10 @@ import java.util.UUID;
 
 public class BedwarsTabStats extends TabStats {
     @Override
-    protected String getDisplayName(NetworkPlayerInfo playerInfo, IStats stats) {
+    protected String getDisplayName(final NetworkPlayerInfo playerInfo, final IStats stats) {
         if (customDisplayNames.containsKey(playerInfo.getGameProfile().getId())) return customDisplayNames.get(playerInfo.getGameProfile().getId());
-        if (stats == null) return ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c?";
-        List<String> statList = stats.getDisplayStats(playerInfo);
+        if (null == stats) return ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c?";
+        final List<String> statList = stats.getDisplayStats(playerInfo);
         return String.join(" ", statList);
     }
 
@@ -46,47 +46,47 @@ public class BedwarsTabStats extends TabStats {
         public volatile int ping;
 
         @Override
-        public IStats buildStats(PlayerResponse.Player player, String mode) {
-            int bwsLvl = JsonUtils.getInt(player.achievements, "bedwars_level", 0);
-            JsonObject genStats = player.stats;
-            if (genStats == null) return null;
-            JsonObject bedwarsStats = genStats.getAsJsonObject("Bedwars");
-            if (bedwarsStats == null) return null;
+        public IStats buildStats(final PlayerResponse.Player player, final String mode) {
+            final int bwsLvl = JsonUtils.getInt(player.achievements, "bedwars_level", 0);
+            final JsonObject genStats = player.stats;
+            if (null == genStats) return null;
+            final JsonObject bedwarsStats = genStats.getAsJsonObject("Bedwars");
+            if (null == bedwarsStats) return null;
 
-            String starsFormatted = HypixelAPI.bedwarsLevelFormatted(
+            final String starsFormatted = HypixelAPI.bedwarsLevelFormatted(
                     bwsLvl,
                     JsonUtils.getString(bedwarsStats, "active_star", "black_open"),
                     JsonUtils.getString(bedwarsStats, "active_prestige_scheme", "prestige_scheme_none"),
                     JsonUtils.getString(bedwarsStats, "active_prestige_bracket", "")
             );
-            int finals = JsonUtils.getInt(bedwarsStats, "final_kills_bedwars", 0);
-            int fds = JsonUtils.getInt(bedwarsStats, "final_deaths_bedwars", 0);
-            double fkdrRaw = (double) finals / (fds == 0 ? 1 : fds);
-            boolean zeroFds = fds == 0;
-            String fkdr = HypixelAPI.fkdrFormatted(fkdrRaw);
+            final int finals = JsonUtils.getInt(bedwarsStats, "final_kills_bedwars", 0);
+            final int fds = JsonUtils.getInt(bedwarsStats, "final_deaths_bedwars", 0);
+            final double fkdrRaw = (double) finals / (0 == fds ? 1 : fds);
+            final boolean zeroFds = 0 == fds;
+            final String fkdr = HypixelAPI.fkdrFormatted(fkdrRaw);
             String otherTags = "";
             if (zeroFds) otherTags += "§5Z";
 
-            this.uuid = UUID.fromString(UUIDUtils.dashUUID(player.uuid));
+            uuid = UUID.fromString(UUIDUtils.dashUUID(player.uuid));
             this.starsFormatted = starsFormatted;
             this.finals = finals;
             this.fkdr = fkdrRaw;
-            this.fkdrFormatted = fkdr;
-            this.winstreak = HypixelAPI.isAPIHidden(player.stats) ? 0 : bedwarsStats.get("winstreak").getAsInt();
-            this.winstreakEstimated = HypixelAPI.isAPIHidden(player.stats);
-            this.zeroFinalDeaths = zeroFds;
+            fkdrFormatted = fkdr;
+            winstreak = HypixelAPI.isAPIHidden(player.stats) ? 0 : bedwarsStats.get("winstreak").getAsInt();
+            winstreakEstimated = HypixelAPI.isAPIHidden(player.stats);
+            zeroFinalDeaths = zeroFds;
             this.otherTags = otherTags;
-            this.ping = 1;
+            ping = 1;
             AuroraAPI.getPing(UUID.fromString(UUIDUtils.dashUUID(player.uuid))).whenComplete((res, err) -> {
                 if (!res.isSuccess()) return;
-                PingData data = res.getData().get(0);
-                this.ping = data.getAvg();
+                final PingData data = res.getData().get(0);
+                ping = data.getAvg();
             });
-            if (winstreakEstimated) {
+            if (this.winstreakEstimated) {
                 AuroraAPI.getWinstreak(UUID.fromString(UUIDUtils.dashUUID(player.uuid))).whenComplete((res, err) -> {
                     if (!res.isSuccess()) return;
-                    WinstreakData data = res.getData();
-                    this.winstreak = data.getWinstreak();
+                    final WinstreakData data = res.getData();
+                    winstreak = data.getWinstreak();
                 });
             }
 
@@ -95,24 +95,24 @@ public class BedwarsTabStats extends TabStats {
         }
 
         @Override
-        public List<String> getDisplayStats(NetworkPlayerInfo playerInfo) {
+        public List<String> getDisplayStats(final NetworkPlayerInfo playerInfo) {
 
-            List<String> stats = new ArrayList<>();
-            if (playerInfo.getGameProfile().getId().version() == 1) {
+            final List<String> stats = new ArrayList<>();
+            if (1 == playerInfo.getGameProfile().getId().version()) {
                 stats.add(ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()));
                 stats.add("§c[NICK]");
             }
-            stats.add(starsFormatted);
+            stats.add(this.starsFormatted);
             stats.add(ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()));
             stats.add("§7|");
-            stats.add(fkdrFormatted);
+            stats.add(this.fkdrFormatted);
             stats.add("§7|");
-            stats.add(EnumChatFormatting.YELLOW.toString() + (winstreakEstimated ? EnumChatFormatting.ITALIC : "") + winstreak);
+            stats.add(EnumChatFormatting.YELLOW.toString() + (this.winstreakEstimated ? EnumChatFormatting.ITALIC : "") + this.winstreak);
             return stats;
         }
 
         public int getPing() {
-            return ping;
+            return this.ping;
         }
     }
 }

@@ -11,10 +11,10 @@ public class LastSeen{
 	private long timestamp;
 
 	public String getActivityType(){
-		return activityType;
+		return this.activityType;
 	}
 
 	public long getTimestamp(){
-		return timestamp;
+		return this.timestamp;
 	}
 }

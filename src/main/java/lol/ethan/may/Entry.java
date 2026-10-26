@@ -62,16 +62,16 @@ public class Entry {
     private static Minecraft getMinecraft() {
         try {
             return (Minecraft) Minecraft.class.getMethod("getMinecraft").invoke(null);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             try {
                 return (Minecraft) Minecraft.class.getMethod("func_71410_x").invoke(null);
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 throw new RuntimeException(ex);
             }
         }
     }
 
-    public static void load(Instrumentation i, ClassLoader loader) throws Exception {
+    public static void load(final Instrumentation i, final ClassLoader loader) throws Exception {
         nanoTime = System.nanoTime();
         Entry.loader = loader;
         inst = i;
@@ -79,7 +79,7 @@ public class Entry {
         Entry.chat("§dMay §8» §rmodifying game code...");
         Thread.currentThread().setContextClassLoader(loader);
         FILE_PATH = new File(Minecraft.getMinecraft().mcDataDir, "May");
-        if (Mappings.getMappingType() == Mappings.MappingType.MCP) {
+        if (Mappings.MappingType.MCP == Mappings.getMappingType()) {
             transformers.add(new Remapper());
         }
         transformers.add(new MinecraftTransformer());
@@ -94,16 +94,16 @@ public class Entry {
         transformers.add(new EntityRendererTransformer());
         transformers.add(new GuiContainerTransformer());
         transformers.add(new ItemBucketTransformer());
-        for (ITransformer t : transformers) {
+        for (final ITransformer t : transformers) {
             inst.addTransformer(t, true);
         }
-        for (Class clazz : inst.getAllLoadedClasses()) {
-            for (ITransformer t : transformers) {
+        for (final Class clazz : inst.getAllLoadedClasses()) {
+            for (final ITransformer t : transformers) {
                 try {
                     if (!t.shouldTransform(clazz.getName().replace('/', '.')) || !inst.isModifiableClass(clazz))
                         continue;
                     inst.retransformClasses(clazz);
-                } catch (Throwable e) {
+                } catch (final Throwable e) {
                     System.out.println(clazz.getName() + " failed to transform (" + t.getClass().getName() + ")");
                     e.printStackTrace();
                 }
@@ -112,23 +112,23 @@ public class Entry {
         new Entry().start(loader);
     }
 
-    public static String addInternalCommand(Runnable runnable) {
-        UUID uuid = UUID.randomUUID();
+    public static String addInternalCommand(final Runnable runnable) {
+        final UUID uuid = UUID.randomUUID();
         commandIdMap.put(uuid, runnable);
         return "/frostmodinternal " + uuid;
     }
 
-    public static void chat(String message) {
+    public static void chat(final String message) {
         Entry.chat(new ChatComponentText(message.replaceAll("&([0-9A-FK-OR])", "§$1")));
     }
 
-    public static void chat(Object message) {
+    public static void chat(final Object message) {
         Entry.chat(new ChatComponentText(message.toString().replaceAll("&([0-9A-FK-OR])", "§$1")));
     }
 
-    public static void chat(IChatComponent message) {
-        Minecraft mc = Minecraft.getMinecraft();
-        if (mc.thePlayer == null) {
+    public static void chat(final IChatComponent message) {
+        final Minecraft mc = Minecraft.getMinecraft();
+        if (null == mc.thePlayer) {
             return;
         }
         if (mc.isCallingFromMinecraftThread()) {
@@ -138,52 +138,52 @@ public class Entry {
         mc.addScheduledTask(() -> mc.thePlayer.addChatMessage(message));
     }
 
-    public static InputStream getResourceAsStream(String path) {
-        ClassLoader[] loaders;
-        for (ClassLoader cl : loaders = new ClassLoader[]{ClassLoader.getSystemClassLoader(), Thread.currentThread().getContextClassLoader(), Mappings.class.getClassLoader()}) {
-            InputStream in;
-            if (cl == null || (in = cl.getResourceAsStream(path)) == null) continue;
+    public static InputStream getResourceAsStream(final String path) {
+        final ClassLoader[] loaders;
+        for (final ClassLoader cl : loaders = new ClassLoader[]{ClassLoader.getSystemClassLoader(), Thread.currentThread().getContextClassLoader(), Mappings.class.getClassLoader()}) {
+            final InputStream in;
+            if (null == cl || null == (in = cl.getResourceAsStream(path))) continue;
             return in;
         }
         throw new RuntimeException("couldnt find a resource");
     }
 
-    public static void debug(IChatComponent message) {
+    public static void debug(final IChatComponent message) {
         if (Config.isDebugLogging()) {
             Entry.chat(message);
         }
     }
 
-    public static void debug(String message) {
+    public static void debug(final String message) {
         if (Config.isDebugLogging()) {
             Entry.chat(message);
         }
     }
 
     public static String getServerIP() {
-        Minecraft mc = Minecraft.getMinecraft();
+        final Minecraft mc = Minecraft.getMinecraft();
         if (mc.isSingleplayer()) {
             return "none";
         }
-        if (mc.getCurrentServerData() == null || mc.getCurrentServerData().serverIP == null) {
+        if (null == mc.getCurrentServerData() || null == mc.getCurrentServerData().serverIP) {
             return "none";
         }
         return mc.getCurrentServerData().serverIP;
     }
 
-    public static void playSound(String key, float volume, float pitch) {
-        Minecraft mc = Minecraft.getMinecraft();
-        if (mc.thePlayer == null || mc.theWorld == null) {
+    public static void playSound(final String key, final float volume, final float pitch) {
+        final Minecraft mc = Minecraft.getMinecraft();
+        if (null == mc.thePlayer || null == mc.theWorld) {
             return;
         }
         mc.addScheduledTask(() -> mc.thePlayer.playSound(key, volume, pitch));
     }
 
-    public static void playSound(String key, float volume) {
+    public static void playSound(final String key, final float volume) {
         Entry.playSound(key, volume, 1.0f);
     }
 
-    public static void playSound(String key) {
+    public static void playSound(final String key) {
         Entry.playSound(key, 1.0f, 1.0f);
     }
 
@@ -191,21 +191,21 @@ public class Entry {
         Entry.playClickSound(1.0f);
     }
 
-    public static void playClickSound(float pitch) {
+    public static void playClickSound(final float pitch) {
         Entry.playClickSound(1.0f, pitch);
     }
 
-    public static void playClickSound(float volume, float pitch) {
+    public static void playClickSound(final float volume, final float pitch) {
         Entry.playSound("random.click", volume, pitch);
     }
 
-    public void start(ClassLoader loader) {
+    public void start(final ClassLoader loader) {
         Thread.currentThread().setContextClassLoader(loader);
         Config.setConfigFile(new File(new File(Minecraft.getMinecraft().mcDataDir, "May"), "config.json"));
         Config.load();
-        for (Component comp : Config.getAllComponents()) {
+        for (final Component comp : Config.getAllComponents()) {
             if (!(comp instanceof HUDComponent)) continue;
-            HUDComponent hudComponent = (HUDComponent) comp;
+            final HUDComponent hudComponent = (HUDComponent) comp;
             huds.add(hudComponent.hud);
         }
         HypixelModAPI.getInstance().setModImplementation(new ModAPI());
@@ -216,7 +216,7 @@ public class Entry {
         EventBus.subscribe(new Object() {
 
             @SubscribeEvent
-            public void onShutdown(ShutdownEvent event) {
+            public void onShutdown(final ShutdownEvent event) {
                 Config.save();
             }
         });
@@ -248,46 +248,46 @@ public class Entry {
         CommandHandler.register(new HypixelStats());
         CommandHandler.register(new ConfigCommand());
         CommandHandler.register(new HypixelLocation());
-        long nanoTimeNow = System.nanoTime();
-        double diff = ((double) nanoTimeNow / 1000000.0 - (double) nanoTime / 1000000.0) / 1000.0;
+        final long nanoTimeNow = System.nanoTime();
+        final double diff = ((double) nanoTimeNow / 1000000.0 - (double) nanoTime / 1000000.0) / 1000.0;
         Entry.chat("§dMay §8» §rinjection finished! took " + String.format("%.2fs", diff));
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.Post event) {
-        if (Entry.getMinecraft().theWorld == null) {
+    public void onTick(final TickEvent.Post event) {
+        if (null == Entry.getMinecraft().theWorld) {
             return;
         }
-        for (BasicHud hud : huds) {
+        for (final BasicHud hud : huds) {
             if (!hud.shouldShow()) continue;
             hud.updateLineCache();
         }
     }
 
     @SubscribeEvent
-    public void onChat(ChatEvent.Send e) {
-        String msg = e.getMessage();
+    public void onChat(final ChatEvent.Send e) {
+        final String msg = e.getMessage();
         if (msg.startsWith("/frostmodinternal")) {
-            UUID uuid = UUID.fromString(msg.split(" ")[1]);
+            final UUID uuid = UUID.fromString(msg.split(" ")[1]);
             commandIdMap.get(uuid).run();
             e.setCancelled(true);
         }
     }
 
     @SubscribeEvent
-    public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
-        if (Entry.getMinecraft().theWorld == null) {
+    public void onRenderGameOverlay(final RenderGameOverlayEvent.Post event) {
+        if (null == Entry.getMinecraft().theWorld) {
             return;
         }
-        for (BasicHud hud : huds) {
+        for (final BasicHud hud : huds) {
             if (!hud.shouldShow()) continue;
             hud.draw();
         }
     }
 
     @SubscribeEvent
-    public void onScoreboardLine(ScoreboardLineEvent event) {
-        if (Entry.getMinecraft().theWorld == null) {
+    public void onScoreboardLine(final ScoreboardLineEvent event) {
+        if (null == Entry.getMinecraft().theWorld) {
             return;
         }
         if (Config.isDebugLogging()) {

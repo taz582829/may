@@ -16,10 +16,10 @@ public class GuiIngameHook implements ITransformer {
     private static final String CALLBACK_INFO_CLASS = "org/spongepowered/asm/mixin/injection/callback/CallbackInfo";
 
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             if (method.name.equals("renderGameOverlay") || method.name.equals("func_175180_a")) {
-                InsnList preInsnList = new InsnList();
+                final InsnList preInsnList = new InsnList();
                 preInsnList.add(new TypeInsnNode(Opcodes.NEW, Type.getInternalName(RenderGameOverlayEvent.Pre.class)));
                 preInsnList.add(new InsnNode(Opcodes.DUP));
                 preInsnList.add(new VarInsnNode(Opcodes.FLOAD, 1));
@@ -27,11 +27,11 @@ public class GuiIngameHook implements ITransformer {
                 preInsnList.add(ASMUtils.postEvent());
                 preInsnList.add(new InsnNode(Opcodes.POP));
                 method.instructions.insert(preInsnList);
-                AbstractInsnNode[] abstractInsnNodeArray = method.instructions.toArray();
-                int n = abstractInsnNodeArray.length;
-                for (AbstractInsnNode insnNode : abstractInsnNodeArray) {
-                    if (insnNode.getOpcode() < Opcodes.IRETURN || insnNode.getOpcode() > Opcodes.RETURN) continue;
-                    InsnList postInsnList = new InsnList();
+                final AbstractInsnNode[] abstractInsnNodeArray = method.instructions.toArray();
+                final int n = abstractInsnNodeArray.length;
+                for (final AbstractInsnNode insnNode : abstractInsnNodeArray) {
+                    if (Opcodes.IRETURN > insnNode.getOpcode() || Opcodes.RETURN < insnNode.getOpcode()) continue;
+                    final InsnList postInsnList = new InsnList();
                     postInsnList.add(new TypeInsnNode(Opcodes.NEW, Type.getInternalName(RenderGameOverlayEvent.Post.class)));
                     postInsnList.add(new InsnNode(Opcodes.DUP));
                     postInsnList.add(new VarInsnNode(Opcodes.FLOAD, 1));
@@ -42,41 +42,41 @@ public class GuiIngameHook implements ITransformer {
                 }
             }
             if (method.name.equals("renderExpBar") || method.name.equals("func_175176_b")) {
-                InsnList insnList = new InsnList();
+                final InsnList insnList = new InsnList();
                 insnList.add(new TypeInsnNode(Opcodes.NEW, Type.getInternalName(RenderXPEvent.class)));
                 insnList.add(new InsnNode(Opcodes.DUP));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, Type.getInternalName(RenderXPEvent.class), "<init>", "()V"));
                 insnList.add(ASMUtils.postEvent());
                 insnList.add(new TypeInsnNode(Opcodes.CHECKCAST, Type.getInternalName(RenderXPEvent.class)));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, Type.getInternalName(RenderXPEvent.class), "isCancelled", "()Z"));
-                LabelNode label = new LabelNode();
+                final LabelNode label = new LabelNode();
                 insnList.add(new JumpInsnNode(Opcodes.IFEQ, label));
                 insnList.add(new InsnNode(Opcodes.RETURN));
                 insnList.add(label);
                 method.instructions.insert(insnList);
             }
             if (!method.name.equals("renderScoreboard")) continue;
-            for (AbstractInsnNode insnNode : method.instructions.toArray()) {
+            for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                 if (!(insnNode instanceof MethodInsnNode)) continue;
-                MethodInsnNode min = (MethodInsnNode)insnNode;
+                final MethodInsnNode min = (MethodInsnNode)insnNode;
                 if (!min.name.equals("formatPlayerName")) continue;
                 method.instructions.set(min, new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(GuiIngameHook.class), "getScoreboardLine", "(Lnet/minecraft/scoreboard/Team;Ljava/lang/String;)Ljava/lang/String;"));
             }
         }
     }
 
-    public static boolean isScoreboardCancelled(Object ci) {
+    public static boolean isScoreboardCancelled(final Object ci) {
         try {
             return (Boolean)ci.getClass().getMethod("isCancelled", new Class[0]).invoke(ci, new Object[0]);
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             throw new RuntimeException(e);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return false;
         }
     }
 
-    public static String getScoreboardLine(Team team, String name) {
-        ScoreboardLineEvent event = new ScoreboardLineEvent(team, name);
+    public static String getScoreboardLine(final Team team, final String name) {
+        final ScoreboardLineEvent event = new ScoreboardLineEvent(team, name);
         EventBus.postEvent(event);
         return event.getLine();
     }

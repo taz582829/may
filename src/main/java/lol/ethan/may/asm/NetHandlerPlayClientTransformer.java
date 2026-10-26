@@ -13,12 +13,12 @@ import java.util.List;
 
 public class NetHandlerPlayClientTransformer implements ITransformer {
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             if (!method.name.equals("handlePlayerListItem") && !method.name.equals("func_147256_a")) continue;
-            for (AbstractInsnNode insnNode : method.instructions.toArray()) {
+            for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                 if (!(insnNode instanceof MethodInsnNode)) continue;
-                MethodInsnNode mn = (MethodInsnNode)insnNode;
+                final MethodInsnNode mn = (MethodInsnNode)insnNode;
                 if (mn.name.equals("put")) {
                     method.instructions.insert(mn, ASMUtils.asm(a -> {
                         a.pop();

@@ -17,15 +17,15 @@ import java.util.List;
 
 public class ItemBucketTransformer implements ITransformer {
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             if (!method.name.equals("func_180616_a") && !method.name.equals("tryPlaceContainedLiquid")) continue;
-            for (AbstractInsnNode insn : method.instructions.toArray()) {
+            for (final AbstractInsnNode insn : method.instructions.toArray()) {
                 if (!(insn instanceof MethodInsnNode)) continue;
-                MethodInsnNode methodInsn = (MethodInsnNode)insn;
+                final MethodInsnNode methodInsn = (MethodInsnNode)insn;
                 if (!methodInsn.name.equals("func_180501_a") && !methodInsn.name.equals("setBlockState")) continue;
                 method.instructions.insert(methodInsn, ASMUtils.asm(a -> {
-                    Label skip = new Label();
+                    final Label skip = new Label();
                     a.invokestatic("net/minecraft/client/Minecraft", "getMinecraft", "()Lnet/minecraft/client/Minecraft;", false);
                     a.invokevirtual("net/minecraft/client/Minecraft", "isSingleplayer", "()Z", false);
                     a.ifeq(skip);
@@ -44,7 +44,7 @@ public class ItemBucketTransformer implements ITransformer {
         }
     }
 
-    public static boolean may$tryPlaceContainedLiquid(ItemBucket bucket, World world, BlockPos bp) {
+    public static boolean may$tryPlaceContainedLiquid(final ItemBucket bucket, final World world, final BlockPos bp) {
         if (Minecraft.getMinecraft().isSingleplayer()) {
             return bucket.tryPlaceContainedLiquid(world, bp);
         }

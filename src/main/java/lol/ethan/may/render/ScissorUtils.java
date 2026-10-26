@@ -5,9 +5,9 @@ import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 
 public class ScissorUtils {
-    public static void begin(int x, int y, int width, int height) {
-        Minecraft mc = Minecraft.getMinecraft();
-        int scale = new ScaledResolution(mc).getScaleFactor();
+    public static void begin(final int x, final int y, final int width, final int height) {
+        final Minecraft mc = Minecraft.getMinecraft();
+        final int scale = new ScaledResolution(mc).getScaleFactor();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor(
                 x * scale,

@@ -4,10 +4,10 @@ public class Event {
     private boolean cancelled;
 
     public boolean isCancelled() {
-        return this.cancelled;
+        return cancelled;
     }
 
-    public void setCancelled(boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.cancelled = cancelled;
     }
 }

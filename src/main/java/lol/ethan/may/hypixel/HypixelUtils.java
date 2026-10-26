@@ -12,19 +12,19 @@ public class HypixelUtils {
     public static boolean isOnHypixel() {
         return ModAPI.isOnHypixel();
     }
-    public static void showGeneralStats(PlayerResponse.Player player) {
-        if (player.stats == null) return;
-        String displayName = HypixelAPI.getDisplayName(player);
-        double nwl = HypixelAPI.getNetworkLevel(player.networkExp);
-        String nwlFormatted = HypixelAPI.formatNetworkLevel(nwl);
+    public static void showGeneralStats(final PlayerResponse.Player player) {
+        if (null == player.stats) return;
+        final String displayName = HypixelAPI.getDisplayName(player);
+        final double nwl = HypixelAPI.getNetworkLevel(player.networkExp);
+        final String nwlFormatted = HypixelAPI.formatNetworkLevel(nwl);
         //long karma = player.karma;
-        int ap = player.achievementPoints;
-        int ranks = JsonUtils.getInt(player.giftingMeta, "ranksGifted");
-        LocalDateTime firstLogin = player.getFirstLogin();
-        LocalDateTime lastLogin = player.getLastLogin();
+        final int ap = player.achievementPoints;
+        final int ranks = JsonUtils.getInt(player.giftingMeta, "ranksGifted");
+        final LocalDateTime firstLogin = player.getFirstLogin();
+        final LocalDateTime lastLogin = player.getLastLogin();
         String msg = Entry.PREFIX + displayName + " §fLvl: " + nwlFormatted + " §fAP: §e" + ap + " §fRanks: §1" + ranks;
         msg += "\n" + Entry.SHORT_PREFIX + "§fFL: §3" + TimeUtils.formatTime(firstLogin);
-        msg += " §fLL: §3" + (lastLogin == null ? "§4HIDDEN" : TimeUtils.formatTime(lastLogin));
+        msg += " §fLL: §3" + (null == lastLogin ? "§4HIDDEN" : TimeUtils.formatTime(lastLogin));
         Entry.chat(msg);
     }
 }

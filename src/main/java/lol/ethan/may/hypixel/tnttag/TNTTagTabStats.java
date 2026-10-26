@@ -25,10 +25,10 @@ public class TNTTagTabStats extends TabStats {
     }
 
     @Override
-    protected String getDisplayName(NetworkPlayerInfo playerInfo, IStats stats) {
+    protected String getDisplayName(final NetworkPlayerInfo playerInfo, final IStats stats) {
         if (customDisplayNames.containsKey(playerInfo.getGameProfile().getId())) return customDisplayNames.get(playerInfo.getGameProfile().getId());
-        if (stats == null) return ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c?";
-        List<String> statList = stats.getDisplayStats(playerInfo);
+        if (null == stats) return ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c?";
+        final List<String> statList = stats.getDisplayStats(playerInfo);
         return String.join(" ", statList);
     }
 
@@ -37,21 +37,21 @@ public class TNTTagTabStats extends TabStats {
         public volatile int ping;
 
         @Override
-        public IStats buildStats(PlayerResponse.Player player, String mode) {
+        public IStats buildStats(final PlayerResponse.Player player, final String mode) {
             Entry.debug("started building stats for " + player.ign);
-            JsonObject genStats = player.stats;
-            if (genStats == null) return null;
-            JsonObject tntStats = genStats.getAsJsonObject("TNTGames");
-            if (tntStats == null) return null;
+            final JsonObject genStats = player.stats;
+            if (null == genStats) return null;
+            final JsonObject tntStats = genStats.getAsJsonObject("TNTGames");
+            if (null == tntStats) return null;
 
-            int tagWins = JsonUtils.getInt(tntStats, "wins_tntag", 0);
-            this.wins = formatWins(tagWins);
+            final int tagWins = JsonUtils.getInt(tntStats, "wins_tntag", 0);
+            wins = formatWins(tagWins);
             winMap.put(player.ign.toLowerCase().trim(), formatWins(tagWins));
-            this.ping = 1;
+            ping = 1;
             AuroraAPI.getPing(UUID.fromString(UUIDUtils.dashUUID(player.uuid))).whenComplete((res, err) -> {
                 if (!res.isSuccess()) return;
-                PingData data = res.getData().get(0);
-                this.ping = data.getAvg();
+                final PingData data = res.getData().get(0);
+                ping = data.getAvg();
             });
             Entry.debug("finished building stats for " + player.ign);
             return this;
@@ -59,24 +59,24 @@ public class TNTTagTabStats extends TabStats {
 
         @Override
         public int getPing() {
-            return ping;
+            return this.ping;
         }
 
         public String getWins() {
-            return wins;
+            return this.wins;
         }
 
         @Override
-        public List<String> getDisplayStats(NetworkPlayerInfo playerInfo) {
+        public List<String> getDisplayStats(final NetworkPlayerInfo playerInfo) {
 
-            List<String> stats = new ArrayList<>();
-            if (playerInfo.getGameProfile().getId().version() == 1) {
+            final List<String> stats = new ArrayList<>();
+            if (1 == playerInfo.getGameProfile().getId().version()) {
                 stats.add(ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()));
                 stats.add("§c[NICK]");
             }
 
             stats.add(ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()));
-            stats.add(wins);
+            stats.add(this.wins);
 
             return stats;
         }
@@ -84,19 +84,19 @@ public class TNTTagTabStats extends TabStats {
 
 
     }
-    public static String formatWins(int wins) {
-        String w = "[" + wins + "]";
-        StringBuilder result = new StringBuilder();
-        if (wins < 15) result.append(DARK_GRAY);
-        else if (wins < 50) result.append(GRAY);
-        else if (wins < 100) result.append(WHITE);
-        else if (wins < 250) result.append(DARK_GREEN);
-        else if (wins < 500) result.append(GREEN);
-        else if (wins < 1000) result.append(BLUE);
-        else if (wins < 1500) result.append(DARK_PURPLE);
-        else if (wins < 2500) result.append(GOLD);
-        else if (wins < 5000) result.append(RED);
-        else if (wins < 10000) result.append(BLACK);
+    public static String formatWins(final int wins) {
+        final String w = "[" + wins + "]";
+        final StringBuilder result = new StringBuilder();
+        if (15 > wins) result.append(DARK_GRAY);
+        else if (50 > wins) result.append(GRAY);
+        else if (100 > wins) result.append(WHITE);
+        else if (250 > wins) result.append(DARK_GREEN);
+        else if (500 > wins) result.append(GREEN);
+        else if (1000 > wins) result.append(BLUE);
+        else if (1500 > wins) result.append(DARK_PURPLE);
+        else if (2500 > wins) result.append(GOLD);
+        else if (5000 > wins) result.append(RED);
+        else if (10000 > wins) result.append(BLACK);
         else {
             final String[] RAINBOW_COLORS = {
                     "c",
@@ -108,8 +108,8 @@ public class TNTTagTabStats extends TabStats {
                     "5"
             };
             for (int i = 0; i < w.length(); i++) {
-                String part = String.valueOf(w.charAt(i));
-                String color = RAINBOW_COLORS[i % 7];
+                final String part = String.valueOf(w.charAt(i));
+                final String color = RAINBOW_COLORS[i % 7];
                 result.append("§").append(color).append(part);
             }
         }

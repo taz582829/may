@@ -8,35 +8,35 @@ public class ChatEvent {
     public static class Received extends Event {
         private IChatComponent message;
 
-        public Received(IChatComponent message) {
+        public Received(final IChatComponent message) {
             this.message = message;
         }
 
         public IChatComponent getMessage() {
-            return this.message;
+            return message;
         }
 
-        public void setMessage(IChatComponent message) {
+        public void setMessage(final IChatComponent message) {
             this.message = message;
         }
 
         public String getUnformattedMessage() {
-            return StringUtils.stripControlCodes(this.message.getUnformattedText());
+            return StringUtils.stripControlCodes(message.getUnformattedText());
         }
     }
 
     public static class Send extends Event {
         private String message;
 
-        public Send(String message) {
+        public Send(final String message) {
             this.message = message;
         }
 
         public String getMessage() {
-            return this.message;
+            return message;
         }
 
-        public void setMessage(String message) {
+        public void setMessage(final String message) {
             this.message = message;
         }
     }

@@ -16,20 +16,20 @@ public class NetworkPlayerInfoTransformer implements ITransformer {
     private final String formatNameDesc = "(Lnet/minecraft/util/IChatComponent;Lnet/minecraft/client/network/NetworkPlayerInfo;)L" + Type.getInternalName(IChatComponent.class) + ";";
 
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             if (method.name.equals("getDisplayName") || method.name.equals("func_178854_k")) {
-                for (AbstractInsnNode insnNode : method.instructions) {
-                    if (insnNode.getOpcode() != Opcodes.ARETURN) continue;
-                    InsnList insnList = new InsnList();
+                for (final AbstractInsnNode insnNode : method.instructions) {
+                    if (Opcodes.ARETURN != insnNode.getOpcode()) continue;
+                    final InsnList insnList = new InsnList();
                     insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                    insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(NetworkPlayerInfoTransformer.class), "may$formatTabName", this.formatNameDesc));
+                    insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(NetworkPlayerInfoTransformer.class), "may$formatTabName", formatNameDesc));
                     method.instructions.insertBefore(insnNode, insnList);
                 }
             }
             if (!method.name.equals("func_178853_c") && !method.name.equals("getResponseTime")) continue;
-            for (AbstractInsnNode insnNode : method.instructions.toArray()) {
-                if (insnNode.getOpcode() < Opcodes.IRETURN || insnNode.getOpcode() > Opcodes.RETURN) continue;
+            for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
+                if (Opcodes.IRETURN > insnNode.getOpcode() || Opcodes.RETURN < insnNode.getOpcode()) continue;
                 method.instructions.insertBefore(insnNode, ASMUtils.asm(a -> {
                     a.load(0, ASMUtils.getType(NetworkPlayerInfo.class));
                     a.invokestatic(Type.getInternalName(NetworkPlayerInfoTransformer.class), "may$setPlayerPing", "(IL" + Type.getInternalName(NetworkPlayerInfo.class) + ";)I", false);
@@ -38,13 +38,13 @@ public class NetworkPlayerInfoTransformer implements ITransformer {
         }
     }
 
-    public static IChatComponent may$formatTabName(IChatComponent displayName, NetworkPlayerInfo playerInfo) {
-        RenderPlayerInTabEvent event = EventBus.postEvent(new RenderPlayerInTabEvent(displayName, playerInfo));
+    public static IChatComponent may$formatTabName(final IChatComponent displayName, final NetworkPlayerInfo playerInfo) {
+        final RenderPlayerInTabEvent event = EventBus.postEvent(new RenderPlayerInTabEvent(displayName, playerInfo));
         return event.getTextAsComponent();
     }
 
-    public static int may$setPlayerPing(int ping, NetworkPlayerInfo playerInfo) {
-        PlayerPingEvent event = EventBus.postEvent(new PlayerPingEvent(ping, playerInfo));
+    public static int may$setPlayerPing(final int ping, final NetworkPlayerInfo playerInfo) {
+        final PlayerPingEvent event = EventBus.postEvent(new PlayerPingEvent(ping, playerInfo));
         return event.getPing();
     }
 

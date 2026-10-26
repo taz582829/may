@@ -8,7 +8,7 @@ public class ConfigCommand extends Command {
     }
 
     @Override
-    public void execute(String[] args) {
+    public void execute(final String[] args) {
         ClickGUI.open();
     }
 }

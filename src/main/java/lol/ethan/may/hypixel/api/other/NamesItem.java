@@ -11,10 +11,10 @@ public class NamesItem{
 	private String username;
 
 	public String getChangedAt(){
-		return changedAt;
+		return this.changedAt;
 	}
 
 	public String getUsername(){
-		return username;
+		return this.username;
 	}
 }

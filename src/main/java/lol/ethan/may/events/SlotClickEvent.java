@@ -7,29 +7,29 @@ public class SlotClickEvent extends Event {
     private int clickedButton;
     private int clickType;
 
-    public SlotClickEvent(Slot slot, int clickedButton, int clickType) {
+    public SlotClickEvent(final Slot slot, final int clickedButton, final int clickType) {
         this.slot = slot;
         this.clickedButton = clickedButton;
         this.clickType = clickType;
     }
 
     public Slot getSlot() {
-        return this.slot;
+        return slot;
     }
 
     public int getClickedButton() {
-        return this.clickedButton;
+        return clickedButton;
     }
 
-    public void setClickedButton(int clickedButton) {
+    public void setClickedButton(final int clickedButton) {
         this.clickedButton = clickedButton;
     }
 
     public int getClickType() {
-        return this.clickType;
+        return clickType;
     }
 
-    public void setClickType(int clickType) {
+    public void setClickType(final int clickType) {
         this.clickType = clickType;
     }
 }

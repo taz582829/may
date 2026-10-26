@@ -16,24 +16,24 @@ public class LoadedPlayersHUD extends BasicHud {
 
     @Override
     public boolean shouldShow() {
-        return super.shouldShow() && this.mc.theWorld != null && this.mc.thePlayer != null && HousingUtils.isInHousing() && (HousingUtils.isInCreative() || this.mc.thePlayer.capabilities.isCreativeMode);
+        return super.shouldShow() && null != this.mc.theWorld && null != this.mc.thePlayer && HousingUtils.isInHousing() && (HousingUtils.isInCreative() || mc.thePlayer.capabilities.isCreativeMode);
     }
 
     @Override
-    protected List<String> getLines(boolean example) {
-        ArrayList<String> lines = new ArrayList<>();
-        List<EntityPlayer> players = this.mc.theWorld.playerEntities.stream().filter(p -> !p.equals(this.mc.thePlayer) && p.getUniqueID().version() != 2).collect(Collectors.toList());
-        if (players.size() == 0) {
+    protected List<String> getLines(final boolean example) {
+        final ArrayList<String> lines = new ArrayList<>();
+        final List<EntityPlayer> players = mc.theWorld.playerEntities.stream().filter(p -> !p.equals(mc.thePlayer) && 2 != p.getUniqueID().version()).collect(Collectors.toList());
+        if (0 == players.size()) {
             return Collections.emptyList();
         }
         lines.add("§fLoaded Players §7(" + players.size() + ")§f:");
-        for (EntityPlayer player : players) {
-            double dist;
-            StringBuilder text = new StringBuilder("§8- §r" + player.getDisplayName().getFormattedText());
-            if (player.isInvisibleToPlayer(this.mc.thePlayer)) {
+        for (final EntityPlayer player : players) {
+            final double dist;
+            final StringBuilder text = new StringBuilder("§8- §r" + player.getDisplayName().getFormattedText());
+            if (player.isInvisibleToPlayer(mc.thePlayer)) {
                 text.append(" §b[I]");
             }
-            EnumChatFormatting distanceColor = (dist = this.mc.thePlayer.getDistanceToEntity(player)) <= 10.0 ? EnumChatFormatting.DARK_GREEN : (dist <= 20.0 ? EnumChatFormatting.GREEN : (dist <= 30.0 ? EnumChatFormatting.GOLD : (dist <= 45.0 ? EnumChatFormatting.RED : EnumChatFormatting.DARK_RED)));
+            final EnumChatFormatting distanceColor = 10.0 >= (dist = this.mc.thePlayer.getDistanceToEntity(player)) ? EnumChatFormatting.DARK_GREEN : (20.0 >= dist ? EnumChatFormatting.GREEN : (30.0 >= dist ? EnumChatFormatting.GOLD : (45.0 >= dist ? EnumChatFormatting.RED : EnumChatFormatting.DARK_RED)));
             text.append(" ").append(distanceColor).append(String.format("%.2f", dist)).append("m");
             lines.add(text.toString());
         }

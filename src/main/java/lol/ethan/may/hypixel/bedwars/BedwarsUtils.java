@@ -24,34 +24,34 @@ import java.util.*;
 
 public class BedwarsUtils {
     private static final Minecraft mc = Minecraft.getMinecraft();
-    public static int ticksSinceGameStart = 0;
-    public static long timeOfGameStart = 0;
+    public static int ticksSinceGameStart;
+    public static long timeOfGameStart;
     public static final Set<String> MODE_KEYS = new HashSet<>();
     public static boolean isInBedwars() {
         return HypixelUtils.isOnHypixel()
-                && LocationData.getGameType() == GameType.BEDWARS
-                && LocationData.getLobbyName() == null
+                && GameType.BEDWARS == LocationData.getGameType()
+                && null == LocationData.getLobbyName()
                 && gameStarted;
     }
     public static boolean isInPregame() {
         return HypixelUtils.isOnHypixel()
-                && LocationData.getGameType() == GameType.BEDWARS
-                && LocationData.getLobbyName() == null
+                && GameType.BEDWARS == LocationData.getGameType()
+                && null == LocationData.getLobbyName()
                 && !gameStarted;
     }
-    private static boolean gameStarted = false;
+    private static boolean gameStarted;
 
     public static Map<BedwarsTeam, List<UUID>> getAllPlayerTeams() {
-        Map<BedwarsTeam, List<UUID>> teamMap = new HashMap<>();
+        final Map<BedwarsTeam, List<UUID>> teamMap = new HashMap<>();
 
-        for (BedwarsTeam team : BedwarsTeam.values()) {
-            List<UUID> teamList = teamMap.computeIfAbsent(team, k -> new ArrayList<>());
-            for (NetworkPlayerInfo playerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-                if (playerInfo.getGameProfile().getId().version() == 2) continue;
-                if (playerInfo.getPlayerTeam() == null) continue;
-                UUID uuid = playerInfo.getGameProfile().getId();
+        for (final BedwarsTeam team : BedwarsTeam.values()) {
+            final List<UUID> teamList = teamMap.computeIfAbsent(team, k -> new ArrayList<>());
+            for (final NetworkPlayerInfo playerInfo : mc.getNetHandler().getPlayerInfoMap()) {
+                if (2 == playerInfo.getGameProfile().getId().version()) continue;
+                if (null == playerInfo.getPlayerTeam()) continue;
+                final UUID uuid = playerInfo.getGameProfile().getId();
 
-                String teamPrefix = playerInfo.getPlayerTeam().getColorPrefix();
+                final String teamPrefix = playerInfo.getPlayerTeam().getColorPrefix();
                 if (team.prefix.equals(teamPrefix)) {
                     teamList.add(uuid);
                 }
@@ -76,25 +76,25 @@ public class BedwarsUtils {
         public final String displayName;
         public final String[] alternatives;
 
-        Mode(String modeKey, String displayName) {
+        Mode(final String modeKey, final String displayName) {
             this.modeKey = modeKey;
             this.displayName = displayName;
-            this.alternatives = new String[]{};
+            alternatives = new String[]{};
         }
-        Mode(String modeKey, String displayName, String[] alternatives) {
+        Mode(final String modeKey, final String displayName, final String[] alternatives) {
             this.modeKey = modeKey;
             this.displayName = displayName;
             this.alternatives = alternatives;
         }
-        public static Mode parseMode(String gameMode) {
+        public static Mode parseMode(final String gameMode) {
             Mode gamemode = OVERALL;
-            for (Mode m : Mode.values()) {
-                if (m.modeKey == null) continue;
-                String modeKey = m.modeKey;
+            for (final Mode m : Mode.values()) {
+                if (null == m.modeKey) continue;
+                final String modeKey = m.modeKey;
                 boolean matches = modeKey.equalsIgnoreCase(gameMode.toLowerCase())
                         || m.displayName.equalsIgnoreCase(gameMode.toLowerCase());
-                if (!matches && m.alternatives != null) {
-                    for (String alt : m.alternatives) {
+                if (!matches && null != m.alternatives) {
+                    for (final String alt : m.alternatives) {
                         if (alt.equalsIgnoreCase(gameMode.toLowerCase())) {
                             matches = true;
                             break;
@@ -111,39 +111,39 @@ public class BedwarsUtils {
         }
     }
     static {
-        for (Mode m : Mode.values()) {
-            if (m == Mode.UNKNOWN) continue;
+        for (final Mode m : Mode.values()) {
+            if (Mode.UNKNOWN == m) continue;
             if (!m.modeKey.isEmpty()) MODE_KEYS.add(m.modeKey);
             if (!m.displayName.isEmpty()) MODE_KEYS.add(m.displayName);
-            if (m.alternatives != null) {
+            if (null != m.alternatives) {
                 Collections.addAll(MODE_KEYS, m.alternatives);
             }
         }
     }
     public static Mode currentMode;
-    public static void showStats(PlayerResponse.Player player) {
-        if (player.stats == null) return;
-        String displayName = HypixelAPI.getDisplayName(player);
-        double nwl = HypixelAPI.getNetworkLevel(player.networkExp);
-        String nwlFormatted = HypixelAPI.formatNetworkLevel(nwl);
-        JsonObject bedwarsStats = player.stats.getAsJsonObject("Bedwars");
-        int bwsLvl = player.achievements.get("bedwars_level").getAsInt();
-        String stars = HypixelAPI.bedwarsLevelFormatted(
+    public static void showStats(final PlayerResponse.Player player) {
+        if (null == player.stats) return;
+        final String displayName = HypixelAPI.getDisplayName(player);
+        final double nwl = HypixelAPI.getNetworkLevel(player.networkExp);
+        final String nwlFormatted = HypixelAPI.formatNetworkLevel(nwl);
+        final JsonObject bedwarsStats = player.stats.getAsJsonObject("Bedwars");
+        final int bwsLvl = player.achievements.get("bedwars_level").getAsInt();
+        final String stars = HypixelAPI.bedwarsLevelFormatted(
                 bwsLvl,
                 JsonUtils.getString(bedwarsStats, "active_star", "black_open"),
                 JsonUtils.getString(bedwarsStats, "active_prestige_scheme", "prestige_scheme_none"),
                 JsonUtils.getString(bedwarsStats, "active_prestige_bracket", "")
         );
-        int finals = JsonUtils.getInt(bedwarsStats, "final_kills_bedwars", 0);
-        int fds = JsonUtils.getInt(bedwarsStats, "final_deaths_bedwars", 0);
-        double rawFkdr = finals / (double) (fds == 0 ? 1 : fds);
-        String formatted = HypixelAPI.fkdrFormatted(rawFkdr);
-        String formattedFinals = HypixelAPI.finalsFormatted(finals);
+        final int finals = JsonUtils.getInt(bedwarsStats, "final_kills_bedwars", 0);
+        final int fds = JsonUtils.getInt(bedwarsStats, "final_deaths_bedwars", 0);
+        final double rawFkdr = finals / (double) (0 == fds ? 1 : fds);
+        final String formatted = HypixelAPI.fkdrFormatted(rawFkdr);
+        final String formattedFinals = HypixelAPI.finalsFormatted(finals);
 
-        String formattedWs = HypixelAPI.isAPIHidden(player.stats) ? "§4API" : ("§e" + JsonUtils.getInt(bedwarsStats, "winstreak", 0));
+        final String formattedWs = HypixelAPI.isAPIHidden(player.stats) ? "§4API" : ("§e" + JsonUtils.getInt(bedwarsStats, "winstreak", 0));
 
-        String lineBreak = "§8" + ChatUtils.getChatBreak();
-        ChatComponentText message = new ChatComponentText(lineBreak);
+        final String lineBreak = "§8" + ChatUtils.getChatBreak();
+        final ChatComponentText message = new ChatComponentText(lineBreak);
         message.appendText("\n");
         message.appendText(Entry.SHORT_PREFIX).appendText(stars + " ").appendText(displayName).appendText(" §fLvl: ").appendText(nwlFormatted).appendText("\n");
         message.appendText(Entry.SHORT_PREFIX).appendText("§fF: " + formattedFinals).appendText(" §fFD: §8" + fds + " §fFKDR: " + formatted).appendText("\n");
@@ -151,8 +151,8 @@ public class BedwarsUtils {
 
         AuroraAPI.getPing(UUID.fromString(UUIDUtils.dashUUID(player.uuid))).thenAccept(res -> {
             if (res.isSuccess()) {
-                String ping;
-                if (res.getData() != null && res.getData().size() > 0) {
+                final String ping;
+                if (null != res.getData() && 0 < res.getData().size()) {
                     ping = PingUtils.formatPing(res.getData().get(0).getAvg());
                 } else {
                     ping = "§4N/A";
@@ -181,7 +181,7 @@ public class BedwarsUtils {
     }
 
     @SubscribeEvent
-    public void onChat(ChatEvent.Received event) {
+    public void onChat(final ChatEvent.Received event) {
         if (event.getMessage().getUnformattedText().trim().equals("Protect your bed and destroy the enemy beds.")) {
             ticksSinceGameStart = 0;
             gameStarted = true;
@@ -192,16 +192,16 @@ public class BedwarsUtils {
     }
 
     @SubscribeEvent
-    public void onPacket(PacketEvent.Receive event) {
+    public void onPacket(final PacketEvent.Receive event) {
         if (event.getPacket() instanceof S47PacketPlayerListHeaderFooter && isInBedwars()) event.setCancelled(true);
     }
     @SubscribeEvent
-    public void onTick(TickEvent.Post event) {
+    public void onTick(final TickEvent.Post event) {
         if (isInBedwars()) {
             ticksSinceGameStart++;
             ResourceSpawnManager.updateTimers();
             if (Config.resourceTimerTab.enabled) {
-                ChatComponentText comp = new ChatComponentText("§bDiamonds (§f" + ResourceSpawnManager.diamondSpawnCount + "§b): §f" + ResourceSpawnManager.timeUntilDiamond + " ");
+                final ChatComponentText comp = new ChatComponentText("§bDiamonds (§f" + ResourceSpawnManager.diamondSpawnCount + "§b): §f" + ResourceSpawnManager.timeUntilDiamond + " ");
                 comp.appendText("§aEmeralds (§f" + ResourceSpawnManager.emeraldSpawnCount + "§a): §f" + ResourceSpawnManager.timeUntilEmerald);
                 mc.ingameGUI.getTabList().setHeader(comp);
             }
@@ -209,11 +209,11 @@ public class BedwarsUtils {
     }
 
     @SubscribeEvent
-    public void onLocation(LocationEvent event) {
-        if (event.getMode() == null) return;
+    public void onLocation(final LocationEvent event) {
+        if (null == event.getMode()) return;
         gameStarted = false;
 
-        String mode = event.getMode().toLowerCase();
+        final String mode = event.getMode().toLowerCase();
 
         if (mode.contains("duel")) {
             if (mode.contains("rush")) currentMode = Mode.BW_RUSH_DUEL;

@@ -12,57 +12,57 @@ import java.util.function.Consumer;
 
 public class ColorComponent extends Button {
     public int color;
-    public Consumer<Integer> consumer = null;
-    public ColorComponent(String name, Category category) {
+    public Consumer<Integer> consumer;
+    public ColorComponent(final String name, final Category category) {
         super(name, category);
     }
-    public ColorComponent(String name, Category category, Consumer<Integer> consumer) {
+    public ColorComponent(final String name, final Category category, final Consumer<Integer> consumer) {
         super(name, category);
         this.consumer = consumer;
     }
-    public ColorComponent(String name, Category category, Consumer<Integer> consumer, int defaultColor) {
+    public ColorComponent(final String name, final Category category, final Consumer<Integer> consumer, final int defaultColor) {
         super(name, category);
         this.consumer = consumer;
-        this.color = defaultColor;
+        color = defaultColor;
     }
-    public ColorComponent(String name, Category category, int defaultColor) {
+    public ColorComponent(final String name, final Category category, final int defaultColor) {
         super(name, category);
-        this.color = defaultColor;
+        color = defaultColor;
     }
 
     @Override
-    public void drawComponent(int componentX, int componentY, int guiX, int guiY, int guiWidth, int guiHeight) {
-        int rowWidth = guiWidth - ClickGUI.sidebarWidth;
-        int boxX = componentX + rowWidth - 16;
-        int boxY = componentY + (componentHeight - 10) / 2;
+    public void drawComponent(final int componentX, final int componentY, final int guiX, final int guiY, final int guiWidth, final int guiHeight) {
+        final int rowWidth = guiWidth - ClickGUI.sidebarWidth;
+        final int boxX = componentX + rowWidth - 16;
+        final int boxY = componentY + (this.componentHeight - 10) / 2;
 
-        HUDHelper.drawRect(boxX, boxY, 10, 10, color);
-        mc.fontRendererObj.drawStringWithShadow(
-                name,
+        HUDHelper.drawRect(boxX, boxY, 10, 10, this.color);
+        this.mc.fontRendererObj.drawStringWithShadow(
+                this.name,
                 componentX + 12,
-                componentY + (componentHeight - mc.fontRendererObj.FONT_HEIGHT) / 2f,
+                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2f,
                 -1
         );
     }
 
     @Override
     public void onClick() {
-        mc.displayGuiScreen(null);
+        this.mc.displayGuiScreen(null);
         GuiUtils.openCustomScreen(new ColorWheel(i -> {
-            color = i;
-            if (consumer != null) consumer.accept(i);
+            this.color = i;
+            if (null != consumer) this.consumer.accept(i);
         }));
     }
 
     @Override
     public JsonElement serialize() {
-        return new JsonPrimitive(color);
+        return new JsonPrimitive(this.color);
     }
 
     @Override
-    public void load(JsonElement element) {
-        color = element.getAsInt();
+    public void load(final JsonElement element) {
+        this.color = element.getAsInt();
 
-        if (consumer != null) consumer.accept(color);
+        if (null != consumer) this.consumer.accept(this.color);
     }
 }

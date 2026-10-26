@@ -13,10 +13,10 @@ public class TrickDenickResponse{
 	private int matches;
 
 	public List<PlayersItem> getPlayers(){
-		return players;
+		return this.players;
 	}
 
 	public int getMatches(){
-		return matches;
+		return this.matches;
 	}
 }

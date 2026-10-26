@@ -17,76 +17,76 @@ import java.util.function.Consumer;
 public class ColorWheel extends GuiScreen {
     private final BufferedImage image;
     private final int size = 200;
-    private ResourceLocation texture = null;
+    private ResourceLocation texture;
     private int selectedColor = 65527;
     private int hoveredColor = -1;
     private final DynamicTexture dynamicTexture;
     private final Consumer<Integer> consumer;
 
-    public ColorWheel(Consumer<Integer> consumer) {
+    public ColorWheel(final Consumer<Integer> consumer) {
         this.consumer = consumer;
-        try (InputStream in = Entry.getResourceAsStream("assets/may/picker.png")) {
-            this.image = ImageIO.read(in);
-            this.dynamicTexture = new DynamicTexture(this.image);
-            this.texture = Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("color_picker", this.dynamicTexture);
-        } catch (IOException e) {
+        try (final InputStream in = Entry.getResourceAsStream("assets/may/picker.png")) {
+            image = ImageIO.read(in);
+            dynamicTexture = new DynamicTexture(image);
+            texture = Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("color_picker", dynamicTexture);
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     private int getX() {
-        return (this.width - 200) / 2;
+        return (width - 200) / 2;
     }
 
     private int getY() {
-        return (this.height - 200) / 2;
+        return (height - 200) / 2;
     }
 
-    public void drawScreen(int i, int i1, float v) {
-        if (this.texture == null || this.image == null) {
+    public void drawScreen(final int i, final int i1, final float v) {
+        if (null == this.texture || null == this.image) {
             return;
         }
-        Minecraft.getMinecraft().getTextureManager().bindTexture(this.texture);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         GlStateManager.enableBlend();
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        Gui.drawScaledCustomSizeModalRect(this.getX(), this.getY(), 0.0f, 0.0f, this.image.getWidth(), this.image.getHeight(), 200, 200, (float) this.image.getWidth(), (float) this.image.getHeight());
-        this.pick(i, i1);
-        String hex = String.format("#%06X", this.hoveredColor);
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(hex, (float) this.getX() + (float) (200 - this.fontRendererObj.getStringWidth(hex)) / 2.0f, (float) (this.getY() - 10), this.hoveredColor);
+        Gui.drawScaledCustomSizeModalRect(getX(), getY(), 0.0f, 0.0f, image.getWidth(), image.getHeight(), 200, 200, (float) image.getWidth(), (float) image.getHeight());
+        pick(i, i1);
+        final String hex = String.format("#%06X", hoveredColor);
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(hex, (float) getX() + (float) (200 - fontRendererObj.getStringWidth(hex)) / 2.0f, (float) (getY() - 10), hoveredColor);
     }
 
-    protected void mouseClicked(int i, int i1, int i2) {
-        this.selectedColor = this.pick(i, i1);
+    protected void mouseClicked(final int i, final int i1, final int i2) {
+        selectedColor = pick(i, i1);
     }
 
     public void onGuiClosed() {
         super.onGuiClosed();
-        this.dynamicTexture.deleteGlTexture();
-        this.consumer.accept(this.selectedColor);
+        dynamicTexture.deleteGlTexture();
+        consumer.accept(selectedColor);
     }
 
-    public int pick(int mouseX, int mouseY) {
-        int x = this.getX();
-        int y = this.getY();
+    public int pick(final int mouseX, final int mouseY) {
+        final int x = getX();
+        final int y = getY();
         if (mouseX < x || mouseY < y || mouseX >= x + 200 || mouseY >= y + 200) {
-            return this.hoveredColor;
+            return hoveredColor;
         }
-        int offsetY = mouseY - y;
-        if (offsetY < 4) {
-            this.hoveredColor = 0;
-        } else if (offsetY >= 196) {
-            this.hoveredColor = 0xFFFFFF;
+        final int offsetY = mouseY - y;
+        if (4 > offsetY) {
+            hoveredColor = 0;
+        } else if (196 <= offsetY) {
+            hoveredColor = 0xFFFFFF;
         } else {
-            int px = this.snap(mouseX - x, this.image.getWidth());
-            int py = this.snap(offsetY, this.image.getHeight());
-            this.hoveredColor = this.image.getRGB(px, py) & 0xFFFFFF;
+            final int px = snap(mouseX - x, image.getWidth());
+            final int py = snap(offsetY, image.getHeight());
+            hoveredColor = image.getRGB(px, py) & 0xFFFFFF;
         }
-        return this.hoveredColor;
+        return hoveredColor;
     }
 
-    private int snap(int offset, int max) {
-        float t = (float) (offset - 4) / 191.0f;
-        int p = Math.round(t * (float) (max - 1));
+    private int snap(final int offset, final int max) {
+        final float t = (float) (offset - 4) / 191.0f;
+        final int p = Math.round(t * (float) (max - 1));
         return Math.max(0, Math.min(max - 1, p));
     }
 }

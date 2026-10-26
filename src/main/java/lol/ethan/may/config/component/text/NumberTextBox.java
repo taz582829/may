@@ -16,70 +16,70 @@ public class NumberTextBox extends TextBox<Number> {
         SHORT
     }
     public Double value;
-    public Consumer<Number> consumer = null;
+    public Consumer<Number> consumer;
     public final TextBoxType type;
 
-    public NumberTextBox(String name, Category category, TextBoxType type, Consumer<Number> consumer) {
+    public NumberTextBox(final String name, final Category category, final TextBoxType type, final Consumer<Number> consumer) {
         super(name, category);
         this.type = type;
         this.consumer = consumer;
     }
-    public NumberTextBox(String name, Category category, TextBoxType type, Number def, Consumer<Number> consumer) {
+    public NumberTextBox(final String name, final Category category, final TextBoxType type, final Number def, final Consumer<Number> consumer) {
         super(name, category);
         this.type = type;
-        this.value = def.doubleValue();
+        value = def.doubleValue();
         this.consumer = consumer;
-        this.field.setText(value.toString());
+        field.setText(this.value.toString());
     }
-    public NumberTextBox(String name, Category category, TextBoxType type, Number def) {
+    public NumberTextBox(final String name, final Category category, final TextBoxType type, final Number def) {
         super(name, category);
         this.type = type;
-        this.value = def.doubleValue();
-        this.field.setText(value.toString());
+        value = def.doubleValue();
+        field.setText(this.value.toString());
     }
-    public NumberTextBox(String name, Category category, TextBoxType type) {
+    public NumberTextBox(final String name, final Category category, final TextBoxType type) {
         super(name, category);
         this.type = type;
     }
 
-    public NumberTextBox(String name, Category category) {
+    public NumberTextBox(final String name, final Category category) {
         super(name, category);
-        this.type = TextBoxType.DOUBLE;
+        type = TextBoxType.DOUBLE;
     }
 
     @Override
-    protected Number parse(String input) {
+    protected Number parse(final String input) {
         return Double.parseDouble(input);
     }
 
     @Override
-    public void onFinished(Number value) {
-        if (value == null) return;
+    public void onFinished(final Number value) {
+        if (null == value) return;
         this.value = value.doubleValue();
-        if (consumer != null) consumer.accept(this.value);
+        if (null != consumer) this.consumer.accept(this.value);
     }
 
     @Override
-    public void onScroll(int direction) {
+    public void onScroll(final int direction) {
 
     }
 
     @Override
     public JsonElement serialize() {
-        if (type == TextBoxType.INT) {
-            return new JsonPrimitive(value.intValue());
-        } else if (type == TextBoxType.BYTE) {
-            return new JsonPrimitive(value.byteValue());
-        } else if (type == TextBoxType.SHORT) {
-            return new JsonPrimitive(value.shortValue());
+        if (TextBoxType.INT == type) {
+            return new JsonPrimitive(this.value.intValue());
+        } else if (TextBoxType.BYTE == type) {
+            return new JsonPrimitive(this.value.byteValue());
+        } else if (TextBoxType.SHORT == type) {
+            return new JsonPrimitive(this.value.shortValue());
         }
-        return new JsonPrimitive(value);
+        return new JsonPrimitive(this.value);
     }
 
     @Override
-    public void load(JsonElement element) {
-        value = element.getAsDouble();
-        field.setText(value.toString());
-        if (consumer != null) consumer.accept(this.value);
+    public void load(final JsonElement element) {
+        this.value = element.getAsDouble();
+        this.field.setText(this.value.toString());
+        if (null != consumer) this.consumer.accept(value);
     }
 }

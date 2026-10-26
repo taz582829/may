@@ -17,8 +17,8 @@ import java.util.List;
 
 public class EntityRendererTransformer implements ITransformer {
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             MethodInsnNode min;
             if (method.name.equals("renderWorldPass")) {
                 method.instructions.insert(ASMUtils.asm(a -> {
@@ -31,7 +31,7 @@ public class EntityRendererTransformer implements ITransformer {
                 }));
             }
             if (method.name.equals("updateLightmap")) {
-                for (AbstractInsnNode insnNode : method.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                     if (!(insnNode instanceof MethodInsnNode)) continue;
                     min = (MethodInsnNode)insnNode;
                     if (!min.name.equals("isPotionActive")) continue;
@@ -39,7 +39,7 @@ public class EntityRendererTransformer implements ITransformer {
                 }
             }
             if (!method.name.equals("updateFogColor")) continue;
-            for (AbstractInsnNode insnNode : method.instructions.toArray()) {
+            for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                 if (!(insnNode instanceof MethodInsnNode)) continue;
                 min = (MethodInsnNode)insnNode;
                 if (!min.name.equals("isPotionActive")) continue;
@@ -48,14 +48,14 @@ public class EntityRendererTransformer implements ITransformer {
         }
     }
 
-    public static boolean updateLightmap_CancelNightVision(EntityPlayerSP player, Potion potion) {
+    public static boolean updateLightmap_CancelNightVision(final EntityPlayerSP player, final Potion potion) {
         if (potion == Potion.nightVision && Config.clearNightVision.enabled) {
             return false;
         }
         return player.isPotionActive(potion);
     }
 
-    public static boolean updateFogColor_CancelNightVision(EntityLivingBase entity, Potion potion) {
+    public static boolean updateFogColor_CancelNightVision(final EntityLivingBase entity, final Potion potion) {
         if (potion == Potion.nightVision && Config.clearNightVision.enabled) {
             return false;
         }

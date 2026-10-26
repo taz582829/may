@@ -32,11 +32,11 @@ public class Mappings {
         try {
             mc.getClass().getMethod("func_71410_x");
             return MappingType.MCP;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             try {
                 mc.getClass().getMethod("getMinecraft");
                 return MappingType.NONE;
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 new JTextField("couldnt find minecraft class; exiting program").setVisible(true);
                 System.exit(-1);
                 return null;
@@ -44,100 +44,100 @@ public class Mappings {
         }
     }
 
-    private static InputStream open(String path) {
-        ClassLoader[] loaders;
-        String rel = path.startsWith("/") ? path.substring(1) : path;
-        for (ClassLoader cl : loaders = new ClassLoader[]{ClassLoader.getSystemClassLoader(), Thread.currentThread().getContextClassLoader(), Mappings.class.getClassLoader()}) {
-            InputStream in;
-            if (cl == null || (in = cl.getResourceAsStream(rel)) == null) continue;
+    private static InputStream open(final String path) {
+        final ClassLoader[] loaders;
+        final String rel = path.startsWith("/") ? path.substring(1) : path;
+        for (final ClassLoader cl : loaders = new ClassLoader[]{ClassLoader.getSystemClassLoader(), Thread.currentThread().getContextClassLoader(), Mappings.class.getClassLoader()}) {
+            final InputStream in;
+            if (null == cl || null == (in = cl.getResourceAsStream(rel))) continue;
             return in;
         }
         return null;
     }
 
-    private static List<String> readLines(String path) throws IOException {
-        try (InputStream in = Mappings.open(path)) {
+    private static List<String> readLines(final String path) throws IOException {
+        try (final InputStream in = Mappings.open(path)) {
             String l;
-            if (in == null) {
+            if (null == in) {
                 throw new FileNotFoundException(path);
             }
-            BufferedReader r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            ArrayList<String> lines = new ArrayList<>();
-            while ((l = r.readLine()) != null) {
+            final BufferedReader r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            final ArrayList<String> lines = new ArrayList<>();
+            while (null != (l = r.readLine())) {
                 lines.add(l);
             }
-            ArrayList<String> arrayList = lines;
+            final ArrayList<String> arrayList = lines;
             return arrayList;
         }
     }
 
-    public static void load(Minecraft mc) throws IOException {
+    public static void load(final Minecraft mc) throws IOException {
         Mappings.mc = mc;
         try {
             String[] p;
-            HashMap dataMap = new HashMap();
-            HashMap<String, String> fieldNames = new HashMap<>();
-            for (String line : Mappings.readLines("/mappings/fields.csv")) {
-                String[] p2;
-                if (line.startsWith("searge,") || (p2 = line.split(",", 3)).length < 2) continue;
+            final HashMap dataMap = new HashMap();
+            final HashMap<String, String> fieldNames = new HashMap<>();
+            for (final String line : Mappings.readLines("/mappings/fields.csv")) {
+                final String[] p2;
+                if (line.startsWith("searge,") || 2 > (p2 = line.split(",", 3)).length) continue;
                 fieldNames.put(p2[0], p2[1]);
             }
-            HashMap<String, String> methodNames = new HashMap<>();
-            for (String line : Mappings.readLines("/mappings/methods.csv")) {
-                if (line.startsWith("searge,") || (p = line.split(",", 3)).length < 2) continue;
+            final HashMap<String, String> methodNames = new HashMap<>();
+            for (final String line : Mappings.readLines("/mappings/methods.csv")) {
+                if (line.startsWith("searge,") || 2 > (p = line.split(",", 3)).length) continue;
                 methodNames.put(p[0], p[1]);
             }
-            for (String line : Mappings.readLines("/mappings/joined.srg")) {
-                String full;
+            for (final String line : Mappings.readLines("/mappings/joined.srg")) {
+                final String full;
                 if (line.equals("searge,name,side,desc")) continue;
                 if (line.startsWith("FD: ")) {
                     p = line.substring(4).trim().split("\\s+");
                     full = p[1];
-                    int slash = full.lastIndexOf(47);
-                    String owner = full.substring(0, slash);
-                    String srg = full.substring(slash + 1);
-                    String mcp = fieldNames.get(srg);
-                    if (mcp == null) continue;
+                    final int slash = full.lastIndexOf(47);
+                    final String owner = full.substring(0, slash);
+                    final String srg = full.substring(slash + 1);
+                    final String mcp = fieldNames.get(srg);
+                    if (null == mcp) continue;
                     fieldMappings.put(owner + "." + mcp, srg);
                     continue;
                 }
                 if (!line.startsWith("MD: ")) continue;
                 p = line.substring(4).trim().split("\\s+");
                 full = p[2];
-                String desc = p[3];
-                int slash = full.lastIndexOf(47);
-                String owner = full.substring(0, slash);
-                String srg = full.substring(slash + 1);
-                String mcp = methodNames.get(srg);
-                if (mcp == null) continue;
+                final String desc = p[3];
+                final int slash = full.lastIndexOf(47);
+                final String owner = full.substring(0, slash);
+                final String srg = full.substring(slash + 1);
+                final String mcp = methodNames.get(srg);
+                if (null == mcp) continue;
                 methodMappings.put(owner + "." + mcp + desc, srg);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static String getField(String owner, String name) {
+    public static String getField(final String owner, final String name) {
         return fieldMappings.getOrDefault(owner + "." + name, name);
     }
 
-    public static String getField(Class<?> owner, String name) {
+    public static String getField(final Class<?> owner, final String name) {
         return fieldMappings.getOrDefault(Type.getInternalName(owner) + "." + name, name);
     }
 
-    public static String getMethod(String owner, String name, String desc) {
+    public static String getMethod(final String owner, final String name, final String desc) {
         return methodMappings.getOrDefault(owner + "." + name + desc, name);
     }
 
-    public static String mapMethodInHierarchy(String owner, String name, String desc) {
+    public static String mapMethodInHierarchy(final String owner, final String name, final String desc) {
         return Mappings.mapMethodInHierarchy(owner, name, desc, null);
     }
 
-    public static String mapMethodInHierarchy(String owner, String name, String desc, String fallback) {
+    public static String mapMethodInHierarchy(final String owner, final String name, final String desc, final String fallback) {
         String cur = owner;
-        while (cur != null) {
-            String srg = methodMappings.get(cur + "." + name + desc);
-            if (srg != null) {
+        while (null != cur) {
+            final String srg = methodMappings.get(cur + "." + name + desc);
+            if (null != srg) {
                 return srg;
             }
             cur = Mappings.superOf(cur);
@@ -145,11 +145,11 @@ public class Mappings {
         return fallback;
     }
 
-    public static String mapFieldInHierarchy(String owner, String name, String fallback) {
+    public static String mapFieldInHierarchy(final String owner, final String name, final String fallback) {
         String cur = owner;
-        while (cur != null) {
-            String srg = fieldMappings.get(cur + "." + name);
-            if (srg != null) {
+        while (null != cur) {
+            final String srg = fieldMappings.get(cur + "." + name);
+            if (null != srg) {
                 return srg;
             }
             cur = Mappings.superOf(cur);
@@ -157,19 +157,19 @@ public class Mappings {
         return fallback;
     }
 
-    private static String superOf(String internalName) {
+    private static String superOf(final String internalName) {
         if (internalName.equals("java/lang/Object")) {
             return null;
         }
         return superCache.computeIfAbsent(internalName, n -> {
-            try (InputStream in = Mappings.class.getClassLoader().getResourceAsStream(n + ".class")) {
-                if (in == null) {
-                    String string2 = "java/lang/Object";
+            try (final InputStream in = Mappings.class.getClassLoader().getResourceAsStream(n + ".class")) {
+                if (null == in) {
+                    final String string2 = "java/lang/Object";
                     return string2;
                 }
-                String string = new ClassReader(in).getSuperName();
+                final String string = new ClassReader(in).getSuperName();
                 return string;
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 return "java/lang/Object";
             }
         });

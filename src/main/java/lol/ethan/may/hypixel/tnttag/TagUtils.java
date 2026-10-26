@@ -7,8 +7,8 @@ import net.hypixel.data.type.GameType;
 public class TagUtils {
     public static boolean isInTag() {
         return HypixelUtils.isOnHypixel() &&
-                LocationData.getGameType() == GameType.TNTGAMES &&
-                LocationData.getMode() != null &&
+                GameType.TNTGAMES == LocationData.getGameType() &&
+                null != LocationData.getMode() &&
                 LocationData.getMode().equalsIgnoreCase("tntag");
     }
 }

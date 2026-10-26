@@ -6,7 +6,7 @@ import lol.ethan.may.utils.JsonUtils;
 import java.util.concurrent.CompletableFuture;
 
 public class NameHistory {
-    public static CompletableFuture<NameHistoryResponse> getNameHistory(String uuid) {
+    public static CompletableFuture<NameHistoryResponse> getNameHistory(final String uuid) {
         return HttpUtils.get("https://api.leeism.com/v2/player/" + uuid + "/names").thenApply(r -> JsonUtils.gson.fromJson(r, NameHistoryResponse.class));
     }
 }

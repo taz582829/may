@@ -12,14 +12,14 @@ public class RendererLivingEntityTransformer implements ITransformer {
     private static final Class<?> compClass;
 
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             if (!method.desc.equals("(Lnet/minecraft/entity/EntityLivingBase;DDDLcom/llamalad7/mixinextras/injector/wrapoperation/Operation;)V")) continue;
-            for (AbstractInsnNode abstractNode : method.instructions) {
+            for (final AbstractInsnNode abstractNode : method.instructions) {
                 if (!(abstractNode instanceof MethodInsnNode)) continue;
-                MethodInsnNode insn = (MethodInsnNode)abstractNode;
+                final MethodInsnNode insn = (MethodInsnNode)abstractNode;
                 if (!insn.name.startsWith("bridge$getDisplayNameComponent")) continue;
-                InsnList instructions = new InsnList();
+                final InsnList instructions = new InsnList();
                 instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
                 instructions.add(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(RendererLivingEntityTransformer.class), "may$modifyDisplayName", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", false));
                 instructions.add(new TypeInsnNode(Opcodes.CHECKCAST, "com/moonsworth/lunar/lib/adventure/text/Component"));
@@ -29,19 +29,19 @@ public class RendererLivingEntityTransformer implements ITransformer {
         }
     }
 
-    public static Object may$modifyDisplayName(Object componentObj, Object entityObj) {
-        if (!(entityObj instanceof EntityLivingBase) || componentObj == null) {
+    public static Object may$modifyDisplayName(final Object componentObj, final Object entityObj) {
+        if (!(entityObj instanceof EntityLivingBase) || null == componentObj) {
             return componentObj;
         }
-        EntityLivingBase entity = (EntityLivingBase)entityObj;
+        final EntityLivingBase entity = (EntityLivingBase)entityObj;
         return RendererLivingEntityTransformer.textToComponent(entity.getDisplayName().getFormattedText());
     }
 
-    public static Object textToComponent(String text) {
+    public static Object textToComponent(final String text) {
         try {
             return compClass.getMethod("text", String.class).invoke(null, text);
         }
-        catch (Exception e) {
+        catch (final Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -56,7 +56,7 @@ public class RendererLivingEntityTransformer implements ITransformer {
         try {
             compClass = Class.forName("com.moonsworth.lunar.lib.adventure.text.Component");
         }
-        catch (Exception e) {
+        catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }

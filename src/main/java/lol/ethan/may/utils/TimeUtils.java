@@ -10,8 +10,8 @@ import java.util.TimerTask;
 
 public class TimeUtils {
 
-    public static Timer setTimeout(final Runnable runnable, int delay) {
-        Timer timer = new Timer();
+    public static Timer setTimeout(final Runnable runnable, final int delay) {
+        final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
 
             @Override
@@ -22,8 +22,8 @@ public class TimeUtils {
         return timer;
     }
 
-    public static Timer setInterval(final Runnable runnable, int delay, int interval) {
-        Timer timer = new Timer();
+    public static Timer setInterval(final Runnable runnable, final int delay, final int interval) {
+        final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
 
             @Override
@@ -34,18 +34,18 @@ public class TimeUtils {
         return timer;
     }
 
-    public static void setTickDelay(Runnable runnable) {
+    public static void setTickDelay(final Runnable runnable) {
         TimeUtils.setTickDelay(runnable, 1);
     }
 
     public static void setTickDelay(final Runnable runnable, final int delay) {
         EventBus.subscribe(new Object() {
-            int ticks = 0;
+            int ticks;
 
             @SubscribeEvent
-            public void onTick(TickEvent.Post event) {
-                ++this.ticks;
-                if (this.ticks >= delay) {
+            public void onTick(final TickEvent.Post event) {
+                ++ticks;
+                if (ticks >= delay) {
                     runnable.run();
                     EventBus.unsubscribe(this);
                 }
@@ -53,9 +53,9 @@ public class TimeUtils {
         });
     }
 
-    public static String formatTime(LocalDateTime time) {
-        boolean addZeroToMonths = time.getMonthValue() < 10;
-        boolean addZeroToDay = time.getDayOfMonth() < 10;
+    public static String formatTime(final LocalDateTime time) {
+        final boolean addZeroToMonths = 10 > time.getMonthValue();
+        final boolean addZeroToDay = 10 > time.getDayOfMonth();
         return (addZeroToMonths ? "0" : "") + time.getMonthValue() + "/" + (addZeroToDay ? "0" : "") + time.getDayOfMonth() + "/" + time.getYear();
     }
 }

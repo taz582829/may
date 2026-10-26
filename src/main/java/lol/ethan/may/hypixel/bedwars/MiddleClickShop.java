@@ -25,14 +25,14 @@ public class MiddleClickShop {
             "frost-test-gui"
     );
     @SubscribeEvent
-    public void onSlotClick(SlotClickEvent event) {
+    public void onSlotClick(final SlotClickEvent event) {
         if (GuiScreen.isShiftKeyDown()) return;
-        String guiTitle = GuiUtils.getTitle();
-        if (guiTitle == null || guiTitle.trim().isEmpty()) return;
+        final String guiTitle = GuiUtils.getTitle();
+        if (null == guiTitle || guiTitle.trim().isEmpty()) return;
 
-        String clean = StringUtils.stripControlCodes(guiTitle.trim());
+        final String clean = StringUtils.stripControlCodes(guiTitle.trim());
 
-        if (shopNames.contains(clean)) {
+        if (this.shopNames.contains(clean)) {
             event.setClickType(3);
         }
     }

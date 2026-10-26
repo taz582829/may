@@ -6,16 +6,16 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 
 public class DragElement extends GuiScreen {
-    public static boolean active = false;
+    public static boolean active;
     BasicHud hud;
     private float dragOffsetX;
     private float dragOffsetY;
-    private boolean dragging = false;
+    private boolean dragging;
     private String text = "§aExample Text";
     private float x;
     private float y;
 
-    public DragElement(String text, float x, float y, BasicHud hud) {
+    public DragElement(final String text, final float x, final float y, final BasicHud hud) {
         active = true;
         this.text = text;
         this.x = x;
@@ -23,43 +23,43 @@ public class DragElement extends GuiScreen {
         this.hud = hud;
     }
 
-    public void drawScreen(int mX, int mY, float pt) {
-        this.drawDefaultBackground();
-        if (this.hud.background) {
-            HUDHelper.drawTextWithBackground(this.text, this.x, this.y, this.hud.getBackgroundColor());
+    public void drawScreen(final int mX, final int mY, final float pt) {
+        drawDefaultBackground();
+        if (hud.background) {
+            HUDHelper.drawTextWithBackground(text, x, y, hud.getBackgroundColor());
         } else {
-            HUDHelper.drawText(this.text, this.x, this.y);
+            HUDHelper.drawText(text, x, y);
         }
-        int size = this.mc.fontRendererObj.getStringWidth("§8Dragging text!");
-        ScaledResolution sr = new ScaledResolution(this.mc);
+        final int size = mc.fontRendererObj.getStringWidth("§8Dragging text!");
+        final ScaledResolution sr = new ScaledResolution(mc);
         HUDHelper.drawText("§8Dragging text!", sr.getScaledWidth() - size - 5, 15.0f);
     }
 
-    public void mouseClicked(int mX, int mY, int button) {
-        if (button == 0) {
-            this.dragOffsetX = (float) mX - this.x;
-            this.dragOffsetY = (float) mY - this.y;
-            this.dragging = true;
+    public void mouseClicked(final int mX, final int mY, final int button) {
+        if (0 == button) {
+            dragOffsetX = (float) mX - x;
+            dragOffsetY = (float) mY - y;
+            dragging = true;
         }
     }
 
-    public void mouseClickMove(int mX, int mY, int button, long timeSinceLastClick) {
-        if (button == 0) {
-            this.x = (float) mX - this.dragOffsetX;
-            this.y = (float) mY - this.dragOffsetY;
+    public void mouseClickMove(final int mX, final int mY, final int button, final long timeSinceLastClick) {
+        if (0 == button) {
+            x = (float) mX - dragOffsetX;
+            y = (float) mY - dragOffsetY;
         }
     }
 
-    protected void mouseReleased(int mX, int mY, int state) {
-        if (state == 0) {
-            this.dragging = false;
+    protected void mouseReleased(final int mX, final int mY, final int state) {
+        if (0 == state) {
+            dragging = false;
         }
     }
 
     public void onGuiClosed() {
         active = false;
-        this.hud.x = this.x;
-        this.hud.y = this.y;
+        hud.x = x;
+        hud.y = y;
         Config.save();
     }
 

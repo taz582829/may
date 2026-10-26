@@ -12,12 +12,12 @@ import java.util.function.Consumer;
 public class PingUtils {
 
     public static void getPing(final Consumer<Integer> consumer) {
-        Minecraft mc = Minecraft.getMinecraft();
+        final Minecraft mc = Minecraft.getMinecraft();
         final long packetSendTime = System.currentTimeMillis();
         EventBus.subscribe(new Object() {
 
             @SubscribeEvent
-            public void onPacketReceive(PacketEvent.Receive event) {
+            public void onPacketReceive(final PacketEvent.Receive event) {
                 if (event.getPacket() instanceof S37PacketStatistics) {
                     consumer.accept((int) (System.currentTimeMillis() - packetSendTime));
                     EventBus.unsubscribe(this);
@@ -27,17 +27,17 @@ public class PingUtils {
         mc.thePlayer.sendQueue.addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.REQUEST_STATS));
     }
 
-    public static String formatPing(int ping) {
-        if (ping <= 50) {
+    public static String formatPing(final int ping) {
+        if (50 >= ping) {
             return "§2" + ping + "ms";
         }
-        if (ping <= 100) {
+        if (100 >= ping) {
             return "§a" + ping + "ms";
         }
-        if (ping <= 150) {
+        if (150 >= ping) {
             return "§e" + ping + "ms";
         }
-        if (ping <= 200) {
+        if (200 >= ping) {
             return "§c" + ping + "ms";
         }
         return "§4" + ping + "ms";

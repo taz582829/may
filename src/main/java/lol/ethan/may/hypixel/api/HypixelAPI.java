@@ -24,21 +24,21 @@ public class HypixelAPI {
 
     private static final Cache<UUID, PlayerResponse> playerCache = new Cache<>();
 
-    public static CompletableFuture<PlayerResponse> getPlayer(UUID uuid) {
-        CompletableFuture<PlayerResponse> future = new CompletableFuture<>();
+    public static CompletableFuture<PlayerResponse> getPlayer(final UUID uuid) {
+        final CompletableFuture<PlayerResponse> future = new CompletableFuture<>();
         if (playerCache.has(uuid)) {
             future.complete(playerCache.get(uuid));
         } else {
             if (Config.hypixelKeyless.enabled) {
                 HttpUtils.get("https://thirdpartycache.lunarclientprod.com/hypixel/ursa-minor/player/" + uuid).whenComplete((element, throwable) -> {
-                    PlayerResponse response = gson.fromJson(element, PlayerResponse.class);
+                    final PlayerResponse response = gson.fromJson(element, PlayerResponse.class);
                     playerCache.put(uuid, response);
 
                     future.complete(response);
                 });
             } else {
                 HttpUtils.get("https://api.hypixel.net/v2/player?uuid=" + uuid + "&key=" + Config.hypixelKey.value).whenComplete((element, throwable) -> {
-                    PlayerResponse response = gson.fromJson(element, PlayerResponse.class);
+                    final PlayerResponse response = gson.fromJson(element, PlayerResponse.class);
                     playerCache.put(uuid, response);
 
                     future.complete(response);
@@ -49,37 +49,37 @@ public class HypixelAPI {
 
         return future;
     }
-    public static CompletableFuture<PlayerResponse> getPlayer(String name) {
-        CompletableFuture<PlayerResponse> future = new CompletableFuture<>();
+    public static CompletableFuture<PlayerResponse> getPlayer(final String name) {
+        final CompletableFuture<PlayerResponse> future = new CompletableFuture<>();
         MojangAPI.getUUID(name).thenAccept(id -> {
-            String uuid = UUIDUtils.dashUUID(id);
+            final String uuid = UUIDUtils.dashUUID(id);
             HypixelAPI.getPlayer(UUID.fromString(uuid)).thenAccept(future::complete);
         });
         return future;
     }
-    public static String getDisplayName(PlayerResponse.Player player) {
+    public static String getDisplayName(final PlayerResponse.Player player) {
         try {
-            String ign = player.ign;
-            String rankField = player.getRankField();
-            if (rankField == null) {
+            final String ign = player.ign;
+            final String rankField = player.getRankField();
+            if (null == rankField) {
                 return "§7" + ign;
             }
             if (rankField.equals("prefix")) return player.prefix + " " + ign;
 
-            String rank = player.getClass().getDeclaredField(rankField).get(player).toString();
+            final String rank = player.getClass().getDeclaredField(rankField).get(player).toString();
 
-            StringBuilder builder = new StringBuilder();
+            final StringBuilder builder = new StringBuilder();
             if (rankField.equalsIgnoreCase("rank")) {
                 if (rank.equalsIgnoreCase("admin") || rank.equalsIgnoreCase("game_master")) return "§c[§6ዞ§c] " + ign;
                 else return "§c[§fYOUTUBE§c] " + ign;
             } else if (rankField.equalsIgnoreCase("monthlyPackageRank")) {
-                boolean aquaPlus = player.monthlyRankColor != null && player.monthlyRankColor.equalsIgnoreCase("aqua");
+                final boolean aquaPlus = "aqua".equalsIgnoreCase(player.monthlyRankColor);
                 if (aquaPlus) {
                     builder.append("§b[MVP");
                 } else builder.append("§6[MVP");
 
                 EnumChatFormatting plusColor = EnumChatFormatting.getValueByName(player.rankPlusColor);
-                if (plusColor == null) plusColor = EnumChatFormatting.RED;
+                if (null == plusColor) plusColor = EnumChatFormatting.RED;
                 builder.append(plusColor).append("++").append(aquaPlus ? "§b]" : "§6]").append(" ").append(ign);
             } else if (rankField.equalsIgnoreCase("newPackageRank") || rankField.equalsIgnoreCase("packageRank")) {
                 switch (rank) {
@@ -94,7 +94,7 @@ public class HypixelAPI {
                         break;
                     case "MVP_PLUS":
                         builder.append("§b[MVP");
-                        EnumChatFormatting plusColor = EnumChatFormatting.getValueByName(player.rankPlusColor == null ? "RED" : player.rankPlusColor);
+                        final EnumChatFormatting plusColor = EnumChatFormatting.getValueByName(null == player.rankPlusColor ? "RED" : player.rankPlusColor);
                         builder.append(plusColor).append("+").append("§b]");
                         break;
                 }
@@ -102,29 +102,29 @@ public class HypixelAPI {
 
             } else builder.append("§7").append(ign);
             return builder.toString();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }
-    public static double getNetworkLevel(long exp) {
+    public static double getNetworkLevel(final long exp) {
         return (Math.sqrt(exp + 15312.5) - 125/ Math.sqrt(2))/(25*Math.sqrt(2));
     }
-    public static String formatNetworkLevel(double nwl) {
-        String color;
-        if (nwl < 35) color = "§c";
-        else if (nwl < 45) color = "§6";
-        else if (nwl < 55) color = "§a";
-        else if (nwl < 65) color = "§e";
-        else if (nwl < 75) color = "§d";
-        else if (nwl < 85) color = "§f";
-        else if (nwl < 95) color = "§9";
-        else if (nwl < 150) color = "§2";
-        else if (nwl < 200) color = "§3";
-        else if (nwl < 250) color = "§7";
+    public static String formatNetworkLevel(final double nwl) {
+        final String color;
+        if (35 > nwl) color = "§c";
+        else if (45 > nwl) color = "§6";
+        else if (55 > nwl) color = "§a";
+        else if (65 > nwl) color = "§e";
+        else if (75 > nwl) color = "§d";
+        else if (85 > nwl) color = "§f";
+        else if (95 > nwl) color = "§9";
+        else if (150 > nwl) color = "§2";
+        else if (200 > nwl) color = "§3";
+        else if (250 > nwl) color = "§7";
         else color = "§0";
         return color + String.format("%.2f", nwl);
     }
-    private static String formatBedwarsStarIcon(String scheme) {
+    private static String formatBedwarsStarIcon(final String scheme) {
         switch (scheme) {
             case "star_black_outlined":
                 return "✭";
@@ -147,7 +147,7 @@ public class HypixelAPI {
         }
     }
 
-    private static String formatBedwarsBrackets(String activeBrackets, String formattedStar) {
+    private static String formatBedwarsBrackets(final String activeBrackets, final String formattedStar) {
         switch (activeBrackets) {
             case "prestige_bracket_angled":
                 return formattedStar.replace("[", "<").replace("]", ">");
@@ -160,29 +160,29 @@ public class HypixelAPI {
             default: return formattedStar;
         }
     }
-    public static String bedwarsLevelFormatted(int level, String starKey, String colorScheme, String activeBrackets) {
+    public static String bedwarsLevelFormatted(final int level, final String starKey, final String colorScheme, final String activeBrackets) {
 
-        int prestige = level / 100;
+        final int prestige = level / 100;
         int key = prestige * 100;
-        int maxDefinedPrestige = PrestigeSchemes.SCHEMES.keySet().stream()
+        final int maxDefinedPrestige = PrestigeSchemes.SCHEMES.keySet().stream()
                 .max(Integer::compareTo)
                 .orElse(0);
         if (key > maxDefinedPrestige) key = maxDefinedPrestige;
-        StringBuilder value = new StringBuilder();
-        String starIcon = formatBedwarsStarIcon(starKey);
-        String text = "[" + level + starIcon + "]";
+        final StringBuilder value = new StringBuilder();
+        final String starIcon = formatBedwarsStarIcon(starKey);
+        final String text = "[" + level + starIcon + "]";
 
         PrestigeScheme scheme = null;
         if (colorScheme.contains("random") || colorScheme.equalsIgnoreCase("default")) {
             scheme = PrestigeSchemes.SCHEMES.get(key);
         } else {
-            for (Map.Entry<Integer, PrestigeScheme> s : PrestigeSchemes.SCHEMES.entrySet()) {
+            for (final Map.Entry<Integer, PrestigeScheme> s : PrestigeSchemes.SCHEMES.entrySet()) {
                 if (colorScheme.equalsIgnoreCase(s.getValue().key)) {
                     scheme = s.getValue();
                     break;
                 }
             }
-            if (scheme == null) scheme = PrestigeSchemes.SCHEMES.get(key);
+            if (null == scheme) scheme = PrestigeSchemes.SCHEMES.get(key);
         }
 
         for (int i = 0; i < text.length(); i++) {
@@ -192,7 +192,7 @@ public class HypixelAPI {
         }
         return formatBedwarsBrackets(activeBrackets, value.toString());
     }
-    public static String bedwarsLevelFormatted(int bwsLvl, JsonObject bedwarsStats) {
+    public static String bedwarsLevelFormatted(final int bwsLvl, final JsonObject bedwarsStats) {
         return HypixelAPI.bedwarsLevelFormatted(
                 bwsLvl,
                 JsonUtils.getString(bedwarsStats, "active_star", "black_open"),
@@ -200,75 +200,75 @@ public class HypixelAPI {
                 JsonUtils.getString(bedwarsStats, "active_prestige_bracket", "")
         );
     }
-    public static String bedwarsLevelFormatted(int level, String starScheme) {
+    public static String bedwarsLevelFormatted(final int level, final String starScheme) {
         return bedwarsLevelFormatted(level, starScheme, "default", "default");
     }
-    public static boolean isAPIHidden(JsonObject stats) {
-        if (stats == null) return false;
-        JsonObject duelsStats = stats.getAsJsonObject("Duels");
-        if (duelsStats != null && duelsStats.has("wins")) {
-            int wins = duelsStats.get("wins").getAsInt();
-            return wins > 1 && !duelsStats.has("best_overall_winstreak");
+    public static boolean isAPIHidden(final JsonObject stats) {
+        if (null == stats) return false;
+        final JsonObject duelsStats = stats.getAsJsonObject("Duels");
+        if (null != duelsStats && duelsStats.has("wins")) {
+            final int wins = duelsStats.get("wins").getAsInt();
+            return 1 < wins && !duelsStats.has("best_overall_winstreak");
         }
         return false;
     }
-    public static String fkdrFormatted(double number) {
-        String n = formatter.format(number);
+    public static String fkdrFormatted(final double number) {
+        final String n = formatter.format(number);
 
-        if (number < 1) return "§7" + n;
-        if (number < 3) return "§f" + n;
-        if (number < 5) return "§a" + n;
-        if (number < 7) return "§2" + n;
-        if (number < 10) return "§e" + n;
-        if (number < 20) return "§6" + n;
-        if (number < 30) return "§4" + n;
-        if (number < 50) return "§d" + n;
+        if (1 > number) return "§7" + n;
+        if (3 > number) return "§f" + n;
+        if (5 > number) return "§a" + n;
+        if (7 > number) return "§2" + n;
+        if (10 > number) return "§e" + n;
+        if (20 > number) return "§6" + n;
+        if (30 > number) return "§4" + n;
+        if (50 > number) return "§d" + n;
         return "§5" + n;
     }
 
-    public static String winsFormatted(int number) {
-        if (number < 150) {
+    public static String winsFormatted(final int number) {
+        if (150 > number) {
             return "§7" + number;
-        } else if (number < 300) {
+        } else if (300 > number) {
             return "§f" + number;
-        } else if (number < 450) {
+        } else if (450 > number) {
             return "§a" + number;
-        } else if (number < 1500) {
+        } else if (1500 > number) {
             return "§2" + number;
-        } else if (number < 2250) {
+        } else if (2250 > number) {
             return "§e" + number;
-        } else if (number < 4500) {
+        } else if (4500 > number) {
             return "§6" + number;
-        } else if (number < 7500) {
+        } else if (7500 > number) {
             return "§c" + number;
-        } else if (number < 15000) {
+        } else if (15000 > number) {
             return "§4" + number;
-        } else if (number < 30000) {
+        } else if (30000 > number) {
             return "§d" + number;
         }
         return "§5" + number;
 
 
     }
-    public static String finalsFormatted(int finals) {
-        String color;
-        if (finals < 500) {
+    public static String finalsFormatted(final int finals) {
+        final String color;
+        if (500 > finals) {
             color = "§7"; // Gray
-        } else if (finals < 1000) {
+        } else if (1000 > finals) {
             color = "§f"; // White
-        } else if (finals < 2500) {
+        } else if (2500 > finals) {
             color = "§a"; // Green
-        } else if (finals < 5000) {
+        } else if (5000 > finals) {
             color = "§2"; // Dark Green
-        } else if (finals < 7500) {
+        } else if (7500 > finals) {
             color = "§e"; // Yellow
-        } else if (finals < 15000) {
+        } else if (15000 > finals) {
             color = "§6"; // Gold
-        } else if (finals < 25000) {
+        } else if (25000 > finals) {
             color = "§c"; // Red
-        } else if (finals < 50000) {
+        } else if (50000 > finals) {
             color = "§4"; // Dark Red
-        } else if (finals < 100000) {
+        } else if (100000 > finals) {
             color = "§d"; // Light Purple
         } else {
             color = "§5"; // Dark Purple

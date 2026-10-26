@@ -29,19 +29,19 @@ import java.util.List;
 public class ItemStorage extends GuiChest {
     private static final StorageInventory storage = new StorageInventory();
     private static final List<ItemStack> items = new ArrayList<>(Collections.nCopies(54, null));
-    private static boolean registeredShutdown = false;
-    private boolean hasDoubleClicked = false;
+    private static boolean registeredShutdown;
+    private boolean hasDoubleClicked;
 
     public ItemStorage() {
         super(Minecraft.getMinecraft().thePlayer.inventory, storage);
         ItemStorage.load();
-        this.inventorySlots.windowId = -125;
-        Minecraft.getMinecraft().thePlayer.openContainer = this.inventorySlots;
+        inventorySlots.windowId = -125;
+        Minecraft.getMinecraft().thePlayer.openContainer = inventorySlots;
         if (!registeredShutdown) {
             EventBus.subscribe(new Object() {
 
                 @SubscribeEvent
-                public void onShutdown(ShutdownEvent event) {
+                public void onShutdown(final ShutdownEvent event) {
                     ItemStorage.save();
                 }
             });
@@ -49,9 +49,9 @@ public class ItemStorage extends GuiChest {
         }
     }
 
-    public static void addItem(ItemStack item) {
-        for (int i = 0; i < 54; i++) {
-            if (items.get(i) != null) continue;
+    public static void addItem(final ItemStack item) {
+        for (int i = 0; 54 > i; i++) {
+            if (null != items.get(i)) continue;
             items.set(i, item);
             storage.setInventorySlotContents(i, item);
             break;
@@ -63,20 +63,20 @@ public class ItemStorage extends GuiChest {
     }
 
     public static void load() {
-        File file = ItemStorage.getSaveFile();
+        final File file = ItemStorage.getSaveFile();
         if (!file.exists()) {
             return;
         }
-        try (FileInputStream is = new FileInputStream(file)) {
-            NBTTagCompound nbt = CompressedStreamTools.readCompressed(is);
-            NBTTagList items = nbt.getTagList("Items", 10);
+        try (final FileInputStream is = new FileInputStream(file)) {
+            final NBTTagCompound nbt = CompressedStreamTools.readCompressed(is);
+            final NBTTagList items = nbt.getTagList("Items", 10);
             for (int i = 0; i < items.tagCount(); i++) {
-                NBTTagCompound item = items.getCompoundTagAt(i);
-                int slot = item.getByte("Slot") & 0xFF;
+                final NBTTagCompound item = items.getCompoundTagAt(i);
+                final int slot = item.getByte("Slot") & 0xFF;
                 if (slot >= storage.getSizeInventory()) continue;
                 storage.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Entry.chat("§cFailed to load item storage!");
             e.printStackTrace();
         }
@@ -84,31 +84,31 @@ public class ItemStorage extends GuiChest {
 
     public static void save() {
         try {
-            NBTTagCompound root = new NBTTagCompound();
-            NBTTagList items = new NBTTagList();
+            final NBTTagCompound root = new NBTTagCompound();
+            final NBTTagList items = new NBTTagList();
             for (int i = 0; i < storage.getSizeInventory(); i++) {
-                ItemStack stack = storage.getStackInSlot(i);
-                if (stack == null) continue;
-                NBTTagCompound item = new NBTTagCompound();
+                final ItemStack stack = storage.getStackInSlot(i);
+                if (null == stack) continue;
+                final NBTTagCompound item = new NBTTagCompound();
                 item.setByte("Slot", (byte) i);
                 stack.writeToNBT(item);
                 items.appendTag(item);
             }
             root.setTag("Items", items);
-            File file = ItemStorage.getSaveFile();
-            try (FileOutputStream os = new FileOutputStream(file)) {
+            final File file = ItemStorage.getSaveFile();
+            try (final FileOutputStream os = new FileOutputStream(file)) {
                 CompressedStreamTools.writeCompressed((NBTTagCompound) root, (OutputStream) os);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
                 Entry.chat("§cFailed to save item storage!");
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Entry.chat("§cFailed to save item storage!");
         }
     }
 
-    protected void handleMouseClick(Slot slot, int slotId, int mouseButton, int clickType) {
-        if (slot == null) {
+    protected void handleMouseClick(final Slot slot, final int slotId, final int mouseButton, final int clickType) {
+        if (null == slot) {
             return;
         }
         Entry.playClickSound();
@@ -119,44 +119,39 @@ public class ItemStorage extends GuiChest {
                     break;
                 }
                 case 1: {
-                    if (clickType == 1) {
+                    if (1 == clickType) {
                         items.set(slotId, null);
                         storage.removeStackFromSlot(slotId);
                         return;
                     }
-                    if (this.hasDoubleClicked) {
+                    if (hasDoubleClicked) {
                         items.set(slotId, null);
                         storage.removeStackFromSlot(slotId);
                         break;
                     }
-                    this.hasDoubleClicked = true;
-                    TimeUtils.setTimeout(() -> {
-                        this.hasDoubleClicked = false;
-                    }, 200);
+                    hasDoubleClicked = true;
+                    TimeUtils.setTimeout(() -> hasDoubleClicked = false, 200);
                     break;
                 }
                 default: {
-                    if (clickType == 2) {
-                        this.mc.thePlayer.sendQueue.addToSendQueue(new C10PacketCreativeInventoryAction(mouseButton + 37, slot.getStack()));
+                    if (2 == clickType) {
+                        mc.thePlayer.sendQueue.addToSendQueue(new C10PacketCreativeInventoryAction(mouseButton + 37, slot.getStack()));
                         break;
                     }
-                    if (clickType == 3) {
-                        ItemStack newStack = slot.getStack().copy();
+                    if (3 == clickType) {
+                        final ItemStack newStack = slot.getStack().copy();
                         newStack.stackSize = 64;
                         HousingUtils.spawnItem(newStack);
-                        break;
-                    } else {
-                        break;
                     }
+                    break;
                 }
             }
-        } else if (clickType == 1 && mouseButton == 0) {
+        } else if (1 == clickType && 0 == mouseButton) {
             ItemStorage.addItem(slot.getStack());
         }
     }
 
-    private static class StorageInventory
-            implements IInventory {
+    private static class StorageInventory implements IInventory {
         private StorageInventory() {
         }
 
@@ -164,39 +159,39 @@ public class ItemStorage extends GuiChest {
             return 54;
         }
 
-        public ItemStack getStackInSlot(int i) {
+        public ItemStack getStackInSlot(final int i) {
             return items.size() < i ? null : items.get(i);
         }
 
-        public ItemStack decrStackSize(int slot, int count) {
-            if (slot < 0 || slot >= items.size()) {
+        public ItemStack decrStackSize(final int slot, final int count) {
+            if (0 > slot || slot >= items.size()) {
                 return null;
             }
-            ItemStack stack = items.get(slot);
-            if (stack == null) {
+            final ItemStack stack = items.get(slot);
+            if (null == stack) {
                 return null;
             }
             if (stack.stackSize <= count) {
                 items.set(slot, null);
                 return stack;
             }
-            ItemStack result = stack.splitStack(count);
-            if (stack.stackSize <= 0) {
+            final ItemStack result = stack.splitStack(count);
+            if (0 >= stack.stackSize) {
                 items.set(slot, null);
             }
             return result;
         }
 
-        public ItemStack removeStackFromSlot(int i) {
-            ItemStack original = items.get(i);
+        public ItemStack removeStackFromSlot(final int i) {
+            final ItemStack original = items.get(i);
             items.set(i, null);
             return original;
         }
 
-        public void setInventorySlotContents(int i, ItemStack item) {
+        public void setInventorySlotContents(final int i, final ItemStack item) {
             items.set(i, item);
-            if (item != null && item.stackSize > this.getInventoryStackLimit()) {
-                item.stackSize = this.getInventoryStackLimit();
+            if (null != item && item.stackSize > getInventoryStackLimit()) {
+                item.stackSize = getInventoryStackLimit();
             }
         }
 
@@ -207,26 +202,26 @@ public class ItemStorage extends GuiChest {
         public void markDirty() {
         }
 
-        public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
+        public boolean isUseableByPlayer(final EntityPlayer entityPlayer) {
             return true;
         }
 
-        public void openInventory(EntityPlayer entityPlayer) {
+        public void openInventory(final EntityPlayer entityPlayer) {
         }
 
-        public void closeInventory(EntityPlayer entityPlayer) {
+        public void closeInventory(final EntityPlayer entityPlayer) {
             ItemStorage.save();
         }
 
-        public boolean isItemValidForSlot(int i, ItemStack itemStack) {
+        public boolean isItemValidForSlot(final int i, final ItemStack itemStack) {
             return true;
         }
 
-        public int getField(int i) {
+        public int getField(final int i) {
             return 0;
         }
 
-        public void setField(int i, int i1) {
+        public void setField(final int i, final int i1) {
         }
 
         public int getFieldCount() {
@@ -246,7 +241,7 @@ public class ItemStorage extends GuiChest {
         }
 
         public IChatComponent getDisplayName() {
-            return new ChatComponentText(this.getName());
+            return new ChatComponentText(getName());
         }
     }
 }

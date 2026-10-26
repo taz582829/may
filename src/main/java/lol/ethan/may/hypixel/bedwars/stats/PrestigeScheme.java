@@ -7,9 +7,9 @@ public class PrestigeScheme {
     public int level;
     public String key;
 
-    public PrestigeScheme(List<String> colors, int prestige, String key) {
+    public PrestigeScheme(final List<String> colors, final int prestige, final String key) {
         this.colors = colors;
-        this.level = prestige;
+        level = prestige;
         this.key = key;
     }
 }

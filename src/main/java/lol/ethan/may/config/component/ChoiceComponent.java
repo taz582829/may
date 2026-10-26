@@ -12,51 +12,51 @@ import java.util.function.Consumer;
 
 public class ChoiceComponent extends Component {
     public List<Button> children = new ArrayList<>();
-    public Consumer<Integer> consumer = null;
-    public int choice = 0;
-    public int scrollOffset = 0;
+    public Consumer<Integer> consumer;
+    public int choice;
+    public int scrollOffset;
     private int clipBottom = Integer.MAX_VALUE;
 
-    public ChoiceComponent(String name, Category category, Consumer<Integer> consumer, String... children) {
+    public ChoiceComponent(final String name, final Category category, final Consumer<Integer> consumer, final String... children) {
         super(name, category);
         this.consumer = consumer;
         for (int i = 0; i < children.length; i++) {
-            String childName = children[i];
-            Button newBtn = new Button(childName, category, choice == i);
+            final String childName = children[i];
+            final Button newBtn = new Button(childName, category, this.choice == i);
             this.children.add(newBtn);
         }
     }
-    public ChoiceComponent(String name, Category category, String... children) {
+    public ChoiceComponent(final String name, final Category category, final String... children) {
         this(name, category, null, children);
     }
-    public ChoiceComponent(String name, Category category, Consumer<Integer> consumer, Button... children) {
+    public ChoiceComponent(final String name, final Category category, final Consumer<Integer> consumer, final Button... children) {
         super(name, category);
         this.consumer = consumer;
         this.children.addAll(Arrays.asList(children));
     }
-    public ChoiceComponent(String name, Category category, Button... children) {
+    public ChoiceComponent(final String name, final Category category, final Button... children) {
         this(name, category, null, children);
     }
 
     @Override
-    public void init(ClickGUI clickGUI) {
-        componentHeight = 20;
-        for (Component comp : children) {
+    public void init(final ClickGUI clickGUI) {
+        this.componentHeight = 20;
+        for (final Component comp : this.children) {
             comp.init(clickGUI);
-            componentHeight += comp.componentHeight;
+            this.componentHeight += comp.componentHeight;
         }
     }
 
     @Override
-    public void drawComponent(int componentX, int componentY, int guiX, int guiY, int guiWidth, int guiHeight) {
-        clipBottom = guiY + guiHeight;
+    public void drawComponent(final int componentX, final int componentY, final int guiX, final int guiY, final int guiWidth, final int guiHeight) {
+        this.clipBottom = guiY + guiHeight;
 
-        mc.fontRendererObj.drawStringWithShadow(this.name, componentX, componentY + 5.5f, -1);
+        this.mc.fontRendererObj.drawStringWithShadow(name, componentX, componentY + 5.5f, -1);
 
         int childY = componentY + 20;
-        for (int i = 0; i < children.size(); i++) {
-            if (scrollOffset > i) continue;
-            Component comp = children.get(i);
+        for (int i = 0; i < this.children.size(); i++) {
+            if (this.scrollOffset > i) continue;
+            final Component comp = this.children.get(i);
             comp.x = componentX + 10;
             comp.y = childY;
             comp.drawComponent(componentX + 10, childY, guiX, guiY, guiWidth, guiHeight);
@@ -75,10 +75,10 @@ public class ChoiceComponent extends Component {
     }
 
     @Override
-    public void onKeyPress(char c, int code) {
-        for (Component comp : children) {
+    public void onKeyPress(final char c, final int code) {
+        for (final Component comp : this.children) {
             if (comp instanceof TextBox) {
-                TextBox tb = (TextBox) comp;
+                final TextBox tb = (TextBox) comp;
                 if (tb.drawingField) {
                     tb.onKeyPress(c, code);
                     return;
@@ -88,30 +88,30 @@ public class ChoiceComponent extends Component {
     }
 
     @Override
-    public void onMouseClick(int x, int y, int mb) {
+    public void onMouseClick(final int x, final int y, final int mb) {
         boolean disableAll = false;
-        for (int i = 0; i < children.size(); i++) {
-            if (ClickGUI.scrollOffset - scrollOffset > i) continue;
-            Button btn = children.get(i);
-            if (btn.y >= clipBottom) continue;
+        for (int i = 0; i < this.children.size(); i++) {
+            if (ClickGUI.scrollOffset - this.scrollOffset > i) continue;
+            final Button btn = this.children.get(i);
+            if (btn.y >= this.clipBottom) continue;
             btn.onMouseClick(x, y, mb);
-            if (hoveringOn(x, y, btn, 10)) {
-                choice = i;
-                if (mb == 0) {
+            if (this.hoveringOn(x, y, btn, 10)) {
+                this.choice = i;
+                if (0 == mb) {
                     btn.onClick();
                     if (btn.enabled) {
-                        if (consumer != null) consumer.accept(i);
+                        if (null != consumer) this.consumer.accept(i);
                         disableAll = true;
                     }
-                } else if (mb == 1) {
+                } else if (1 == mb) {
                     btn.onRightClick();
                 }
             }
         }
         if (disableAll) {
-            for (int i = 0; i < children.size(); i++) {
-                Button btn = children.get(i);
-                if (choice != i) {
+            for (int i = 0; i < this.children.size(); i++) {
+                final Button btn = this.children.get(i);
+                if (this.choice != i) {
                     btn.enabled = false;
                 }
             }
@@ -119,20 +119,20 @@ public class ChoiceComponent extends Component {
     }
 
     @Override
-    public void onScroll(int direction) {
-        scrollOffset = Math.max(0, scrollOffset + direction);
+    public void onScroll(final int direction) {
+        this.scrollOffset = Math.max(0, this.scrollOffset + direction);
     }
 
     @Override
     public JsonElement serialize() {
-        return new JsonPrimitive(choice);
+        return new JsonPrimitive(this.choice);
     }
 
     @Override
-    public void load(JsonElement element) {
-        choice = element.getAsInt();
-        for (int i = 0; i < children.size(); i++) {
-            children.get(i).enabled = i == choice;
+    public void load(final JsonElement element) {
+        this.choice = element.getAsInt();
+        for (int i = 0; i < this.children.size(); i++) {
+            this.children.get(i).enabled = i == this.choice;
         }
     }
 }

@@ -9,11 +9,11 @@ public abstract class Command {
     public String prefix = "/";
     public List<String> aliases = new ArrayList<>();
 
-    public Command(String name) {
+    public Command(final String name) {
         this.name = name;
     }
 
-    public Command(String name, String... aliases) {
+    public Command(final String name, final String... aliases) {
         this.name = name;
         this.aliases.addAll(Arrays.asList(aliases));
     }
@@ -24,19 +24,19 @@ public abstract class Command {
 
     public abstract void execute(String[] args);
 
-    public String[] getTabCompletes(String[] args) {
+    public String[] getTabCompletes(final String[] args) {
         return new String[0];
     }
 
     public String toString() {
-        return this.prefix + this.name;
+        return prefix + name;
     }
 
-    public boolean matches(String text) {
-        if (text.toLowerCase().startsWith(this.name.toLowerCase())) {
+    public boolean matches(final String text) {
+        if (text.toLowerCase().startsWith(name.toLowerCase())) {
             return true;
         }
-        for (String a : this.aliases) {
+        for (final String a : aliases) {
             if (!text.toLowerCase().startsWith(a.toLowerCase())) continue;
             return true;
         }

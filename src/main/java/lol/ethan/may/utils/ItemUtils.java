@@ -11,39 +11,39 @@ import java.util.List;
 
 public class ItemUtils {
 
-    public static List<String> getLore(ItemStack item) {
-        if (item == null) {
+    public static List<String> getLore(final ItemStack item) {
+        if (null == item) {
             return Collections.emptyList();
         }
         return item.getTooltip(Minecraft.getMinecraft().thePlayer, true);
     }
 
-    public static List<String> getLore(ItemStack item, boolean advancedTooltips) {
-        if (item == null) {
+    public static List<String> getLore(final ItemStack item, final boolean advancedTooltips) {
+        if (null == item) {
             return Collections.emptyList();
         }
         return item.getTooltip(Minecraft.getMinecraft().thePlayer, advancedTooltips);
     }
 
-    public static NBTTagCompound getFullNBT(ItemStack item) {
-        NBTTagCompound base = new NBTTagCompound();
+    public static NBTTagCompound getFullNBT(final ItemStack item) {
+        final NBTTagCompound base = new NBTTagCompound();
         item.writeToNBT(base);
         return base;
     }
 
-    public static void setLore(ItemStack item, String line) {
-        NBTTagCompound display = new NBTTagCompound();
-        NBTTagList lore = new NBTTagList();
-        for (String part : line.split("\\n")) {
+    public static void setLore(final ItemStack item, final String line) {
+        final NBTTagCompound display = new NBTTagCompound();
+        final NBTTagList lore = new NBTTagList();
+        for (final String part : line.split("\\n")) {
             lore.appendTag(new NBTTagString(part));
         }
         display.setTag("Lore", lore);
         item.setTagInfo("display", display);
     }
 
-    public static void setName(ItemStack item, String name) {
-        NBTTagCompound display = new NBTTagCompound();
-        NBTTagString nbtName = new NBTTagString(name);
+    public static void setName(final ItemStack item, final String name) {
+        final NBTTagCompound display = new NBTTagCompound();
+        final NBTTagString nbtName = new NBTTagString(name);
         display.setTag("Name", nbtName);
         item.setTagInfo("display", display);
     }

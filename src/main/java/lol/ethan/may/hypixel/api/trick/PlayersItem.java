@@ -29,34 +29,34 @@ public class PlayersItem{
 	private Cosmetics cosmetics;
 
 	public Object getScore(){
-		return score;
+		return this.score;
 	}
 
 	public int getFinals(){
-		return finals;
+		return this.finals;
 	}
 
 	public LastSeen getLastSeen(){
-		return lastSeen;
+		return this.lastSeen;
 	}
 
 	public String getPlayerName(){
-		return playerName;
+		return this.playerName;
 	}
 
 	public int getBeds(){
-		return beds;
+		return this.beds;
 	}
 
 	public String getUuid(){
-		return uuid;
+		return this.uuid;
 	}
 
 	public long getRecordTimestamp(){
-		return recordTimestamp;
+		return this.recordTimestamp;
 	}
 
 	public Cosmetics getCosmetics(){
-		return cosmetics;
+		return this.cosmetics;
 	}
 }

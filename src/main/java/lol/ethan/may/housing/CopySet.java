@@ -14,24 +14,24 @@ public class CopySet {
     Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
-    public void onMouseButton(MouseEvent event) {
-        if (this.mc.theWorld == null || this.mc.thePlayer == null) {
+    public void onMouseButton(final MouseEvent event) {
+        if (null == this.mc.theWorld || null == this.mc.thePlayer) {
             return;
         }
-        if (event.button == 2 && this.mc.thePlayer.capabilities.isCreativeMode) {
-            MovingObjectPosition mop = this.mc.objectMouseOver;
-            if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
+        if (2 == event.button && mc.thePlayer.capabilities.isCreativeMode) {
+            final MovingObjectPosition mop = mc.objectMouseOver;
+            if (MovingObjectPosition.MovingObjectType.ENTITY == mop.typeOfHit) {
                 event.setCancelled(true);
-                Entity e = mop.entityHit;
+                final Entity e = mop.entityHit;
                 if (!(e instanceof EntityLivingBase)) {
                     return;
                 }
-                EntityLivingBase entity = (EntityLivingBase) e;
-                if (this.mc.thePlayer.isSneaking()) {
-                    this.spawnItem(entity.getEquipmentInSlot(1), 5);
-                    this.spawnItem(entity.getEquipmentInSlot(2), 6);
-                    this.spawnItem(entity.getEquipmentInSlot(3), 7);
-                    this.spawnItem(entity.getEquipmentInSlot(4), 3);
+                final EntityLivingBase entity = (EntityLivingBase) e;
+                if (mc.thePlayer.isSneaking()) {
+                    spawnItem(entity.getEquipmentInSlot(1), 5);
+                    spawnItem(entity.getEquipmentInSlot(2), 6);
+                    spawnItem(entity.getEquipmentInSlot(3), 7);
+                    spawnItem(entity.getEquipmentInSlot(4), 3);
                 } else {
                     HousingUtils.spawnItem(entity.getHeldItem());
                 }
@@ -40,8 +40,8 @@ public class CopySet {
         }
     }
 
-    private void spawnItem(ItemStack item, int slot) {
-        this.mc.thePlayer.sendQueue.addToSendQueue(new C10PacketCreativeInventoryAction(slot, item));
+    private void spawnItem(final ItemStack item, final int slot) {
+        mc.thePlayer.sendQueue.addToSendQueue(new C10PacketCreativeInventoryAction(slot, item));
     }
 }
 

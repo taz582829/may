@@ -4,29 +4,27 @@ import net.minecraft.network.play.server.S38PacketPlayerListItem;
 
 public class PlayerListEvent {
 
-    public static class Remove
-            extends Event {
+    public static class Remove extends Event {
         private final S38PacketPlayerListItem.AddPlayerData data;
 
-        public Remove(S38PacketPlayerListItem.AddPlayerData data) {
+        public Remove(final S38PacketPlayerListItem.AddPlayerData data) {
             this.data = data;
         }
 
         public S38PacketPlayerListItem.AddPlayerData getPlayerData() {
-            return this.data;
+            return data;
         }
     }
 
-    public static class Add
-            extends Event {
+    public static class Add extends Event {
         private final S38PacketPlayerListItem.AddPlayerData data;
 
-        public Add(S38PacketPlayerListItem.AddPlayerData data) {
+        public Add(final S38PacketPlayerListItem.AddPlayerData data) {
             this.data = data;
         }
 
         public S38PacketPlayerListItem.AddPlayerData getPlayerData() {
-            return this.data;
+            return data;
         }
     }
 }

@@ -10,25 +10,25 @@ public class RenderPlayerInTabEvent extends Event {
     public final NetworkPlayerInfo playerInfo;
     public String text;
 
-    public RenderPlayerInTabEvent(IChatComponent text, NetworkPlayerInfo playerInfo) {
-        this.text = text == null ? ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) : text.getFormattedText();
+    public RenderPlayerInTabEvent(final IChatComponent text, final NetworkPlayerInfo playerInfo) {
+        this.text = null == text ? ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) : text.getFormattedText();
         this.playerInfo = playerInfo;
     }
 
     public String getText() {
-        return this.text;
+        return text;
     }
 
-    public void setText(String text) {
+    public void setText(final String text) {
         this.text = text;
     }
 
     public NetworkPlayerInfo getPlayerInfo() {
-        return this.playerInfo;
+        return playerInfo;
     }
 
     public IChatComponent getTextAsComponent() {
-        return new ChatComponentText(this.text);
+        return new ChatComponentText(text);
     }
 }
 

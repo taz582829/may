@@ -17,25 +17,25 @@ import java.util.Map;
 public class PrestigeSchemes {
     public static Map<Integer, PrestigeScheme> SCHEMES = new HashMap<>();
     static {
-        try (InputStream stream = Entry.class.getClassLoader().getResourceAsStream("assets/frost/bedwars/bedwars_stars.json")) {
-            if (stream == null) throw new RuntimeException("couldn't find bedwars stars in assets!");
+        try (final InputStream stream = Entry.class.getClassLoader().getResourceAsStream("assets/frost/bedwars/bedwars_stars.json")) {
+            if (null == stream) throw new RuntimeException("couldn't find bedwars stars in assets!");
 
-            JsonObject root = new JsonParser().parse(new InputStreamReader(stream, StandardCharsets.UTF_8))
+            final JsonObject root = new JsonParser().parse(new InputStreamReader(stream, StandardCharsets.UTF_8))
                     .getAsJsonObject();
-            JsonObject schemes = root.getAsJsonObject("prestige_schemes");
+            final JsonObject schemes = root.getAsJsonObject("prestige_schemes");
 
-            for (Map.Entry<String, JsonElement> entry : schemes.entrySet()) {
-                JsonObject value = entry.getValue().getAsJsonObject();
+            for (final Map.Entry<String, JsonElement> entry : schemes.entrySet()) {
+                final JsonObject value = entry.getValue().getAsJsonObject();
 
-                JsonArray colorArray = value.getAsJsonArray("colors");
-                int prestige = value.get("prestige").getAsInt();
+                final JsonArray colorArray = value.getAsJsonArray("colors");
+                final int prestige = value.get("prestige").getAsInt();
 
-                List<String> colors = new ArrayList<>();
+                final List<String> colors = new ArrayList<>();
 
-                for (JsonElement color : colorArray) {
+                for (final JsonElement color : colorArray) {
                     colors.add(color.getAsString());
                 }
-                PrestigeScheme scheme = new PrestigeScheme(
+                final PrestigeScheme scheme = new PrestigeScheme(
                         colors,
                         prestige,
                         entry.getKey()
@@ -45,7 +45,7 @@ public class PrestigeSchemes {
             }
 
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
 

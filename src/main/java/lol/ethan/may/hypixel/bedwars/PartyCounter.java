@@ -12,12 +12,12 @@ import java.util.Timer;
 public class PartyCounter {
     private Timer joinTimeout;
     private Timer leaveTimeout;
-    private int joinCount = 0;
-    private int leaveCount = 0;
+    private int joinCount;
+    private int leaveCount;
 
-    private boolean shouldPrint(int count) {
-        if (BedwarsUtils.currentMode == BedwarsUtils.Mode.SOLO) return false;
-        int maxPartySize;
+    private boolean shouldPrint(final int count) {
+        if (BedwarsUtils.Mode.SOLO == BedwarsUtils.currentMode) return false;
+        final int maxPartySize;
         switch (BedwarsUtils.currentMode) {
             case DOUBLES:
                 maxPartySize = 2;
@@ -33,31 +33,31 @@ public class PartyCounter {
 
 
         }
-        return count >= 2 && count <= maxPartySize;
+        return 2 <= count && count <= maxPartySize;
     }
 
     @SubscribeEvent
-    public void onChat(ChatEvent.Received event) {
-        if (LocationData.getLobbyName() != null || LocationData.getGameType() != GameType.BEDWARS) return;
+    public void onChat(final ChatEvent.Received event) {
+        if (null != LocationData.getLobbyName() || GameType.BEDWARS != LocationData.getGameType()) return;
         if (BedwarsUtils.isInBedwars()) return;
-        String msg = event.getMessage().getUnformattedText().trim();
+        final String msg = event.getMessage().getUnformattedText().trim();
         if (msg.matches("(\\w{2,16}) has joined \\(\\d+/\\d+\\)!")) {
-            joinCount++;
-            if (joinTimeout != null) joinTimeout.cancel();
-            joinTimeout = TimeUtils.setTimeout(() -> {
-                if (shouldPrint(joinCount)) {
-                    Entry.chat(Entry.PREFIX + "Party of §a" + joinCount + " §fjoined.");
+            this.joinCount++;
+            if (null != joinTimeout) this.joinTimeout.cancel();
+            this.joinTimeout = TimeUtils.setTimeout(() -> {
+                if (this.shouldPrint(this.joinCount)) {
+                    Entry.chat(Entry.PREFIX + "Party of §a" + this.joinCount + " §fjoined.");
                 }
-                joinCount = 0;
+                this.joinCount = 0;
             }, 400);
         } else if (msg.matches("\\w{2,16} has quit!")) {
-            leaveCount++;
-            if (leaveTimeout != null) leaveTimeout.cancel();
-            leaveTimeout = TimeUtils.setTimeout(() -> {
-                if (shouldPrint(joinCount)) {
-                    Entry.chat(Entry.PREFIX + "Party of §c" + joinCount + " §fleft.");
+            this.leaveCount++;
+            if (null != leaveTimeout) this.leaveTimeout.cancel();
+            this.leaveTimeout = TimeUtils.setTimeout(() -> {
+                if (this.shouldPrint(this.joinCount)) {
+                    Entry.chat(Entry.PREFIX + "Party of §c" + this.joinCount + " §fleft.");
                 }
-                joinCount = 0;
+                this.joinCount = 0;
             }, 400);
         }
 

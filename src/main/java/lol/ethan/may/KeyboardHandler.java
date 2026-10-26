@@ -8,10 +8,10 @@ import lol.ethan.may.events.SubscribeEvent;
 
 public class KeyboardHandler {
     @SubscribeEvent
-    public void onKeyPress(KeyboardEvent event) {
-        for (Component comp : Config.getAllComponents()) {
+    public void onKeyPress(final KeyboardEvent event) {
+        for (final Component comp : Config.getAllComponents()) {
             if (!(comp instanceof KeybindComponent)) continue;
-            KeybindComponent keybind = (KeybindComponent) comp;
+            final KeybindComponent keybind = (KeybindComponent) comp;
             if (keybind.bind != event.getBind() || !event.getState()) continue;
             keybind.action.run();
         }

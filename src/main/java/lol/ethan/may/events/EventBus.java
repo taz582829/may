@@ -12,44 +12,43 @@ import java.util.function.Consumer;
 public class EventBus {
     private static final Map<Class<?>, List<EventListener>> listeners = new ConcurrentHashMap<>();
 
-    public static void subscribe(Object obj) {
+    public static void subscribe(final Object obj) {
         try {
-            for (Method method : obj.getClass().getDeclaredMethods()) {
-                if (!method.isAnnotationPresent(SubscribeEvent.class) || method.getParameterCount() != 1) continue;
-                SubscribeEvent annotation = method.getAnnotation(SubscribeEvent.class);
-                Class<?> eventType = method.getParameterTypes()[0];
-                List<EventListener> list = listeners.computeIfAbsent(eventType, k -> new CopyOnWriteArrayList<>());
+            for (final Method method : obj.getClass().getDeclaredMethods()) {
+                if (!method.isAnnotationPresent(SubscribeEvent.class) || 1 != method.getParameterCount()) continue;
+                final SubscribeEvent annotation = method.getAnnotation(SubscribeEvent.class);
+                final Class<?> eventType = method.getParameterTypes()[0];
+                final List<EventListener> list = listeners.computeIfAbsent(eventType, k -> new CopyOnWriteArrayList<>());
                 list.add(new EventListener(method, obj, annotation.priority()));
                 list.sort(Comparator.comparingInt(l -> l.priority.ordinal()));
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void unsubscribe(Object obj) {
-        for (List<EventListener> list : listeners.values()) {
+    public static void unsubscribe(final Object obj) {
+        for (final List<EventListener> list : listeners.values()) {
             list.removeIf(l -> l.owner == obj);
         }
     }
 
-    public static <T extends Event> T postEvent(T event) {
-        for (Class<?> clazz = event.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
-            if (listeners.get(clazz) == null) continue;
-            for (EventListener listener : listeners.get(clazz)) {
+    public static <T extends Event> T postEvent(final T event) {
+        for (Class<?> clazz = event.getClass(); Object.class != clazz; clazz = clazz.getSuperclass()) {
+            if (null == listeners.get(clazz)) continue;
+            for (final EventListener listener : listeners.get(clazz)) {
                 listener.accept(event);
             }
         }
         return event;
     }
 
-    static class EventListener
-            implements Consumer<Event> {
+    static class EventListener implements Consumer<Event> {
         public final Method method;
         public final Object owner;
         public final Priority priority;
 
-        public EventListener(Method method, Object owner, Priority priority) {
+        public EventListener(final Method method, final Object owner, final Priority priority) {
             this.method = method;
             this.owner = owner;
             this.priority = priority;
@@ -57,10 +56,10 @@ public class EventBus {
         }
 
         @Override
-        public void accept(Event event) {
+        public void accept(final Event event) {
             try {
-                this.method.invoke(this.owner, event);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+                method.invoke(owner, event);
+            } catch (final IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
         }

@@ -18,62 +18,62 @@ import java.util.stream.Collectors;
 
 public class HttpUtils {
 
-    public static CompletableFuture<JsonElement> get(String url) {
+    public static CompletableFuture<JsonElement> get(final String url) {
         return CompletableFuture.supplyAsync(() -> {
-            try (CloseableHttpClient client = HttpClients.createDefault();
-                 CloseableHttpResponse response = client.execute(new HttpGet(url))) {
-                HttpEntity entity = response.getEntity();
-                if (entity == null) return null;
-                String result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+            try (final CloseableHttpClient client = HttpClients.createDefault();
+                 final CloseableHttpResponse response = client.execute(new HttpGet(url))) {
+                final HttpEntity entity = response.getEntity();
+                if (null == entity) return null;
+                final String result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
                 return JsonUtils.parse(result);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new RuntimeException("Error sending GET request to " + url + ": \n" + e.getMessage());
             }
         });
     }
 
     @SafeVarargs
-    public static CompletableFuture<JsonElement> get(String url, Consumer<HttpGet>... customizers) {
+    public static CompletableFuture<JsonElement> get(final String url, final Consumer<HttpGet>... customizers) {
         return CompletableFuture.supplyAsync(() -> {
             final HttpGet httpGet = new HttpGet(url);
-            for (Consumer<HttpGet> customizer : customizers) {
+            for (final Consumer<HttpGet> customizer : customizers) {
                 customizer.accept(httpGet);
             }
-            try (CloseableHttpClient client = HttpClients.createDefault();
-                 CloseableHttpResponse response = client.execute(httpGet)) {
+            try (final CloseableHttpClient client = HttpClients.createDefault();
+                 final CloseableHttpResponse response = client.execute(httpGet)) {
 
-                HttpEntity entity = response.getEntity();
-                if (entity == null) return null;
-                String result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+                final HttpEntity entity = response.getEntity();
+                if (null == entity) return null;
+                final String result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
                 return JsonUtils.parse(result);
-            } catch (Exception e) {
-                String headers = Arrays.stream(httpGet.getAllHeaders()).map(h -> h.getName() + ": " + h.getValue()).collect(Collectors.joining(", "));
+            } catch (final Exception e) {
+                final String headers = Arrays.stream(httpGet.getAllHeaders()).map(h -> h.getName() + ": " + h.getValue()).collect(Collectors.joining(", "));
                 throw new RuntimeException("Error sending GET request to " + url + " (headers: " + headers + "):\n" + e.getMessage());
             }
         });
     }
 
     @SafeVarargs
-    public static CompletableFuture<JsonElement> post(String url, JsonElement body, Consumer<HttpPost>... customizers) {
+    public static CompletableFuture<JsonElement> post(final String url, final JsonElement body, final Consumer<HttpPost>... customizers) {
         final HttpPost httpPost = new HttpPost(url);
 
         httpPost.setHeader("Content-Type", "application/json");
-        if (body != null) {
+        if (null != body) {
             httpPost.setEntity(new StringEntity(body.toString(), StandardCharsets.UTF_8));
         }
-        for (Consumer<HttpPost> customizer : customizers) {
+        for (final Consumer<HttpPost> customizer : customizers) {
             customizer.accept(httpPost);
         }
 
         return CompletableFuture.supplyAsync(() -> {
-            try (CloseableHttpClient client = HttpClients.createDefault();
-                 CloseableHttpResponse response = client.execute(httpPost)) {
-                HttpEntity entity = response.getEntity();
-                if (entity == null) return null;
+            try (final CloseableHttpClient client = HttpClients.createDefault();
+                 final CloseableHttpResponse response = client.execute(httpPost)) {
+                final HttpEntity entity = response.getEntity();
+                if (null == entity) return null;
                 return JsonUtils.parse(EntityUtils.toString(entity));
-            } catch (Exception e) {
-                String headers = Arrays.stream(httpPost.getAllHeaders()).map(h -> h.getName() + ": " + h.getValue()).collect(Collectors.joining(", "));
-                String bodyText = body != null ? body.toString() : "No body found";
+            } catch (final Exception e) {
+                final String headers = Arrays.stream(httpPost.getAllHeaders()).map(h -> h.getName() + ": " + h.getValue()).collect(Collectors.joining(", "));
+                final String bodyText = null != body ? body.toString() : "No body found";
                 throw new RuntimeException("Error sending POST request to " + url + " (headers: " + headers + ", body: " + bodyText + "):\n" + e.getMessage());
             }
 
@@ -81,24 +81,24 @@ public class HttpUtils {
     }
 
     @SafeVarargs
-    public static CompletableFuture<JsonElement> postNoJSON(String url, JsonElement body, Consumer<HttpPost>... customizers) {
+    public static CompletableFuture<JsonElement> postNoJSON(final String url, final JsonElement body, final Consumer<HttpPost>... customizers) {
         final HttpPost httpPost = new HttpPost(url);
-        if (body != null) {
+        if (null != body) {
             httpPost.setEntity(new StringEntity(body.toString(), StandardCharsets.UTF_8));
         }
-        for (Consumer<HttpPost> customizer : customizers) {
+        for (final Consumer<HttpPost> customizer : customizers) {
             customizer.accept(httpPost);
         }
 
         return CompletableFuture.supplyAsync(() -> {
-            try (CloseableHttpClient client = HttpClients.createDefault();
-                 CloseableHttpResponse response = client.execute(httpPost)) {
-                HttpEntity entity = response.getEntity();
-                if (entity == null) return null;
+            try (final CloseableHttpClient client = HttpClients.createDefault();
+                 final CloseableHttpResponse response = client.execute(httpPost)) {
+                final HttpEntity entity = response.getEntity();
+                if (null == entity) return null;
                 return JsonUtils.parse(EntityUtils.toString(entity));
-            } catch (Exception e) {
-                String headers = Arrays.stream(httpPost.getAllHeaders()).map(h -> h.getName() + ": " + h.getValue()).collect(Collectors.joining(", "));
-                String bodyText = body != null ? body.toString() : "No body found";
+            } catch (final Exception e) {
+                final String headers = Arrays.stream(httpPost.getAllHeaders()).map(h -> h.getName() + ": " + h.getValue()).collect(Collectors.joining(", "));
+                final String bodyText = null != body ? body.toString() : "No body found";
                 throw new RuntimeException("Error sending POST request to " + url + " (headers: " + headers + ", body: " + bodyText + "):\n" + e.getMessage());
             }
 

@@ -19,10 +19,10 @@ public class DuelsTabStats extends TabStats {
     }
 
     @Override
-    protected String getDisplayName(NetworkPlayerInfo playerInfo, IStats stats) {
+    protected String getDisplayName(final NetworkPlayerInfo playerInfo, final IStats stats) {
         if (customDisplayNames.containsKey(playerInfo.getGameProfile().getId())) return customDisplayNames.get(playerInfo.getGameProfile().getId());
-        if (stats == null) return ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c?";
-        List<String> statList = stats.getDisplayStats(playerInfo);
+        if (null == stats) return ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c?";
+        final List<String> statList = stats.getDisplayStats(playerInfo);
         return String.join(" ", statList);
     }
 
@@ -32,40 +32,40 @@ public class DuelsTabStats extends TabStats {
         public String wlrFormatted;
 
         @Override
-        public IStats buildStats(PlayerResponse.Player player, String mode) {
-            JsonObject duelsStats = JsonUtils.getObject(player.stats, "Duels", null);
-            if (duelsStats == null) return null;
+        public IStats buildStats(final PlayerResponse.Player player, final String mode) {
+            final JsonObject duelsStats = JsonUtils.getObject(player.stats, "Duels", null);
+            if (null == duelsStats) return null;
             int wins = JsonUtils.getInt(duelsStats, "wins", 0);
             int losses = JsonUtils.getInt(duelsStats, "losses", 0);
-            double wlr = (double) wins / (losses == 0 ? 1 : losses);
-            if (mode != null && mode.toLowerCase().contains("bedwars")) {
+            double wlr = (double) wins / (0 == losses ? 1 : losses);
+            if (null != mode && mode.toLowerCase().contains("bedwars")) {
                 wins = JsonUtils.getInt(duelsStats, "wins_bedwars", 0);
                 losses = JsonUtils.getInt(duelsStats, "losses_bedwars", 0);
-                wlr = (double) wins / (losses == 0 ? 1 : losses);
-                int rawStars = JsonUtils.getInt(player.achievements, "bedwars_level", 0);
-                JsonObject bedwarsStats = JsonUtils.getObject(player.stats, "Bedwars", null);
+                wlr = (double) wins / (0 == losses ? 1 : losses);
+                final int rawStars = JsonUtils.getInt(player.achievements, "bedwars_level", 0);
+                final JsonObject bedwarsStats = JsonUtils.getObject(player.stats, "Bedwars", null);
 
-                stars = HypixelAPI.bedwarsLevelFormatted(
+                this.stars = HypixelAPI.bedwarsLevelFormatted(
                         rawStars,
                         JsonUtils.getString(bedwarsStats, "active_star", "black_open"),
                         JsonUtils.getString(bedwarsStats, "active_prestige_scheme", "prestige_scheme_none"),
                         JsonUtils.getString(bedwarsStats, "active_prestige_bracket", "")
                 );
             }
-            winsFormatted = DuelsUtils.formatWins(wins);
-            wlrFormatted = DuelsUtils.formatWLR(wlr);
+            this.winsFormatted = DuelsUtils.formatWins(wins);
+            this.wlrFormatted = DuelsUtils.formatWLR(wlr);
             return this;
         }
 
         @Override
-        public List<String> getDisplayStats(NetworkPlayerInfo playerInfo) {
-            String displayName = ScorePlayerTeam.formatPlayerName(
+        public List<String> getDisplayStats(final NetworkPlayerInfo playerInfo) {
+            final String displayName = ScorePlayerTeam.formatPlayerName(
                     playerInfo.getPlayerTeam(),
                     playerInfo.getGameProfile().getName()
             );
             return Arrays.asList(
                     displayName,
-                    "§8» " + winsFormatted
+                    "§8» " + this.winsFormatted
             );
         }
 

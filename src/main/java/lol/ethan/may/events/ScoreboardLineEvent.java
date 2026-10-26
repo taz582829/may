@@ -7,21 +7,21 @@ public class ScoreboardLineEvent extends Event {
     private final Team team;
     private String line;
 
-    public ScoreboardLineEvent(Team team, String name) {
+    public ScoreboardLineEvent(final Team team, final String name) {
         this.team = team;
-        this.line = ScorePlayerTeam.formatPlayerName(team, name);
+        line = ScorePlayerTeam.formatPlayerName(team, name);
     }
 
     public String getLine() {
-        return this.line;
+        return line;
     }
 
-    public void setLine(String line) {
+    public void setLine(final String line) {
         this.line = line;
     }
 
     public Team getTeam() {
-        return this.team;
+        return team;
     }
 }
 

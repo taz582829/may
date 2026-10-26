@@ -7,14 +7,14 @@ public class Response {
     private JsonObject raw;
 
     public boolean isSuccess() {
-        return success;
+        return this.success;
     }
 
     public JsonObject getRaw() {
-        return raw;
+        return this.raw;
     }
 
-    public void setRaw(JsonObject raw) {
+    public void setRaw(final JsonObject raw) {
         this.raw = raw;
     }
 }

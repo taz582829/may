@@ -23,42 +23,42 @@ public class ASMUtils {
         return new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(EventBus.class), "postEvent", "(L" + Type.getInternalName(Event.class) + ";)L" + Type.getInternalName(Event.class) + ";");
     }
 
-    public static void postEvent(InstructionAdapter a) {
+    public static void postEvent(final InstructionAdapter a) {
         a.invokestatic(Type.getInternalName(EventBus.class), "postEvent", "(L" + Type.getInternalName(Event.class) + ";)L" + Type.getInternalName(Event.class) + ";", false);
     }
 
-    public static void returnIfEventCancelled(InstructionAdapter a) {
-        Label end = new Label();
+    public static void returnIfEventCancelled(final InstructionAdapter a) {
+        final Label end = new Label();
         a.invokevirtual(Type.getInternalName(Event.class), "isCancelled", "()Z", false);
         a.ifeq(end);
         a.areturn(Type.VOID_TYPE);
         a.mark(end);
     }
 
-    public static void ifEventCancel(InstructionAdapter a, Consumer<InstructionAdapter> onCancel) {
-        Label end = new Label();
+    public static void ifEventCancel(final InstructionAdapter a, final Consumer<InstructionAdapter> onCancel) {
+        final Label end = new Label();
         a.invokevirtual(Type.getInternalName(Event.class), "isCancelled", "()Z", false);
         a.ifeq(end);
         onCancel.accept(a);
         a.mark(end);
     }
 
-    public static Type getType(Class<?> clazz) {
+    public static Type getType(final Class<?> clazz) {
         return Type.getObjectType(Type.getInternalName(clazz));
     }
 
-    public static InsnList asm(Consumer<InstructionAdapter> body) {
-        MethodNode temp = new MethodNode();
-        InstructionAdapter a = new InstructionAdapter(temp);
+    public static InsnList asm(final Consumer<InstructionAdapter> body) {
+        final MethodNode temp = new MethodNode();
+        final InstructionAdapter a = new InstructionAdapter(temp);
         body.accept(a);
         return temp.instructions;
     }
 
-    public static void logCalls(MethodNode node) {
+    public static void logCalls(final MethodNode node) {
         System.out.println("___________________________________________________________________");
-        Textifier printer = new Textifier();
+        final Textifier printer = new Textifier();
         node.accept(new TraceMethodVisitor(printer));
-        StringWriter writer = new StringWriter();
+        final StringWriter writer = new StringWriter();
         printer.print(new PrintWriter(writer));
         System.out.println(writer);
         System.out.println("___________________________________________________________________");

@@ -8,8 +8,8 @@ import java.util.List;
 
 public class FontRendererTransformer implements ITransformer {
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             if (!method.name.equals("func_78255_a") && !method.name.equals("renderStringAtPos")) continue;
         }
     }

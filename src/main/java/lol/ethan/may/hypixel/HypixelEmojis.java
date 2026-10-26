@@ -16,7 +16,7 @@ public class HypixelEmojis {
     }
 
     @SubscribeEvent
-    public void onPacket(PacketEvent.Send event) {
+    public void onPacket(final PacketEvent.Send event) {
 //        if (!(event.getPacket() instanceof C01PacketChatMessage)) return;
 //
 //        C01PacketChatMessage packet = (C01PacketChatMessage) event.getPacket();

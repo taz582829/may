@@ -17,30 +17,30 @@ public class DuelsRankHUD extends BasicHud {
     public boolean shouldShow() {
         return super.shouldShow() &&
                 DuelsUtils.isInDuels() &&
-                mc.theWorld != null &&
-                mc.theWorld.getScoreboard() != null &&
+                null != mc.theWorld &&
+                null != mc.theWorld.getScoreboard() &&
                 DuelsUtils.isInPregame();
     }
 
     @Override
-    protected List<String> getLines(boolean example) {
-        List<String> result = new ArrayList<>();
-        if (mc.theWorld == null || mc.theWorld.getScoreboard() == null) return Collections.emptyList();
-        for (ScorePlayerTeam team : mc.theWorld.getScoreboard().getTeams()) {
-            if (team.getMembershipCollection().size() == 0) continue;
-            String prefix = team.getColorPrefix();
-            if (prefix == null) continue;
+    protected List<String> getLines(final boolean example) {
+        final List<String> result = new ArrayList<>();
+        if (null == mc.theWorld || null == mc.theWorld.getScoreboard()) return Collections.emptyList();
+        for (final ScorePlayerTeam team : this.mc.theWorld.getScoreboard().getTeams()) {
+            if (0 == team.getMembershipCollection().size()) continue;
+            final String prefix = team.getColorPrefix();
+            if (null == prefix) continue;
             if (prefix.startsWith("§k")) {
-                String color = prefix.substring(0, 2);
-                String rank = getRankFromColor(color);
+                final String color = prefix.substring(0, 2);
+                final String rank = this.getRankFromColor(color);
                 result.add(rank);
             }
         }
-        if (result.size() > 0) result.add(0, "§f§lPregame Ranks");
+        if (0 < result.size()) result.add(0, "§f§lPregame Ranks");
         return result;
     }
 
-    private String getRankFromColor(@NotNull String teamColor) {
+    private String getRankFromColor(@NotNull final String teamColor) {
         switch (teamColor) {
             case "§7": return "§7Non";
             case "§a": return "§aVIP§f/§aVIP§6+";

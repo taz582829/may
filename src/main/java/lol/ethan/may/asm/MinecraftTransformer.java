@@ -15,19 +15,19 @@ import java.util.List;
 
 public class MinecraftTransformer implements ITransformer {
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
             if (method.name.equals("runTick") || method.name.equals("func_71407_l")) {
-                for (AbstractInsnNode insnNode : method.instructions.toArray()) {
-                    if (insnNode.getOpcode() >= Opcodes.IRETURN && insnNode.getOpcode() <= Opcodes.RETURN) {
+                for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
+                    if (Opcodes.IRETURN <= insnNode.getOpcode() && Opcodes.RETURN >= insnNode.getOpcode()) {
                         method.instructions.insertBefore(insnNode, new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(MinecraftTransformer.class), "postTickEvent", "()V"));
                     }
                     if (!(insnNode instanceof MethodInsnNode)) continue;
-                    MethodInsnNode mn = (MethodInsnNode)insnNode;
+                    final MethodInsnNode mn = (MethodInsnNode)insnNode;
                     if (!mn.owner.equals(Type.getInternalName(Mouse.class)) || !mn.name.equals("next")) continue;
-                    LabelNode top = new LabelNode();
+                    final LabelNode top = new LabelNode();
                     method.instructions.insertBefore(mn, top);
-                    InsnList insnList = ASMUtils.asm(a -> {
+                    final InsnList insnList = ASMUtils.asm(a -> {
                         a.anew(ASMUtils.getType(MouseEvent.class));
                         a.dup();
                         a.invokespecial(Type.getInternalName(MouseEvent.class), "<init>", "()V", false);
@@ -40,14 +40,14 @@ public class MinecraftTransformer implements ITransformer {
                 method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(MinecraftTransformer.class), "preTickEvent", "()V"));
             }
             if (method.name.equals("func_152348_aa") || method.name.equals("dispatchKeypresses")) {
-                for (AbstractInsnNode insnNode : method.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                     if (!(insnNode instanceof VarInsnNode)) continue;
-                    VarInsnNode vin = (VarInsnNode)insnNode;
-                    if (vin.var != 1 || vin.getOpcode() != Opcodes.ISTORE) continue;
-                    InsnList insnList = new InsnList();
+                    final VarInsnNode vin = (VarInsnNode)insnNode;
+                    if (1 != vin.var || Opcodes.ISTORE != vin.getOpcode()) continue;
+                    final InsnList insnList = new InsnList();
                     insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(MinecraftTransformer.class), "getKeypresses", "()L" + Type.getInternalName(KeyboardEvent.class) + ";"));
                     insnList.add(new InsnNode(Opcodes.DUP));
-                    LabelNode label = new LabelNode();
+                    final LabelNode label = new LabelNode();
                     insnList.add(new JumpInsnNode(Opcodes.IFNONNULL, label));
                     insnList.add(new InsnNode(Opcodes.POP));
                     insnList.add(new InsnNode(Opcodes.RETURN));
@@ -59,13 +59,13 @@ public class MinecraftTransformer implements ITransformer {
                 }
             }
             if (method.name.equals("func_71405_e") || method.name.equals("shutdownMinecraftApplet")) {
-                InsnList insnList = new InsnList();
+                final InsnList insnList = new InsnList();
                 insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(MinecraftTransformer.class), "onShutdown", "()V"));
                 method.instructions.insert(insnList);
             }
             if (!method.name.equals("displayGuiScreen")) continue;
             method.instructions.insert(ASMUtils.asm(a -> {
-                Label top = new Label();
+                final Label top = new Label();
                 a.load(0, ASMUtils.getType(Minecraft.class));
                 a.getfield("net/minecraft/client/Minecraft", "currentScreen", "Lnet/minecraft/client/gui/GuiScreen;");
                 a.ifnull(top);
@@ -104,8 +104,8 @@ public class MinecraftTransformer implements ITransformer {
     }
 
     public static KeyboardEvent getKeypresses() {
-        int key = Keyboard.getEventKey() == 0 ? Keyboard.getEventCharacter() : Keyboard.getEventKey();
-        KeyboardEvent event = new KeyboardEvent(key, Keyboard.getEventKeyState());
+        final int key = 0 == Keyboard.getEventKey() ? Keyboard.getEventCharacter() : Keyboard.getEventKey();
+        final KeyboardEvent event = new KeyboardEvent(key, Keyboard.getEventKeyState());
         EventBus.postEvent(event);
         if (event.isCancelled()) {
             return null;

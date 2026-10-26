@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public abstract class TabStats {
     protected static Minecraft mc = Minecraft.getMinecraft();
-    private static Map<UUID, IStats> statsMap = new HashMap<>();
+    private static final Map<UUID, IStats> statsMap = new HashMap<>();
     protected static Map<UUID, String> customDisplayNames = new HashMap<>();
     protected Map<UUID, IStats> getStatsMap() {
         return statsMap;
@@ -21,23 +21,23 @@ public abstract class TabStats {
     }
 
     public abstract IStats createStats();
-    public IStats refreshPlayer(UUID uuid, PlayerResponse.Player apiPlayer) {
-        IStats stats = statsMap.computeIfAbsent(uuid, id -> createStats());
+    public IStats refreshPlayer(final UUID uuid, final PlayerResponse.Player apiPlayer) {
+        final IStats stats = statsMap.computeIfAbsent(uuid, id -> this.createStats());
         stats.buildStats(apiPlayer, null);
         statsMap.put(uuid, stats);
         return stats;
     }
-    public IStats refreshPlayer(UUID uuid, PlayerResponse.Player apiPlayer, String mode) {
-        IStats stats = statsMap.computeIfAbsent(uuid, id -> createStats());
+    public IStats refreshPlayer(final UUID uuid, final PlayerResponse.Player apiPlayer, final String mode) {
+        final IStats stats = statsMap.computeIfAbsent(uuid, id -> this.createStats());
         stats.buildStats(apiPlayer, mode);
         statsMap.put(uuid, stats);
         return stats;
     }
-    public IStats getStats(UUID uuid) {
+    public IStats getStats(final UUID uuid) {
         return statsMap.get(uuid);
     }
     protected abstract String getDisplayName(NetworkPlayerInfo playerInfo, IStats stats);
-    public void setDisplayName(NetworkPlayerInfo playerInfo, String displayName) {
+    public void setDisplayName(final NetworkPlayerInfo playerInfo, final String displayName) {
         customDisplayNames.put(playerInfo.getGameProfile().getId(), displayName);
 
     }

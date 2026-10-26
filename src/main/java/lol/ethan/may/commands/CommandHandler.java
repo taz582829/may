@@ -22,64 +22,64 @@ public class CommandHandler {
 
     public CommandHandler() {
         try {
-            this.matches = S3APacketTabComplete.class.getDeclaredField("matches");
-        } catch (Exception e) {
+            matches = S3APacketTabComplete.class.getDeclaredField("matches");
+        } catch (final Exception e) {
             try {
-                this.matches = S3APacketTabComplete.class.getDeclaredField(Mappings.getField(S3APacketTabComplete.class, "matches"));
-            } catch (NoSuchFieldException ex) {
+                matches = S3APacketTabComplete.class.getDeclaredField(Mappings.getField(S3APacketTabComplete.class, "matches"));
+            } catch (final NoSuchFieldException ex) {
                 throw new RuntimeException(ex);
             }
             throw new RuntimeException(e);
         }
     }
 
-    public static void register(Command cmd) {
+    public static void register(final Command cmd) {
         commands.add(cmd);
     }
 
-    public static void unregister(Command cmd) {
+    public static void unregister(final Command cmd) {
         commands.remove(cmd);
     }
 
     @SubscribeEvent
-    public void onPacket(PacketEvent.Send event) {
+    public void onPacket(final PacketEvent.Send event) {
         if (event.getPacket() instanceof C14PacketTabComplete) {
-            C14PacketTabComplete packet = (C14PacketTabComplete) event.getPacket();
-            String msg = packet.getMessage().trim();
+            final C14PacketTabComplete packet = (C14PacketTabComplete) event.getPacket();
+            final String msg = packet.getMessage().trim();
             if (!msg.startsWith("/")) {
                 return;
             }
-            String[] args = msg.split(" ");
-            String cmdName = args[0].substring(1);
-            if (args.length == 1) {
-                this.lastSuggestions = commands.stream().filter(c -> c.matches(cmdName)).map(Command::toString).toArray(String[]::new);
+            final String[] args = msg.split(" ");
+            final String cmdName = args[0].substring(1);
+            if (1 == args.length) {
+                lastSuggestions = commands.stream().filter(c -> c.matches(cmdName)).map(Command::toString).toArray(String[]::new);
             } else {
-                for (Command cmd : commands) {
+                for (final Command cmd : commands) {
                     if (!cmd.name.startsWith(cmdName)) continue;
-                    this.lastSuggestions = cmd.getTabCompletes(Arrays.stream(args).skip(1L).toArray(String[]::new));
+                    lastSuggestions = cmd.getTabCompletes(Arrays.stream(args).skip(1L).toArray(String[]::new));
                 }
             }
         }
         if (event.getPacket() instanceof C01PacketChatMessage) {
-            String msg = ((C01PacketChatMessage) event.getPacket()).getMessage();
+            final String msg = ((C01PacketChatMessage) event.getPacket()).getMessage();
             if (!msg.startsWith("/")) return;
-            String[] parts = msg.substring(1).trim().split(" ");
-            for (Command cmd : commands) {
+            final String[] parts = msg.substring(1).trim().split(" ");
+            for (final Command cmd : commands) {
                 if (cmd.name.equals(parts[0].toLowerCase())) {
                     try {
                         cmd.execute(Arrays.stream(msg.split(" ")).skip(1L).toArray(String[]::new));
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         e.printStackTrace();
                         Entry.chat("§cAn error occured while trying to run this command (check console)");
                     }
                     event.setCancelled(true);
                     return;
                 }
-                for (String alias : cmd.aliases) {
+                for (final String alias : cmd.aliases) {
                     if (!alias.equals(parts[0].toLowerCase())) continue;
                     try {
                         cmd.execute(Arrays.stream(msg.split(" ")).skip(1L).toArray(String[]::new));
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         e.printStackTrace();
                         Entry.chat("§cAn error occured while trying to run this command (check console)");
                     }
@@ -91,19 +91,19 @@ public class CommandHandler {
     }
 
     @SubscribeEvent
-    public void onPacketReceive(PacketEvent.Receive event) {
-        if (event.getPacket() instanceof S3APacketTabComplete && this.lastSuggestions != null) {
-            S3APacketTabComplete packet = (S3APacketTabComplete) event.getPacket();
-            String[] lastSuggestions = this.lastSuggestions;
-            String[] serverSuggestions = packet.func_149630_c();
+    public void onPacketReceive(final PacketEvent.Receive event) {
+        if (event.getPacket() instanceof S3APacketTabComplete && null != this.lastSuggestions) {
+            final S3APacketTabComplete packet = (S3APacketTabComplete) event.getPacket();
+            final String[] lastSuggestions = this.lastSuggestions;
+            final String[] serverSuggestions = packet.func_149630_c();
             this.lastSuggestions = null;
-            ArrayList<String> list = new ArrayList<>();
+            final ArrayList<String> list = new ArrayList<>();
             list.addAll(Arrays.asList(lastSuggestions));
             list.addAll(Arrays.asList(serverSuggestions));
-            String[] ordered = list.stream().distinct().sorted().toArray(String[]::new);
+            final String[] ordered = list.stream().distinct().sorted().toArray(String[]::new);
             try {
-                this.matches.set(packet, ordered);
-            } catch (Exception e) {
+                matches.set(packet, ordered);
+            } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
         }

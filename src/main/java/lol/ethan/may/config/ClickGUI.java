@@ -28,9 +28,9 @@ public class ClickGUI extends GuiScreen {
     private final Color backgroundColor = new Color(25, 26, 28, 255);
     private final Color mayTextColor = new Color(0xC8A2C8);
     private final Color selectedColor = new Color(0xE666BC);
-    private int categorySelected = 0;
+    private int categorySelected;
     private final int categorySize = 20;
-    public static int scrollOffset = 0;
+    public static int scrollOffset;
     private final List<Component> components = new ArrayList<>();
     public static HUDComponent currentHud;
 
@@ -43,41 +43,41 @@ public class ClickGUI extends GuiScreen {
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
-        components.clear();
+        this.components.clear();
         try {
-            for (Field field : Config.class.getFields()) {
-                Component comp = (Component) field.get(null);
-                components.add(comp);
+            for (final Field field : Config.class.getFields()) {
+                final Component comp = (Component) field.get(null);
+                this.components.add(comp);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
-        for (Component comp : getCurrentComponents()) {
+        for (final Component comp : this.getCurrentComponents()) {
             comp.init(this);
         }
-        categoryInfo.clear();
-        x = (width / 2) - (xSize / 2);
-        y = (height / 2) - (ySize / 2);
-        int currentCategoryY = y + categorySize;
+        this.categoryInfo.clear();
+        this.x = (this.width / 2) - (xSize / 2);
+        this.y = (this.height / 2) - (ySize / 2);
+        int currentCategoryY = this.y + this.categorySize;
         sidebarWidth = 75;
-        for (Category cat : Category.values()) {
-            sidebarWidth = Math.max(sidebarWidth, fontRendererObj.getStringWidth(cat.name()) + 18);
+        for (final Category cat : Category.values()) {
+            sidebarWidth = Math.max(sidebarWidth, this.fontRendererObj.getStringWidth(cat.name()) + 18);
 
-            categoryInfo.add(new CategoryInfo(
+            this.categoryInfo.add(new CategoryInfo(
                     cat.name(),
                     currentCategoryY,
-                    currentCategoryY + categorySize,
+                    currentCategoryY + this.categorySize,
                     cat
             ));
-            currentCategoryY += categorySize;
+            currentCategoryY += this.categorySize;
         }
     }
 
     private List<Component> getCurrentComponents() {
-        return currentHud != null ? currentHud.getHudComponents() : components;
+        return null != currentHud ? currentHud.getHudComponents() : this.components;
     }
 
-    private boolean shouldShow(Component comp, Category selected) {
+    private boolean shouldShow(final Component comp, final Category selected) {
         if (!comp.shouldDraw()) {
 //            if (comp instanceof HUDComponent) {
 //                HUDComponent hud = (HUDComponent) comp;
@@ -86,69 +86,70 @@ public class ClickGUI extends GuiScreen {
             return false;
         }
 
-        return currentHud != null || comp.category.equals(selected);
+        return null != currentHud || comp.category == selected;
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float pt) {
-        HUDHelper.drawRect(x, y, xSize, ySize, backgroundColor);
-        fontRendererObj.drawStringWithShadow("May", x + 10, y + 10, mayTextColor.getRGB());
+    public void drawScreen(final int mouseX, final int mouseY, final float pt) {
+        HUDHelper.drawRect(this.x, this.y, xSize, ySize, this.backgroundColor);
+        this.fontRendererObj.drawStringWithShadow("May", this.x + 10, this.y + 10, this.mayTextColor.getRGB());
 
-        Category[] categories = Category.values();
-        for (Component comp : getCurrentComponents()) {
+        final Category[] categories = Category.values();
+        for (final Component comp : this.getCurrentComponents()) {
             if (comp instanceof TextBox && ((TextBox<?>) comp).drawingField) {
-                ((TextBox<?>) comp).drawField(x, y, xSize - sidebarWidth, ySize);
+                ((TextBox<?>) comp).drawField(this.x, this.y, xSize - sidebarWidth, ySize);
                 return;
             }
         }
-        for (int i = 0; i < categoryInfo.size(); i++) {
-            CategoryInfo info = categoryInfo.get(i);
-            if (categorySelected == i) {
-                HUDHelper.drawRect(x, info.startingPoint, sidebarWidth, categorySize, selectedColor);
+        for (int i = 0; i < this.categoryInfo.size(); i++) {
+            final CategoryInfo info = this.categoryInfo.get(i);
+            if (this.categorySelected == i) {
+                HUDHelper.drawRect(this.x, info.startingPoint, sidebarWidth, this.categorySize, this.selectedColor);
             }
-            fontRendererObj.drawStringWithShadow(
+            this.fontRendererObj.drawStringWithShadow(
                     info.name,
-                    x + 10,
-                    info.startingPoint + (float) (categorySize - fontRendererObj.FONT_HEIGHT) / 2,
+                    this.x + 10,
+                    info.startingPoint + (float) (this.categorySize - this.fontRendererObj.FONT_HEIGHT) / 2,
                     -1
             );
 
         }
 
-        Category selected = categories[categorySelected];
-        int categoryY = y + categorySize;
-        List<Component> components = getCurrentComponents();
+        final Category selected = categories[this.categorySelected];
+        int categoryY = this.y + this.categorySize;
+        final List<Component> components = this.getCurrentComponents();
 
-        ScissorUtils.begin(x + sidebarWidth, y + categorySize, xSize - sidebarWidth, ySize - categorySize);
+        ScissorUtils.begin(this.x + sidebarWidth, this.y + this.categorySize, xSize - sidebarWidth, ySize - this.categorySize);
         int visibleIndex = 0;
         try {
-            for (Component comp : components) {
-                if (!shouldShow(comp, selected)) continue;
-                if (scrollOffset > visibleIndex++) continue;
+            for (final Component comp : components) {
+                if (!this.shouldShow(comp, selected)) continue;
+                if (scrollOffset > visibleIndex) continue;
+                visibleIndex++;
 
-                comp.x = x + sidebarWidth;
+                comp.x = this.x + sidebarWidth;
                 comp.y = categoryY;
-                boolean hovering = hoveringOn(mouseX, mouseY, (int) comp.x, (int) comp.y, xSize - sidebarWidth, comp.componentHeight);
+                final boolean hovering = this.hoveringOn(mouseX, mouseY, (int) comp.x, (int) comp.y, xSize - sidebarWidth, comp.componentHeight);
 
                 comp.drawComponent(
-                        x + sidebarWidth,
+                        this.x + sidebarWidth,
                         categoryY,
-                        x,
-                        y,
+                        this.x,
+                        this.y,
                         xSize,
                         ySize
                 );
 
                 if (hovering) {
-                    int left = x + sidebarWidth;
-                    int right = left + xSize - sidebarWidth - 1;
-                    int bottom = categoryY + comp.componentHeight - 1;
-                    int color = -1;
+                    final int left = this.x + sidebarWidth;
+                    final int right = left + xSize - sidebarWidth - 1;
+                    final int bottom = categoryY + comp.componentHeight - 1;
+                    final int color = -1;
 
-                    drawHorizontalLine(left, right, categoryY, color);
-                    drawHorizontalLine(left, right, bottom, color);
-                    drawVerticalLine(left, categoryY, bottom, color);
-                    drawVerticalLine(right, categoryY, bottom, color);
+                    this.drawHorizontalLine(left, right, categoryY, color);
+                    this.drawHorizontalLine(left, right, bottom, color);
+                    this.drawVerticalLine(left, categoryY, bottom, color);
+                    this.drawVerticalLine(right, categoryY, bottom, color);
                 }
 
                 categoryY += comp.componentHeight;
@@ -161,40 +162,41 @@ public class ClickGUI extends GuiScreen {
     }
 
     @Override
-    protected void mouseClicked(int mx, int my, int button) throws IOException {
-        TextBox<?> active = getActiveTextBox();
+    protected void mouseClicked(final int mx, final int my, final int button) throws IOException {
+        final TextBox<?> active = this.getActiveTextBox();
 
-        if (active != null) {
+        if (null != active) {
             active.onMouseClick(mx, my, button);
-            if (hoveringOn(mx, my, (int) active.x, (int) active.y, xSize - sidebarWidth, active.componentHeight)) {
-                if (button == 0) {
+            if (this.hoveringOn(mx, my, (int) active.x, (int) active.y, xSize - sidebarWidth, active.componentHeight)) {
+                if (0 == button) {
                     active.onClick();
-                } else if (button == 1) {
+                } else if (1 == button) {
                     active.onRightClick();
                 }
             }
             return;
         }
-        Category selected = Category.values()[categorySelected];
-        List<Component> components = getCurrentComponents();
+        final Category selected = Category.values()[this.categorySelected];
+        final List<Component> components = this.getCurrentComponents();
         int visibleIndex = 0;
-        for (Component comp : components) {
-            if (shouldShow(comp, selected)) {
-                if (scrollOffset > visibleIndex++) continue;
+        for (final Component comp : components) {
+            if (this.shouldShow(comp, selected)) {
+                if (scrollOffset > visibleIndex) continue;
+                visibleIndex++;
                 comp.onMouseClick(mx, my, button);
-                if (hoveringOn(mx, my, (int) comp.x, (int) comp.y, xSize - sidebarWidth, comp.componentHeight)) {
-                    if (button == 0) {
+                if (this.hoveringOn(mx, my, (int) comp.x, (int) comp.y, xSize - sidebarWidth, comp.componentHeight)) {
+                    if (0 == button) {
                         comp.onClick();
-                    } else if (button == 1) {
+                    } else if (1 == button) {
                         comp.onRightClick();
                     }
                 }
             }
         }
-        for (int i = 0; i < categoryInfo.size(); i++) {
-            CategoryInfo info = categoryInfo.get(i);
-            if (hoveringOn(mx, my, x, info.startingPoint, sidebarWidth, categorySize)) {
-                categorySelected = i;
+        for (int i = 0; i < this.categoryInfo.size(); i++) {
+            final CategoryInfo info = this.categoryInfo.get(i);
+            if (this.hoveringOn(mx, my, this.x, info.startingPoint, sidebarWidth, this.categorySize)) {
+                this.categorySelected = i;
                 scrollOffset = 0;
                 currentHud = null;
                 Entry.playClickSound();
@@ -206,7 +208,7 @@ public class ClickGUI extends GuiScreen {
         super.mouseClicked(mx, my, button);
     }
     private TextBox<?> getActiveTextBox() {
-        for (Component comp : getCurrentComponents()) {
+        for (final Component comp : this.getCurrentComponents()) {
             if (comp instanceof TextBox && ((TextBox<?>) comp).drawingField) {
                 return (TextBox<?>) comp;
             }
@@ -214,23 +216,23 @@ public class ClickGUI extends GuiScreen {
         return null;
     }
     private boolean isTextBoxOpen() {
-        return getActiveTextBox() != null;
+        return null != getActiveTextBox();
     }
-    public boolean hoveringOn(int mx, int my, int targetX, int targetY, int width, int height) {
+    public boolean hoveringOn(final int mx, final int my, final int targetX, final int targetY, final int width, final int height) {
         return my >= targetY && my < targetY + height && mx >= targetX && mx < targetX + width;
     }
 
     @Override
-    protected void keyTyped(char c, int i) throws IOException {
-        if (i == Keyboard.KEY_ESCAPE && currentHud != null) {
+    protected void keyTyped(final char c, final int i) throws IOException {
+        if (Keyboard.KEY_ESCAPE == i && null != currentHud) {
             currentHud = null;
             scrollOffset = 0;
             return;
         }
         super.keyTyped(c, i);
-        Category selected = Category.values()[categorySelected];
-        for (Component comp : getCurrentComponents()) {
-            if (comp.category.equals(selected)) {
+        final Category selected = Category.values()[this.categorySelected];
+        for (final Component comp : this.getCurrentComponents()) {
+            if (comp.category == selected) {
                 comp.onKeyPress(c, i);
             }
         }
@@ -244,9 +246,9 @@ public class ClickGUI extends GuiScreen {
     @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
-        for (Component comp : components) {
+        for (final Component comp : this.components) {
             if (comp instanceof TextBox) {
-                TextBox<?> box = (TextBox<?>) comp;
+                final TextBox<?> box = (TextBox<?>) comp;
                 box.finish();
             }
         }
@@ -259,9 +261,9 @@ public class ClickGUI extends GuiScreen {
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-        int wheel = Mouse.getEventDWheel();
-        if (wheel != 0) {
-            scrollOffset += (wheel > 0 ? -1 : 1);
+        final int wheel = Mouse.getEventDWheel();
+        if (0 != wheel) {
+            scrollOffset += (0 < wheel ? -1 : 1);
             scrollOffset = Math.max(0, scrollOffset);
         }
     }
@@ -272,7 +274,7 @@ public class ClickGUI extends GuiScreen {
         public int endingPoint;
         public Category category;
 
-        public CategoryInfo(String name, int startingPoint, int endingPoint, Category category) {
+        public CategoryInfo(final String name, final int startingPoint, final int endingPoint, final Category category) {
             this.name = name;
             this.startingPoint = startingPoint;
             this.endingPoint = endingPoint;

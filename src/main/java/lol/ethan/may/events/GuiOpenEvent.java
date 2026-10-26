@@ -7,23 +7,23 @@ import net.minecraft.inventory.ContainerChest;
 public class GuiOpenEvent extends Event {
     private GuiScreen screen;
 
-    public GuiOpenEvent(GuiScreen screen) {
+    public GuiOpenEvent(final GuiScreen screen) {
         this.screen = screen;
     }
 
     public GuiScreen getScreen() {
-        return this.screen;
+        return screen;
     }
 
-    public void setScreen(GuiScreen screen) {
+    public void setScreen(final GuiScreen screen) {
         this.screen = screen;
     }
 
     public String getTitle() {
-        if (!(this.screen instanceof GuiContainer)) {
+        if (!(screen instanceof GuiContainer)) {
             return null;
         }
-        ContainerChest containerChest = (ContainerChest) ((GuiContainer) this.screen).inventorySlots;
+        final ContainerChest containerChest = (ContainerChest) ((GuiContainer) screen).inventorySlots;
         return containerChest.getLowerChestInventory().getDisplayName().getFormattedText();
     }
 }
