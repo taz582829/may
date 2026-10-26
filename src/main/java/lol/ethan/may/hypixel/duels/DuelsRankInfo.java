@@ -1,12 +1,12 @@
 package lol.ethan.may.hypixel.duels;
 
 import lol.ethan.may.Entry;
+import lol.ethan.may.events.PacketEvent;
+import lol.ethan.may.events.SubscribeEvent;
 import net.minecraft.network.play.server.S0CPacketSpawnPlayer;
 import net.minecraft.network.play.server.S13PacketDestroyEntities;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.network.play.server.S3EPacketTeams;
-import lol.ethan.may.events.PacketEvent;
-import lol.ethan.may.events.SubscribeEvent;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;

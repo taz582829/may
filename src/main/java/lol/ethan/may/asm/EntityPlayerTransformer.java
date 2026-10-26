@@ -1,18 +1,19 @@
 package lol.ethan.may.asm;
 
-import java.util.Collections;
-import java.util.List;
-
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.player.NameFormatEvent;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IChatComponent;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IChatComponent;
-import static lol.ethan.may.asm.ASMUtils.*;
+
+import java.util.Collections;
+import java.util.List;
+
+import static lol.ethan.may.asm.ASMUtils.asm;
 
 public class EntityPlayerTransformer implements ITransformer {
     @Override

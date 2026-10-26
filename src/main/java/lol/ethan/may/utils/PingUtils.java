@@ -4,7 +4,6 @@ import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.PacketEvent;
 import lol.ethan.may.events.SubscribeEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.network.play.server.S37PacketStatistics;
 

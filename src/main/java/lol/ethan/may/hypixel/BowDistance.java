@@ -1,11 +1,10 @@
 package lol.ethan.may.hypixel;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumChatFormatting;
 import lol.ethan.may.events.ChatEvent;
 import lol.ethan.may.events.SubscribeEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

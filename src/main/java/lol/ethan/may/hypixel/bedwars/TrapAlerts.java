@@ -1,10 +1,10 @@
 package lol.ethan.may.hypixel.bedwars;
 
 import lol.ethan.may.Entry;
-import net.minecraft.network.play.server.S1DPacketEntityEffect;
-import net.minecraft.potion.Potion;
 import lol.ethan.may.events.PacketEvent;
 import lol.ethan.may.events.SubscribeEvent;
+import net.minecraft.network.play.server.S1DPacketEntityEffect;
+import net.minecraft.potion.Potion;
 
 public class TrapAlerts {
     @SubscribeEvent

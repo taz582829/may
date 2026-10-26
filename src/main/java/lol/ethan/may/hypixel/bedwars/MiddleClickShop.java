@@ -1,11 +1,10 @@
 package lol.ethan.may.hypixel.bedwars;
 
-import lol.ethan.may.Entry;
 import lol.ethan.may.events.SlotClickEvent;
+import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.utils.GuiUtils;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.StringUtils;
-import lol.ethan.may.events.SubscribeEvent;
 
 import java.util.Arrays;
 import java.util.List;

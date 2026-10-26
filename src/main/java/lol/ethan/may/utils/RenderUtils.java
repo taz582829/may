@@ -14,7 +14,6 @@ import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Timer;
-import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;

@@ -14,7 +14,6 @@ import lol.ethan.may.render.huds.TestHUD;
 import lol.ethan.may.utils.GuiUtils;
 import lol.ethan.may.utils.JsonUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
@@ -24,7 +23,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

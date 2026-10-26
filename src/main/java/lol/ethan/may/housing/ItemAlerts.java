@@ -24,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S04PacketEntityEquipment;
 import net.minecraft.network.play.server.S1CPacketEntityMetadata;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.util.IChatComponent;
 import org.apache.commons.lang3.RandomUtils;
 

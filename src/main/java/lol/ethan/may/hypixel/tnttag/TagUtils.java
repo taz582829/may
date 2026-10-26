@@ -1,6 +1,5 @@
 package lol.ethan.may.hypixel.tnttag;
 
-import lol.ethan.may.commands.HypixelLocation;
 import lol.ethan.may.hypixel.HypixelUtils;
 import lol.ethan.may.hypixel.modapi.LocationData;
 import net.hypixel.data.type.GameType;

@@ -1,14 +1,13 @@
 package lol.ethan.may.asm;
 
-import java.util.Collections;
-import java.util.List;
-import lol.ethan.may.asm.ASMUtils;
-import lol.ethan.may.asm.ITransformer;
 import lol.ethan.may.events.SlotClickEvent;
+import net.minecraft.inventory.Slot;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
-import net.minecraft.inventory.Slot;
+
+import java.util.Collections;
+import java.util.List;
 
 public class GuiContainerTransformer implements ITransformer {
     private static final String SLOT_CLICK_EVENT = Type.getInternalName(SlotClickEvent.class);

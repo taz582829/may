@@ -1,20 +1,19 @@
 package lol.ethan.may.asm;
 
-import java.util.Collections;
-import java.util.List;
-import lol.ethan.may.asm.ASMUtils;
-import lol.ethan.may.asm.ITransformer;
 import lol.ethan.may.config.Config;
 import lol.ethan.may.events.RenderWorldEvent;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.potion.Potion;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.potion.Potion;
+
+import java.util.Collections;
+import java.util.List;
 
 public class EntityRendererTransformer implements ITransformer {
     @Override

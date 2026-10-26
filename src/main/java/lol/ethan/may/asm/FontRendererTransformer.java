@@ -1,10 +1,10 @@
 package lol.ethan.may.asm;
 
-import java.util.Collections;
-import java.util.List;
-import lol.ethan.may.asm.ITransformer;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
+
+import java.util.Collections;
+import java.util.List;
 
 public class FontRendererTransformer implements ITransformer {
     @Override

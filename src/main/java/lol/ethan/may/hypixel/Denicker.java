@@ -3,7 +3,9 @@ package lol.ethan.may.hypixel;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lol.ethan.may.Entry;
+import lol.ethan.may.events.PlayerListEvent;
 import lol.ethan.may.events.Priority;
+import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.events.player.NameFormatEvent;
 import lol.ethan.may.events.player.RenderPlayerInTabEvent;
 import lol.ethan.may.utils.ChatUtils;
@@ -16,8 +18,6 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.IChatComponent;
-import lol.ethan.may.events.PlayerListEvent;
-import lol.ethan.may.events.SubscribeEvent;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;

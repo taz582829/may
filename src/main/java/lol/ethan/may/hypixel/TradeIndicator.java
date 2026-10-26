@@ -3,14 +3,13 @@ package lol.ethan.may.hypixel;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.component.Button;
 import lol.ethan.may.config.component.ColorComponent;
+import lol.ethan.may.events.PacketEvent;
+import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.render.huds.BasicHud;
 import lol.ethan.may.render.huds.HUDHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.C02PacketUseEntity;
-import lol.ethan.may.events.PacketEvent;
-import lol.ethan.may.events.SubscribeEvent;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 

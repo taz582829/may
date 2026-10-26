@@ -1,33 +1,17 @@
 package lol.ethan.may.asm;
 
-import java.util.Collections;
-import java.util.List;
-import lol.ethan.may.asm.ASMUtils;
-import lol.ethan.may.asm.ITransformer;
-import lol.ethan.may.events.Event;
-import lol.ethan.may.events.EventBus;
-import lol.ethan.may.events.GuiCloseEvent;
-import lol.ethan.may.events.GuiOpenEvent;
-import lol.ethan.may.events.KeyboardEvent;
-import lol.ethan.may.events.MouseEvent;
-import lol.ethan.may.events.ShutdownEvent;
-import lol.ethan.may.events.TickEvent;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
+import lol.ethan.may.events.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.*;
+
+import java.util.Collections;
+import java.util.List;
 
 public class MinecraftTransformer implements ITransformer {
     @Override

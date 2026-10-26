@@ -1,9 +1,5 @@
 package lol.ethan.may.hypixel.bedwars;
 
-import lol.ethan.may.events.LocationEvent;
-import lol.ethan.may.events.SubscribeEvent;
-import lol.ethan.may.events.WorldEvent;
-
 public class ResourceSpawnManager {
 
     public static int timeUntilEmerald = -1;

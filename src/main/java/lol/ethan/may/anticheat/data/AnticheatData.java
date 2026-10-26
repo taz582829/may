@@ -1,16 +1,16 @@
 package lol.ethan.may.anticheat.data;
 
 import lol.ethan.may.anticheat.AnticheatFlag;
+import lol.ethan.may.events.PacketEvent;
+import lol.ethan.may.events.SubscribeEvent;
+import lol.ethan.may.events.TickEvent;
+import lol.ethan.may.events.WorldEvent;
 import lol.ethan.may.events.player.NameFormatEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S0BPacketAnimation;
 import net.minecraft.util.MovingObjectPosition;
-import lol.ethan.may.events.PacketEvent;
-import lol.ethan.may.events.SubscribeEvent;
-import lol.ethan.may.events.TickEvent;
-import lol.ethan.may.events.WorldEvent;
 
 import java.util.*;
 

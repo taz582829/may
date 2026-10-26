@@ -1,20 +1,6 @@
 package lol.ethan.may.asm;
 
-import java.util.Collections;
-import java.util.List;
-import lol.ethan.may.asm.ITransformer;
 import lol.ethan.may.config.Config;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
 import lol.ethan.may.utils.ColorUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -24,6 +10,13 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
+
+import java.util.Collections;
+import java.util.List;
 
 public class HitboxesHook implements ITransformer {
     @Override

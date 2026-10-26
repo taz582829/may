@@ -10,7 +10,6 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class DuelsTabStats extends TabStats {

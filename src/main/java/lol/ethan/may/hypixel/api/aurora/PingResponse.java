@@ -1,7 +1,8 @@
 package lol.ethan.may.hypixel.api.aurora;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class PingResponse{
 

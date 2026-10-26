@@ -1,25 +1,16 @@
 package lol.ethan.may.asm;
 
-import java.util.Collections;
-import java.util.List;
-
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.RenderGameOverlayEvent;
 import lol.ethan.may.events.RenderXPEvent;
 import lol.ethan.may.events.ScoreboardLineEvent;
+import net.minecraft.scoreboard.Team;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
-import net.minecraft.scoreboard.Team;
+import org.objectweb.asm.tree.*;
+
+import java.util.Collections;
+import java.util.List;
 
 public class GuiIngameHook implements ITransformer {
     private static final String CALLBACK_INFO_CLASS = "org/spongepowered/asm/mixin/injection/callback/CallbackInfo";

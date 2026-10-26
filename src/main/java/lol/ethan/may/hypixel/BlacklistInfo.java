@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import lol.ethan.may.Entry;
 import lol.ethan.may.config.Config;
 import lol.ethan.may.events.PlayerListEvent;
+import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.events.player.NameFormatEvent;
 import lol.ethan.may.events.player.RenderPlayerInTabEvent;
 import lol.ethan.may.hypixel.api.urchin.TagsItem;
@@ -12,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.StringUtils;
-import lol.ethan.may.events.SubscribeEvent;
 
 import java.util.HashMap;
 import java.util.Map;

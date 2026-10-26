@@ -4,9 +4,7 @@ import lol.ethan.may.hypixel.HypixelUtils;
 import lol.ethan.may.hypixel.modapi.LocationData;
 import net.hypixel.data.type.GameType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C10PacketCreativeInventoryAction;
 import net.minecraft.world.WorldSettings;
 

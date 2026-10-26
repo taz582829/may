@@ -1,9 +1,7 @@
 package lol.ethan.may;
 
 import lol.ethan.may.events.*;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C01PacketChatMessage;
-import net.minecraft.network.play.server.S02PacketChat;
 
 public class ChatListener {
     @SubscribeEvent(priority = Priority.HIGHEST)

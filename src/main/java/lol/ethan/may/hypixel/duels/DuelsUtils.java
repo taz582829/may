@@ -2,19 +2,18 @@ package lol.ethan.may.hypixel.duels;
 
 import com.google.gson.JsonObject;
 import lol.ethan.may.Entry;
+import lol.ethan.may.events.ChatEvent;
 import lol.ethan.may.events.LocationEvent;
+import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.hypixel.HypixelUtils;
-import lol.ethan.may.hypixel.api.aurora.AuroraAPI;
-import lol.ethan.may.hypixel.modapi.LocationData;
 import lol.ethan.may.hypixel.api.HypixelAPI;
+import lol.ethan.may.hypixel.api.aurora.AuroraAPI;
 import lol.ethan.may.hypixel.api.responses.PlayerResponse;
+import lol.ethan.may.hypixel.modapi.LocationData;
 import lol.ethan.may.utils.*;
 import net.hypixel.data.type.GameType;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import lol.ethan.may.events.ChatEvent;
-import lol.ethan.may.events.SubscribeEvent;
 
 import java.util.Arrays;
 import java.util.List;

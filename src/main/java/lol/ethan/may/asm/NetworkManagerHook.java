@@ -1,23 +1,14 @@
 package lol.ethan.may.asm;
 
-import java.util.Collections;
-import java.util.List;
-import lol.ethan.may.asm.ASMUtils;
-import lol.ethan.may.asm.ITransformer;
 import lol.ethan.may.events.ClientDisconnectFromServerEvent;
 import lol.ethan.may.events.Event;
 import lol.ethan.may.events.PacketEvent;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
+import org.objectweb.asm.tree.*;
+
+import java.util.Collections;
+import java.util.List;
 
 public class NetworkManagerHook implements ITransformer {
     @Override

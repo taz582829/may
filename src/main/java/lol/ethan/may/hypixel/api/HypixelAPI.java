@@ -5,15 +5,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import lol.ethan.may.config.Config;
 import lol.ethan.may.hypixel.api.responses.PlayerResponse;
-import lol.ethan.may.hypixel.bedwars.BedwarsUtils;
+import lol.ethan.may.hypixel.bedwars.stats.PrestigeScheme;
+import lol.ethan.may.hypixel.bedwars.stats.PrestigeSchemes;
 import lol.ethan.may.utils.*;
-import lol.ethan.may.hypixel.bedwars.stats.*;
 import net.minecraft.util.EnumChatFormatting;
 
-import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 

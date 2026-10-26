@@ -1,16 +1,15 @@
 package lol.ethan.may.asm;
 
-import java.util.Collections;
-import java.util.List;
-import lol.ethan.may.asm.ASMUtils;
-import lol.ethan.may.asm.ITransformer;
 import lol.ethan.may.events.PlayerListEvent;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-import net.minecraft.network.play.server.S38PacketPlayerListItem;
+
+import java.util.Collections;
+import java.util.List;
 
 public class NetHandlerPlayClientTransformer implements ITransformer {
     @Override

@@ -4,6 +4,8 @@ import lol.ethan.may.Entry;
 import lol.ethan.may.anticheat.AnticheatFlag;
 import lol.ethan.may.anticheat.data.AnticheatData;
 import lol.ethan.may.config.Config;
+import lol.ethan.may.events.PacketEvent;
+import lol.ethan.may.events.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
@@ -11,8 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S25PacketBlockBreakAnim;
 import net.minecraft.util.EnumChatFormatting;
-import lol.ethan.may.events.PacketEvent;
-import lol.ethan.may.events.SubscribeEvent;
 
 public class NoBreakDelay extends AnticheatFlag {
     public NoBreakDelay() {

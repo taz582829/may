@@ -2,7 +2,6 @@
 package lol.ethan.may.hypixel.bedwars.stats;
 
 import com.google.gson.JsonObject;
-import lol.ethan.may.Entry;
 import lol.ethan.may.hypixel.api.HypixelAPI;
 import lol.ethan.may.hypixel.api.aurora.AuroraAPI;
 import lol.ethan.may.hypixel.api.aurora.PingData;
@@ -16,7 +15,9 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class BedwarsTabStats extends TabStats {
     @Override

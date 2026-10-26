@@ -1,8 +1,6 @@
 package lol.ethan.may.config;
 
-import com.google.gson.JsonObject;
 import lol.ethan.may.Entry;
-import lol.ethan.may.config.component.Button;
 import lol.ethan.may.config.component.Component;
 import lol.ethan.may.config.component.HUDComponent;
 import lol.ethan.may.config.component.TextBox;
@@ -10,16 +8,13 @@ import lol.ethan.may.render.ScissorUtils;
 import lol.ethan.may.render.huds.HUDHelper;
 import lol.ethan.may.utils.GuiUtils;
 import lol.ethan.may.utils.JsonUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 

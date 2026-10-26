@@ -1,19 +1,15 @@
 package lol.ethan.may.asm;
 
-import java.util.Collections;
-import java.util.List;
-import lol.ethan.may.asm.ITransformer;
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.WorldEvent;
 import lol.ethan.may.mappings.Mappings;
+import net.minecraft.client.multiplayer.WorldClient;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
-import net.minecraft.client.multiplayer.WorldClient;
+import org.objectweb.asm.tree.*;
+
+import java.util.Collections;
+import java.util.List;
 
 public class WorldTransformer implements ITransformer {
     Mappings.MappingType mappings = Mappings.getMappingType();

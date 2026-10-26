@@ -1,21 +1,16 @@
 package lol.ethan.may.asm;
 
-import java.util.Collections;
-import java.util.List;
-
 import lol.ethan.may.events.EventBus;
-import lol.ethan.may.events.player.RenderPlayerInTabEvent;
 import lol.ethan.may.events.player.PlayerPingEvent;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
+import lol.ethan.may.events.player.RenderPlayerInTabEvent;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.IChatComponent;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.*;
+
+import java.util.Collections;
+import java.util.List;
 
 public class NetworkPlayerInfoTransformer implements ITransformer {
     private final String formatNameDesc = "(Lnet/minecraft/util/IChatComponent;Lnet/minecraft/client/network/NetworkPlayerInfo;)L" + Type.getInternalName(IChatComponent.class) + ";";

@@ -1,7 +1,6 @@
 package lol.ethan.may.config.component;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import lol.ethan.may.Entry;
 import lol.ethan.may.config.Category;

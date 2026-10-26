@@ -6,9 +6,9 @@ import lol.ethan.may.Entry;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.ClickGUI;
 import lol.ethan.may.config.component.text.NumberTextBox;
+import lol.ethan.may.events.EventBus;
 import lol.ethan.may.render.huds.BasicHud;
 import lol.ethan.may.render.huds.HUDHelper;
-import lol.ethan.may.events.EventBus;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static lol.ethan.may.config.component.Button.ENABLED_COLOR;
 import static lol.ethan.may.config.component.Button.DISABLED_COLOR;
+import static lol.ethan.may.config.component.Button.ENABLED_COLOR;
 
 public class HUDComponent extends Component {
     public BasicHud hud;

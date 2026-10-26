@@ -1,7 +1,9 @@
 package lol.ethan.may.hypixel;
 
 import io.netty.buffer.Unpooled;
-import lol.ethan.may.events.*;
+import lol.ethan.may.events.EventBus;
+import lol.ethan.may.events.PacketEvent;
+import lol.ethan.may.events.SubscribeEvent;
 import net.hypixel.modapi.HypixelModAPI;
 import net.hypixel.modapi.HypixelModAPIImplementation;
 import net.hypixel.modapi.packet.HypixelPacket;

@@ -1,7 +1,6 @@
 package lol.ethan.may.hypixel.api.responses;
 
 import com.google.gson.JsonObject;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Response {
     private boolean success;

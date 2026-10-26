@@ -1,7 +1,6 @@
 package lol.ethan.may.housing;
 
 import lol.ethan.may.render.huds.BasicHud;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 

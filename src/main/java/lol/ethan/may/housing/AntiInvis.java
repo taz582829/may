@@ -6,7 +6,6 @@ import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.events.player.NameFormatEvent;
 import lol.ethan.may.events.player.RenderLivingEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.Collections;

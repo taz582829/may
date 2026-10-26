@@ -2,7 +2,6 @@ package lol.ethan.may.hypixel.duels;
 
 import lol.ethan.may.render.huds.BasicHud;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

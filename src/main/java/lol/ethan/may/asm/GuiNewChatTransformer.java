@@ -1,14 +1,15 @@
 package lol.ethan.may.asm;
 
 import lol.ethan.may.events.ChatEvent;
-import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.util.IChatComponent;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
-import static lol.ethan.may.asm.ASMUtils.*;
+
 import java.util.Collections;
 import java.util.List;
+
+import static lol.ethan.may.asm.ASMUtils.*;
 
 public class GuiNewChatTransformer implements ITransformer {
     @Override

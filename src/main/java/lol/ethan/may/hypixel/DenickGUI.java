@@ -2,7 +2,6 @@ package lol.ethan.may.hypixel;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 
 public class DenickGUI extends GuiScreen {
     @Override

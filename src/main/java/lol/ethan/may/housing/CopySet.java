@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C10PacketCreativeInventoryAction;
 import net.minecraft.util.MovingObjectPosition;
 

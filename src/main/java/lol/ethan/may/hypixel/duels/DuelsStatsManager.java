@@ -1,6 +1,8 @@
 package lol.ethan.may.hypixel.duels;
 
 import com.mojang.authlib.GameProfile;
+import lol.ethan.may.events.ChatEvent;
+import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.events.player.NameFormatEvent;
 import lol.ethan.may.events.player.PlayerPingEvent;
 import lol.ethan.may.events.player.RenderPlayerInTabEvent;
@@ -12,10 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import lol.ethan.may.events.ChatEvent;
-import lol.ethan.may.events.SubscribeEvent;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 public class DuelsStatsManager {

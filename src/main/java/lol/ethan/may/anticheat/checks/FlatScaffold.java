@@ -1,13 +1,13 @@
 package lol.ethan.may.anticheat.checks;
 
-import lol.ethan.may.anticheat.data.AnticheatData;
 import lol.ethan.may.anticheat.AnticheatFlag;
+import lol.ethan.may.anticheat.data.AnticheatData;
+import lol.ethan.may.events.SubscribeEvent;
+import lol.ethan.may.events.TickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.EnumChatFormatting;
-import lol.ethan.may.events.SubscribeEvent;
-import lol.ethan.may.events.TickEvent;
 
 public class FlatScaffold extends AnticheatFlag {
     public FlatScaffold() {

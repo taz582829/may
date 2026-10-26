@@ -1,18 +1,12 @@
 package lol.ethan.may.hypixel.modapi;
 
 import com.google.common.base.Objects;
-import lol.ethan.may.Entry;
+import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.LocationEvent;
-import lol.ethan.may.hypixel.HypixelUtils;
-import lol.ethan.may.utils.JsonUtils;
 import net.hypixel.data.type.GameType;
 import net.hypixel.data.type.ServerType;
 import net.hypixel.modapi.HypixelModAPI;
 import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket;
-import net.minecraft.util.StringUtils;
-import lol.ethan.may.events.ChatEvent;
-import lol.ethan.may.events.EventBus;
-import lol.ethan.may.events.SubscribeEvent;
 
 /*
 {"server":"dynamiclobby4D","gametype":"TNTGAMES","lobbyname":"tntlobby3"}

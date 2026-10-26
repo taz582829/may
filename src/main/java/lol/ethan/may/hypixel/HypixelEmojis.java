@@ -1,6 +1,5 @@
 package lol.ethan.may.hypixel;
 
-import net.minecraft.network.play.client.C01PacketChatMessage;
 import lol.ethan.may.events.PacketEvent;
 import lol.ethan.may.events.SubscribeEvent;
 

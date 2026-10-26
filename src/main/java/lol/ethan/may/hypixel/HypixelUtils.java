@@ -7,7 +7,6 @@ import lol.ethan.may.utils.JsonUtils;
 import lol.ethan.may.utils.TimeUtils;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 public class HypixelUtils {
     public static boolean isOnHypixel() {
