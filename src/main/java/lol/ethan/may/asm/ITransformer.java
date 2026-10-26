@@ -14,7 +14,7 @@ import java.security.ProtectionDomain;
 import java.util.List;
 
 public interface ITransformer extends ClassFileTransformer {
-    void transform(ClassNode var1);
+    void transform(ClassNode node);
 
     List<String> getTargets();
 
@@ -30,25 +30,18 @@ public interface ITransformer extends ClassFileTransformer {
         try {
             ClassNode node = new ClassNode();
             ClassReader reader = new ClassReader(bytes);
-            reader.accept(node, 8);
-            this.transform(node);
-            int flags = 1;
-            if (this.shouldComputeFrames()) {
-                flags |= 2;
-            }
+            int flags = ClassWriter.COMPUTE_MAXS;
+            if (shouldComputeFrames()) flags |= ClassWriter.COMPUTE_FRAMES;
             ClassWriter writer = new ClassWriter(reader, flags) {
                 @Override
                 protected String getCommonSuperClass(String type1, String type2) {
-                    Class<?> class2;
                     Class<?> class1;
-                    if (!shouldComputeFrames()) {
-                        return super.getCommonSuperClass(type1, type2);
-                    }
                     try {
                         class1 = Class.forName(type1.replace('/', '.'), false, loader);
                     } catch (ClassNotFoundException e) {
                         throw new TypeNotPresentException(type1, e);
                     }
+                    Class<?> class2;
                     try {
                         class2 = Class.forName(type2.replace('/', '.'), false, loader);
                     } catch (ClassNotFoundException e) {
@@ -62,23 +55,25 @@ public interface ITransformer extends ClassFileTransformer {
                     }
                     if (class1.isInterface() || class2.isInterface()) {
                         return "java/lang/Object";
+                    } else {
+                        do {
+                            class1 = class1.getSuperclass();
+                        } while (!class1.isAssignableFrom(class2));
+                        return class1.getName().replace('.', '/');
                     }
-                    return class1.getName().replace('.', '/');
                 }
             };
             node.accept(writer);
-            byte[] transformedBytes = writer.toByteArray();
-            if (transformedBytes != bytes) {
-                File debugFolder = new File(Entry.FILE_PATH, "debug");
-                if (!debugFolder.exists()) {
-                    debugFolder.mkdirs();
-                }
-                Files.write(new File(debugFolder, target.getSimpleName() + "_transformed.class").toPath(), writer.toByteArray());
+            byte[] transformed = writer.toByteArray();
+            File file = new File(new File(Entry.FILE_PATH, "debug"), target.getSimpleName() + "_transformed.class");
+            if (!file.exists()) {
+                file.mkdirs();
             }
-            return transformedBytes;
-        } catch (Throwable e) {
-            e.printStackTrace();
-            return null;
+            Files.write(file.toPath(), transformed);
+            return transformed;
+        } catch (Exception e) {
+            System.out.println(target.getName() + " failed to transform! (" + this.getClass().getName() + ")");
+            throw new RuntimeException(e);
         }
     }
 

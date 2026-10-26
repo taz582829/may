@@ -7,20 +7,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class PlayerResponse extends Response {
     public Player player;
-
-    public String toString() {
-        return new ToStringBuilder(this).append("player", this.player).toString();
-    }
-
     public static class Player {
-        @SerializedName(value = "_id")
+        @SerializedName("_id")
         public String hypixelId;
         public String uuid;
-        @SerializedName(value = "displayname")
+        @SerializedName("displayname")
         public String ign;
         public long firstLogin;
         public long lastLogin;
@@ -45,42 +41,48 @@ public class PlayerResponse extends Response {
         public int achievementPoints;
 
         public String getRankField() {
-            if (this.prefix != null) {
-                return "prefix";
-            }
-            if (this.rank != null) {
-                return "rank";
-            }
-            if (this.monthlyPackageRank != null && !this.monthlyPackageRank.equalsIgnoreCase("NONE")) {
-                return "monthlyPackageRank";
-            }
-            if (this.newPackageRank != null) {
-                return "newPackageRank";
-            }
-            if (this.packageRank != null) {
-                return "packageRank";
-            }
+            if (prefix != null) return "prefix";
+            if (rank != null) return "rank";
+            if (monthlyPackageRank != null && !monthlyPackageRank.equalsIgnoreCase("NONE")) return "monthlyPackageRank";
+            if (newPackageRank != null) return "newPackageRank";
+            if (packageRank != null) return "packageRank";
             return null;
         }
-
         public LocalDateTime getFirstLogin() {
-            return LocalDateTime.ofInstant(Instant.ofEpochMilli(this.firstLogin), ZoneId.of("America/New_York"));
+            return LocalDateTime.ofInstant(Instant.ofEpochMilli(firstLogin), ZoneId.of("America/New_York"));
         }
-
         public LocalDateTime getLastLogin() {
-            if (this.lastLogin == 0L) {
-                return null;
-            }
-            return LocalDateTime.ofInstant(Instant.ofEpochMilli(this.lastLogin), ZoneId.of("America/New_York"));
+            if (lastLogin == 0) return null;
+            return LocalDateTime.ofInstant(Instant.ofEpochMilli(lastLogin), ZoneId.of("America/New_York"));
         }
-
         public boolean exists() {
-            return this.hypixelId != null;
+            return hypixelId != null;
         }
-
+        @Override
         public String toString() {
-            return new ToStringBuilder(this).append("hypixelId", this.hypixelId).append("uuid", this.uuid).append("firstLogin", this.firstLogin).append("lastLogin", this.lastLogin).append("achievementsOneTime", this.achievementsOneTime).append("stats", this.stats).append("achievements", this.achievements).append("housingMeta", this.housingMeta).append("channel", this.channel).append("mostRecentGameType", this.mostRecentGameType).append("giftingMeta", this.giftingMeta).append("rankPlusColor", this.rankPlusColor).append("monthlyPackageRank", this.monthlyPackageRank).append("newPackageRank", this.newPackageRank).toString();
+            return new ToStringBuilder(this)
+                    .append("hypixelId", hypixelId)
+                    .append("uuid", uuid)
+                    .append("firstLogin", firstLogin)
+                    .append("lastLogin", lastLogin)
+                    .append("achievementsOneTime", achievementsOneTime)
+                    .append("stats", stats)
+                    .append("achievements", achievements)
+                    .append("housingMeta", housingMeta)
+                    .append("channel", channel)
+                    .append("mostRecentGameType", mostRecentGameType)
+                    .append("giftingMeta", giftingMeta)
+                    .append("rankPlusColor", rankPlusColor)
+                    .append("monthlyPackageRank", monthlyPackageRank)
+                    .append("newPackageRank", newPackageRank)
+                    .toString();
         }
     }
-}
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("player", player)
+                .toString();
+    }
+}

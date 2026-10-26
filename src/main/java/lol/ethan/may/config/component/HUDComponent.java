@@ -6,9 +6,10 @@ import lol.ethan.may.Entry;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.ClickGUI;
 import lol.ethan.may.config.component.text.NumberTextBox;
-import lol.ethan.may.events.EventBus;
 import lol.ethan.may.render.huds.BasicHud;
 import lol.ethan.may.render.huds.HUDHelper;
+import lol.ethan.may.events.EventBus;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -16,40 +17,39 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class HUDComponent extends Component {
-    public final List<Component> DEFAULT_HUD_COMPONENTS;
-    public BasicHud hud;
+import static lol.ethan.may.config.component.Button.ENABLED_COLOR;
+import static lol.ethan.may.config.component.Button.DISABLED_COLOR;
 
+public class HUDComponent extends Component {
+    public BasicHud hud;
+    public final List<Component> DEFAULT_HUD_COMPONENTS;
     public HUDComponent(String name, Category category, BasicHud hud) {
         super(name, category);
         this.hud = hud;
         EventBus.subscribe(hud);
-        this.DEFAULT_HUD_COMPONENTS = new ArrayList<>(Arrays.asList(new Button("Background", category, val -> {
-            hud.background = val;
-        }), new Button("Text Shadow", category, val -> {
-            hud.shadow = val;
-        }), new NumberTextBox("Padding", category, NumberTextBox.TextBoxType.INT, 2, p -> {
-            hud.padding = p.intValue();
-        }), new Button("Right Align", category, val -> {
-            hud.rightAlign = val;
-        }), new HUDMove("Move HUD", category, hud), new NumberTextBox("Scale", category, NumberTextBox.TextBoxType.FLOAT, 1.0, num -> {
-            hud.scale = num.floatValue();
-        }), new ColorComponent("Background Color", category, i -> {
-            hud.bgColor = i;
-        }), new NumberTextBox("Background Alpha", category, NumberTextBox.TextBoxType.INT, 50, val -> {
-            hud.bgAlpha = val.intValue();
-        })));
+        DEFAULT_HUD_COMPONENTS = new ArrayList<>(Arrays.asList(
+                new Button("Background", category, (val) -> hud.background = val),
+                new Button("Text Shadow", category, (val) -> hud.shadow = val),
+                new NumberTextBox("Padding", category, NumberTextBox.TextBoxType.INT, 2, p -> hud.padding = p.intValue()),
+                new Button("Right Align", category, (val) -> hud.rightAlign = val),
+                new HUDMove("Move HUD", category, hud),
+                new NumberTextBox("Scale", category, NumberTextBox.TextBoxType.FLOAT, 1.0, (num) -> hud.scale = num.floatValue()),
+                new ColorComponent("Background Color", category, i -> hud.bgColor = i),
+                new NumberTextBox("Background Alpha", category, NumberTextBox.TextBoxType.INT, 50, val -> hud.bgAlpha = val.intValue())
+        ));
     }
 
+
+
     public List<Component> getHudComponents() {
-        ArrayList<Component> components = new ArrayList<>(this.DEFAULT_HUD_COMPONENTS);
+        List<Component> components = new ArrayList<>(DEFAULT_HUD_COMPONENTS);
         try {
-            for (Field field : this.hud.getClass().getDeclaredFields()) {
+            for (Field field : hud.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
-                Object value = field.get(this.hud);
-                if (!Modifier.isPublic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()) || Modifier.isStatic(field.getModifiers()) || !(value instanceof Component))
-                    continue;
-                components.add((Component) value);
+                Object value = field.get(hud);
+                // fields are expected to be public, not static, and not transient
+                if (!Modifier.isPublic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()) || Modifier.isStatic(field.getModifiers())) continue;
+                if (value instanceof Component) components.add((Component) value);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -59,20 +59,27 @@ public class HUDComponent extends Component {
 
     @Override
     public void init(ClickGUI clickGUI) {
+
     }
 
     @Override
     public void drawComponent(int componentX, int componentY, int guiX, int guiY, int guiWidth, int guiHeight) {
         int rowWidth = guiWidth - ClickGUI.sidebarWidth;
         int boxX = componentX + rowWidth - 16;
-        int boxY = componentY + (this.componentHeight - 10) / 2;
-        HUDHelper.drawRect(boxX, boxY, 10, 10, this.hud.enabled ? Button.ENABLED_COLOR : Button.DISABLED_COLOR);
-        this.mc.fontRendererObj.drawStringWithShadow(this.name + " §e(Right Click)", (float) (componentX + 12), (float) componentY + (float) (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2.0f, -1);
+        int boxY = componentY + (componentHeight - 10) / 2;
+
+        HUDHelper.drawRect(boxX, boxY, 10, 10, hud.enabled ? ENABLED_COLOR : DISABLED_COLOR);
+        mc.fontRendererObj.drawStringWithShadow(
+                name + " §e(Right Click)",
+                componentX + 12,
+                componentY + (componentHeight - mc.fontRendererObj.FONT_HEIGHT) / 2f,
+                -1
+        );
     }
 
     @Override
     public void onClick() {
-        this.hud.enabled = !this.hud.enabled;
+        hud.enabled = !hud.enabled;
         Entry.playClickSound();
     }
 
@@ -84,27 +91,33 @@ public class HUDComponent extends Component {
 
     @Override
     public void onKeyPress(char c, int code) {
+
     }
 
     @Override
     public void onMouseClick(int x, int y, int button) {
+
     }
 
     @Override
     public void onScroll(int direction) {
+
     }
 
     @Override
     public JsonElement serialize() {
-        JsonObject obj = this.getHUDObject();
+        JsonObject obj = getHUDObject();
+
         try {
-            for (Field field : this.hud.getClass().getDeclaredFields()) {
-                Object value;
+            for (Field field : hud.getClass().getDeclaredFields()) {
                 int mods = field.getModifiers();
-                if (!Modifier.isPublic(mods) || Modifier.isTransient(mods) || !((value = field.get(this.hud)) instanceof Component))
-                    continue;
-                Component comp = (Component) value;
-                obj.add(field.getName(), comp.serialize());
+                if (Modifier.isPublic(mods) && !Modifier.isTransient(mods)) {
+                    Object value = field.get(hud);
+                    if (value instanceof Component) {
+                        Component comp = (Component) value;
+                        obj.add(field.getName(), comp.serialize());
+                    }
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -112,46 +125,47 @@ public class HUDComponent extends Component {
         return obj;
     }
 
-    private JsonObject getHUDObject() {
+    private @NotNull JsonObject getHUDObject() {
         JsonObject obj = new JsonObject();
-        obj.addProperty("enabled", Boolean.valueOf(this.hud.enabled));
-        obj.addProperty("background", Boolean.valueOf(this.hud.background));
-        obj.addProperty("shadow", Boolean.valueOf(this.hud.shadow));
-        obj.addProperty("x", Float.valueOf(this.hud.x));
-        obj.addProperty("y", Float.valueOf(this.hud.y));
-        obj.addProperty("scale", Float.valueOf(this.hud.scale));
-        obj.addProperty("bgColor", this.hud.bgColor);
-        obj.addProperty("bgAlpha", this.hud.bgAlpha);
-        obj.addProperty("padding", this.hud.padding);
-        obj.addProperty("rightAlign", Boolean.valueOf(this.hud.rightAlign));
+        obj.addProperty("enabled", hud.enabled);
+        obj.addProperty("background", hud.background);
+        obj.addProperty("shadow", hud.shadow);
+        obj.addProperty("x", hud.x);
+        obj.addProperty("y", hud.y);
+        obj.addProperty("scale", hud.scale);
+        obj.addProperty("bgColor", hud.bgColor);
+        obj.addProperty("bgAlpha", hud.bgAlpha);
+        obj.addProperty("padding", hud.padding);
+        obj.addProperty("rightAlign", hud.rightAlign);
         return obj;
     }
 
     @Override
     public void load(JsonElement element) {
         JsonObject obj = element.getAsJsonObject();
-        this.hud.enabled = obj.get("enabled").getAsBoolean();
-        this.hud.background = obj.get("background").getAsBoolean();
-        this.hud.shadow = obj.get("shadow").getAsBoolean();
-        this.hud.x = obj.get("x").getAsFloat();
-        this.hud.y = obj.get("y").getAsFloat();
-        this.hud.scale = obj.get("scale").getAsFloat();
-        this.hud.bgColor = obj.get("bgColor").getAsInt();
-        this.hud.bgAlpha = obj.get("bgAlpha").getAsInt();
-        this.hud.padding = obj.get("padding").getAsInt();
-        this.hud.rightAlign = obj.get("rightAlign").getAsBoolean();
+        hud.enabled = obj.get("enabled").getAsBoolean();
+        hud.background = obj.get("background").getAsBoolean();
+        hud.shadow = obj.get("shadow").getAsBoolean();
+        hud.x = obj.get("x").getAsFloat();
+        hud.y = obj.get("y").getAsFloat();
+        hud.scale = obj.get("scale").getAsFloat();
+        hud.bgColor = obj.get("bgColor").getAsInt();
+        hud.bgAlpha = obj.get("bgAlpha").getAsInt();
+        hud.padding = obj.get("padding").getAsInt();
+        hud.rightAlign = obj.get("rightAlign").getAsBoolean();
         try {
-            for (Field field : this.hud.getClass().getDeclaredFields()) {
-                Object value;
+            for (Field field : hud.getClass().getDeclaredFields()) {
                 int mods = field.getModifiers();
-                if (!Modifier.isPublic(mods) || Modifier.isTransient(mods) || !((value = field.get(this.hud)) instanceof Component))
-                    continue;
-                Component comp = (Component) value;
-                comp.load(obj.get(field.getName()));
+                if (Modifier.isPublic(mods) && !Modifier.isTransient(mods)) {
+                    Object value = field.get(hud);
+                    if (value instanceof Component) {
+                        Component comp = (Component) value;
+                        comp.load(obj.get(field.getName()));
+                    }
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 }
-

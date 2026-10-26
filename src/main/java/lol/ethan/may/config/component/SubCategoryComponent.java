@@ -9,37 +9,43 @@ import java.util.List;
 
 public class SubCategoryComponent extends Component {
     public List<Component> components = new ArrayList<>();
-
     public SubCategoryComponent(String name, Category category) {
         super(name, category);
     }
 
     @Override
     public void init(ClickGUI clickGUI) {
+
     }
 
     @Override
     public void drawComponent(int componentX, int componentY, int guiX, int guiY, int guiWidth, int guiHeight) {
+
     }
 
     @Override
     public void onClick() {
+
     }
 
     @Override
     public void onRightClick() {
+
     }
 
     @Override
     public void onKeyPress(char c, int code) {
+
     }
 
     @Override
     public void onMouseClick(int x, int y, int button) {
+
     }
 
     @Override
     public void onScroll(int direction) {
+
     }
 
     @Override
@@ -49,6 +55,6 @@ public class SubCategoryComponent extends Component {
 
     @Override
     public void load(JsonElement element) {
+
     }
 }
-

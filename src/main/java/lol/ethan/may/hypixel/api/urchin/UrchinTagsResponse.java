@@ -1,27 +1,28 @@
 package lol.ethan.may.hypixel.api.urchin;
 
+import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+public class UrchinTagsResponse{
 
-public class UrchinTagsResponse {
-    @SerializedName(value = "displayname")
-    private String displayname;
-    @SerializedName(value = "uuid")
-    private String uuid;
-    @SerializedName(value = "tags")
-    private List<TagsItem> tags;
+	@SerializedName("displayname")
+	private String displayname;
 
-    public String getDisplayname() {
-        return this.displayname;
-    }
+	@SerializedName("uuid")
+	private String uuid;
 
-    public String getUuid() {
-        return this.uuid;
-    }
+	@SerializedName("tags")
+	private List<TagsItem> tags;
 
-    public List<TagsItem> getTags() {
-        return this.tags;
-    }
+	public String getDisplayname(){
+		return displayname;
+	}
+
+	public String getUuid(){
+		return uuid;
+	}
+
+	public List<TagsItem> getTags(){
+		return tags;
+	}
 }
-

@@ -1,6 +1,8 @@
+
 package lol.ethan.may.hypixel.bedwars.stats;
 
 import com.google.gson.JsonObject;
+import lol.ethan.may.Entry;
 import lol.ethan.may.hypixel.api.HypixelAPI;
 import lol.ethan.may.hypixel.api.aurora.AuroraAPI;
 import lol.ethan.may.hypixel.api.aurora.PingData;
@@ -12,22 +14,15 @@ import lol.ethan.may.utils.JsonUtils;
 import lol.ethan.may.utils.UUIDUtils;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class BedwarsTabStats extends TabStats {
     @Override
     protected String getDisplayName(NetworkPlayerInfo playerInfo, IStats stats) {
-        if (customDisplayNames.containsKey(playerInfo.getGameProfile().getId())) {
-            return customDisplayNames.get(playerInfo.getGameProfile().getId());
-        }
-        if (stats == null) {
-            return ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c?";
-        }
+        if (customDisplayNames.containsKey(playerInfo.getGameProfile().getId())) return customDisplayNames.get(playerInfo.getGameProfile().getId());
+        if (stats == null) return ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c?";
         List<String> statList = stats.getDisplayStats(playerInfo);
         return String.join(" ", statList);
     }
@@ -37,8 +32,7 @@ public class BedwarsTabStats extends TabStats {
         return new BedwarsStats();
     }
 
-    public static class BedwarsStats
-            implements IStats {
+    public static class BedwarsStats implements IStats {
         public UUID uuid;
         public String starsFormatted;
         public int finals;
@@ -54,23 +48,24 @@ public class BedwarsTabStats extends TabStats {
         public IStats buildStats(PlayerResponse.Player player, String mode) {
             int bwsLvl = JsonUtils.getInt(player.achievements, "bedwars_level", 0);
             JsonObject genStats = player.stats;
-            if (genStats == null) {
-                return null;
-            }
+            if (genStats == null) return null;
             JsonObject bedwarsStats = genStats.getAsJsonObject("Bedwars");
-            if (bedwarsStats == null) {
-                return null;
-            }
-            String starsFormatted = HypixelAPI.bedwarsLevelFormatted(bwsLvl, JsonUtils.getString(bedwarsStats, "active_star", "black_open"), JsonUtils.getString(bedwarsStats, "active_prestige_scheme", "prestige_scheme_none"), JsonUtils.getString(bedwarsStats, "active_prestige_bracket", ""));
+            if (bedwarsStats == null) return null;
+
+            String starsFormatted = HypixelAPI.bedwarsLevelFormatted(
+                    bwsLvl,
+                    JsonUtils.getString(bedwarsStats, "active_star", "black_open"),
+                    JsonUtils.getString(bedwarsStats, "active_prestige_scheme", "prestige_scheme_none"),
+                    JsonUtils.getString(bedwarsStats, "active_prestige_bracket", "")
+            );
             int finals = JsonUtils.getInt(bedwarsStats, "final_kills_bedwars", 0);
             int fds = JsonUtils.getInt(bedwarsStats, "final_deaths_bedwars", 0);
-            double fkdrRaw = (double) finals / (double) (fds == 0 ? 1 : fds);
+            double fkdrRaw = (double) finals / (fds == 0 ? 1 : fds);
             boolean zeroFds = fds == 0;
             String fkdr = HypixelAPI.fkdrFormatted(fkdrRaw);
             String otherTags = "";
-            if (zeroFds) {
-                otherTags = otherTags + "§5Z";
-            }
+            if (zeroFds) otherTags += "§5Z";
+
             this.uuid = UUID.fromString(UUIDUtils.dashUUID(player.uuid));
             this.starsFormatted = starsFormatted;
             this.finals = finals;
@@ -82,44 +77,41 @@ public class BedwarsTabStats extends TabStats {
             this.otherTags = otherTags;
             this.ping = 1;
             AuroraAPI.getPing(UUID.fromString(UUIDUtils.dashUUID(player.uuid))).whenComplete((res, err) -> {
-                if (!res.isSuccess()) {
-                    return;
-                }
+                if (!res.isSuccess()) return;
                 PingData data = res.getData().get(0);
                 this.ping = data.getAvg();
             });
-            if (this.winstreakEstimated) {
+            if (winstreakEstimated) {
                 AuroraAPI.getWinstreak(UUID.fromString(UUIDUtils.dashUUID(player.uuid))).whenComplete((res, err) -> {
-                    if (!res.isSuccess()) {
-                        return;
-                    }
+                    if (!res.isSuccess()) return;
                     WinstreakData data = res.getData();
                     this.winstreak = data.getWinstreak();
                 });
             }
+
+
             return this;
         }
 
         @Override
         public List<String> getDisplayStats(NetworkPlayerInfo playerInfo) {
-            ArrayList<String> stats = new ArrayList<>();
+
+            List<String> stats = new ArrayList<>();
             if (playerInfo.getGameProfile().getId().version() == 1) {
                 stats.add(ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()));
                 stats.add("§c[NICK]");
             }
-            stats.add(this.starsFormatted);
+            stats.add(starsFormatted);
             stats.add(ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()));
             stats.add("§7|");
-            stats.add(this.fkdrFormatted);
+            stats.add(fkdrFormatted);
             stats.add("§7|");
-            stats.add(EnumChatFormatting.YELLOW.toString() + (this.winstreakEstimated ? EnumChatFormatting.ITALIC : "") + this.winstreak);
+            stats.add(EnumChatFormatting.YELLOW.toString() + (winstreakEstimated ? EnumChatFormatting.ITALIC : "") + winstreak);
             return stats;
         }
 
-        @Override
         public int getPing() {
-            return this.ping;
+            return ping;
         }
     }
 }
-

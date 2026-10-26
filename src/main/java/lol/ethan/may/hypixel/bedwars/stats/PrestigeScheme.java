@@ -13,4 +13,3 @@ public class PrestigeScheme {
         this.key = key;
     }
 }
-

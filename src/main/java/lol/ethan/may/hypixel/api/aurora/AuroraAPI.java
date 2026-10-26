@@ -7,13 +7,10 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class AuroraAPI {
-
     public static CompletableFuture<PingResponse> getPing(UUID uuid) {
         return HttpUtils.get("https://api.bordic.xyz/v3/player/ping?uuid=" + uuid).thenApply(res -> JsonUtils.gson.fromJson(res, PingResponse.class));
     }
-
     public static CompletableFuture<WinstreakResponse> getWinstreak(UUID uuid) {
         return HttpUtils.get("https://api.bordic.xyz/v3/player/ping?uuid=" + uuid).thenApply(res -> JsonUtils.gson.fromJson(res, WinstreakResponse.class));
     }
 }
-

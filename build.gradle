@@ -17,8 +17,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     compileOnly files('libs/lunar.jar')
-    implementation files('libs/forgeBin-1.8.9-11.15.1.2318-1.8.9.jar')
-    implementation files('libs/tools.jar')
+    compileOnly files('libs/forgeBin-1.8.9-11.15.1.2318-1.8.9.jar')
+    compileOnly files('libs/tools.jar')
     implementation 'org.ow2.asm:asm:9.6'
     implementation 'org.ow2.asm:asm-tree:9.6'
     implementation 'org.ow2.asm:asm-util:9.5'
@@ -70,13 +70,18 @@ java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
-jar {
+
+shadowJar {
     manifest {
         attributes(
                 'Manifest-Version': '1.0',
-                'Agent-Class': 'lol.ethan.idk.Main',
+                'Agent-Class': 'lol.ethan.may.Main',
                 'Can-Redefine-Classes': 'true',
                 'Can-Retransform-Classes': 'true'
         )
     }
+    relocate 'net.hypixel', 'lol.ethan.may.shaded.hypixel'
+    relocate 'org.objectweb.asm', 'lol.ethan.may.shaded.asm'
+    destinationDirectory = file("C:/agent")
+    archiveFileName = "agent.jar"
 }

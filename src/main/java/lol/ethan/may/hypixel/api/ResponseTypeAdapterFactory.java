@@ -6,6 +6,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import lol.ethan.may.hypixel.api.responses.Response;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+
 public class ResponseTypeAdapterFactory implements TypeAdapterFactory {
 
     @Override

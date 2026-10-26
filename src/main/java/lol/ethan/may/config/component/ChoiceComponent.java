@@ -22,42 +22,41 @@ public class ChoiceComponent extends Component {
         this.consumer = consumer;
         for (int i = 0; i < children.length; i++) {
             String childName = children[i];
-            Button newBtn = new Button(childName, category, this.choice == i);
+            Button newBtn = new Button(childName, category, choice == i);
             this.children.add(newBtn);
         }
     }
-
     public ChoiceComponent(String name, Category category, String... children) {
         this(name, category, null, children);
     }
-
     public ChoiceComponent(String name, Category category, Consumer<Integer> consumer, Button... children) {
         super(name, category);
         this.consumer = consumer;
         this.children.addAll(Arrays.asList(children));
     }
-
     public ChoiceComponent(String name, Category category, Button... children) {
         this(name, category, null, children);
     }
 
     @Override
     public void init(ClickGUI clickGUI) {
-        this.componentHeight = 20;
-        for (Component component : this.children) {
-            component.init(clickGUI);
-            this.componentHeight += component.componentHeight;
+        componentHeight = 20;
+        for (Component comp : children) {
+            comp.init(clickGUI);
+            componentHeight += comp.componentHeight;
         }
     }
 
     @Override
     public void drawComponent(int componentX, int componentY, int guiX, int guiY, int guiWidth, int guiHeight) {
-        this.clipBottom = guiY + guiHeight;
-        this.mc.fontRendererObj.drawStringWithShadow(this.name, (float) componentX, (float) componentY + 5.5f, -1);
+        clipBottom = guiY + guiHeight;
+
+        mc.fontRendererObj.drawStringWithShadow(this.name, componentX, componentY + 5.5f, -1);
+
         int childY = componentY + 20;
-        for (int i = 0; i < this.children.size(); i++) {
-            if (this.scrollOffset > i) continue;
-            Component comp = this.children.get(i);
+        for (int i = 0; i < children.size(); i++) {
+            if (scrollOffset > i) continue;
+            Component comp = children.get(i);
             comp.x = componentX + 10;
             comp.y = childY;
             comp.drawComponent(componentX + 10, childY, guiX, guiY, guiWidth, guiHeight);
@@ -67,72 +66,73 @@ public class ChoiceComponent extends Component {
 
     @Override
     public void onClick() {
+
     }
 
     @Override
     public void onRightClick() {
+
     }
 
     @Override
     public void onKeyPress(char c, int code) {
-        for (Component component : this.children) {
-            if (!(component instanceof TextBox)) continue;
-            TextBox<?> tb = (TextBox<?>) component;
-            if (!tb.drawingField) continue;
-            tb.onKeyPress(c, code);
-            return;
+        for (Component comp : children) {
+            if (comp instanceof TextBox) {
+                TextBox tb = (TextBox) comp;
+                if (tb.drawingField) {
+                    tb.onKeyPress(c, code);
+                    return;
+                }
+            }
         }
     }
 
     @Override
     public void onMouseClick(int x, int y, int mb) {
-        Button btn;
-
         boolean disableAll = false;
-        for (int i = 0; i < this.children.size(); i++) {
-            if (ClickGUI.scrollOffset - this.scrollOffset > i) continue;
-            btn = this.children.get(i);
-            if (btn.y >= (float) this.clipBottom) continue;
+        for (int i = 0; i < children.size(); i++) {
+            if (ClickGUI.scrollOffset - scrollOffset > i) continue;
+            Button btn = children.get(i);
+            if (btn.y >= clipBottom) continue;
             btn.onMouseClick(x, y, mb);
-            if (!this.hoveringOn(x, y, btn, 10)) continue;
-            this.choice = i;
-            if (mb == 0) {
-                btn.onClick();
-                if (!btn.enabled) continue;
-                if (this.consumer != null) {
-                    this.consumer.accept(i);
+            if (hoveringOn(x, y, btn, 10)) {
+                choice = i;
+                if (mb == 0) {
+                    btn.onClick();
+                    if (btn.enabled) {
+                        if (consumer != null) consumer.accept(i);
+                        disableAll = true;
+                    }
+                } else if (mb == 1) {
+                    btn.onRightClick();
                 }
-                disableAll = true;
-                continue;
             }
-            if (mb != 1) continue;
-            btn.onRightClick();
         }
         if (disableAll) {
-            for (int i = 0; i < this.children.size(); i++) {
-                btn = this.children.get(i);
-                if (this.choice == i) continue;
-                btn.enabled = false;
+            for (int i = 0; i < children.size(); i++) {
+                Button btn = children.get(i);
+                if (choice != i) {
+                    btn.enabled = false;
+                }
             }
         }
     }
 
     @Override
     public void onScroll(int direction) {
-        this.scrollOffset = Math.max(0, this.scrollOffset + direction);
+        scrollOffset = Math.max(0, scrollOffset + direction);
     }
 
     @Override
     public JsonElement serialize() {
-        return new JsonPrimitive(this.choice);
+        return new JsonPrimitive(choice);
     }
 
     @Override
     public void load(JsonElement element) {
-        this.choice = element.getAsInt();
-        for (int i = 0; i < this.children.size(); i++) {
-            this.children.get(i).enabled = i == this.choice;
+        choice = element.getAsInt();
+        for (int i = 0; i < children.size(); i++) {
+            children.get(i).enabled = i == choice;
         }
     }
 }
-

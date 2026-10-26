@@ -1,21 +1,21 @@
 package lol.ethan.may.hypixel.api.trick;
 
+import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+public class TrickDenickResponse{
 
-public class TrickDenickResponse {
-    @SerializedName(value = "players")
-    private List<PlayersItem> players;
-    @SerializedName(value = "matches")
-    private int matches;
+	@SerializedName("players")
+	private List<PlayersItem> players;
 
-    public List<PlayersItem> getPlayers() {
-        return this.players;
-    }
+	@SerializedName("matches")
+	private int matches;
 
-    public int getMatches() {
-        return this.matches;
-    }
+	public List<PlayersItem> getPlayers(){
+		return players;
+	}
+
+	public int getMatches(){
+		return matches;
+	}
 }
-

@@ -3,65 +3,74 @@ package lol.ethan.may.hypixel.api.aurora;
 import com.google.gson.annotations.SerializedName;
 
 public class WinstreakData {
-    @SerializedName(value = "eight_one_winstreak")
-    private int eightOneWinstreak;
-    @SerializedName(value = "two_four_winstreak")
-    private int twoFourWinstreak;
-    @SerializedName(value = "four_four_winstreak")
-    private int fourFourWinstreak;
-    @SerializedName(value = "accurate_winstreak")
-    private Object accurateWinstreak;
-    @SerializedName(value = "winstreak")
-    private int winstreak;
-    @SerializedName(value = "estimated")
-    private boolean estimated;
-    @SerializedName(value = "eight_two_winstreak")
-    private int eightTwoWinstreak;
-    @SerializedName(value = "four_three_winstreak")
-    private int fourThreeWinstreak;
-    @SerializedName(value = "uuid")
-    private String uuid;
-    @SerializedName(value = "confirmed")
-    private long confirmed;
 
-    public int getEightOneWinstreak() {
-        return this.eightOneWinstreak;
-    }
+	@SerializedName("eight_one_winstreak")
+	private int eightOneWinstreak;
 
-    public int getTwoFourWinstreak() {
-        return this.twoFourWinstreak;
-    }
+	@SerializedName("two_four_winstreak")
+	private int twoFourWinstreak;
 
-    public int getFourFourWinstreak() {
-        return this.fourFourWinstreak;
-    }
+	@SerializedName("four_four_winstreak")
+	private int fourFourWinstreak;
 
-    public Object getAccurateWinstreak() {
-        return this.accurateWinstreak;
-    }
+	@SerializedName("accurate_winstreak")
+	private Object accurateWinstreak;
 
-    public int getWinstreak() {
-        return this.winstreak;
-    }
+	@SerializedName("winstreak")
+	private int winstreak;
 
-    public boolean isEstimated() {
-        return this.estimated;
-    }
+	@SerializedName("estimated")
+	private boolean estimated;
 
-    public int getEightTwoWinstreak() {
-        return this.eightTwoWinstreak;
-    }
+	@SerializedName("eight_two_winstreak")
+	private int eightTwoWinstreak;
 
-    public int getFourThreeWinstreak() {
-        return this.fourThreeWinstreak;
-    }
+	@SerializedName("four_three_winstreak")
+	private int fourThreeWinstreak;
 
-    public String getUuid() {
-        return this.uuid;
-    }
+	@SerializedName("uuid")
+	private String uuid;
 
-    public long getConfirmed() {
-        return this.confirmed;
-    }
+	@SerializedName("confirmed")
+	private long confirmed;
+
+	public int getEightOneWinstreak(){
+		return eightOneWinstreak;
+	}
+
+	public int getTwoFourWinstreak(){
+		return twoFourWinstreak;
+	}
+
+	public int getFourFourWinstreak(){
+		return fourFourWinstreak;
+	}
+
+	public Object getAccurateWinstreak(){
+		return accurateWinstreak;
+	}
+
+	public int getWinstreak(){
+		return winstreak;
+	}
+
+	public boolean isEstimated(){
+		return estimated;
+	}
+
+	public int getEightTwoWinstreak(){
+		return eightTwoWinstreak;
+	}
+
+	public int getFourThreeWinstreak(){
+		return fourThreeWinstreak;
+	}
+
+	public String getUuid(){
+		return uuid;
+	}
+
+	public long getConfirmed(){
+		return confirmed;
+	}
 }
-

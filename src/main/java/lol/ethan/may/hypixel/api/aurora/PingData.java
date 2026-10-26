@@ -3,35 +3,39 @@ package lol.ethan.may.hypixel.api.aurora;
 import com.google.gson.annotations.SerializedName;
 
 public class PingData {
-    @SerializedName(value = "min")
-    private int min;
-    @SerializedName(value = "avg")
-    private int avg;
-    @SerializedName(value = "max")
-    private int max;
-    @SerializedName(value = "day")
-    private String day;
-    @SerializedName(value = "timestamp")
-    private long timestamp;
 
-    public int getMin() {
-        return this.min;
-    }
+	@SerializedName("min")
+	private int min;
 
-    public int getAvg() {
-        return this.avg;
-    }
+	@SerializedName("avg")
+	private int avg;
 
-    public int getMax() {
-        return this.max;
-    }
+	@SerializedName("max")
+	private int max;
 
-    public String getDay() {
-        return this.day;
-    }
+	@SerializedName("day")
+	private String day;
 
-    public long getTimestamp() {
-        return this.timestamp;
-    }
+	@SerializedName("timestamp")
+	private long timestamp;
+
+	public int getMin(){
+		return min;
+	}
+
+	public int getAvg(){
+		return avg;
+	}
+
+	public int getMax(){
+		return max;
+	}
+
+	public String getDay(){
+		return day;
+	}
+
+	public long getTimestamp(){
+		return timestamp;
+	}
 }
-

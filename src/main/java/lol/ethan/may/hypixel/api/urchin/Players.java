@@ -1,15 +1,14 @@
 package lol.ethan.may.hypixel.api.urchin;
 
+import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+public class Players{
 
-public class Players {
-    @SerializedName(value = "additionalProperty")
-    private List<AdditionalPropertyItem> additionalProperty;
+	@SerializedName("additionalProperty")
+	private List<AdditionalPropertyItem> additionalProperty;
 
-    public List<AdditionalPropertyItem> getAdditionalProperty() {
-        return this.additionalProperty;
-    }
+	public List<AdditionalPropertyItem> getAdditionalProperty(){
+		return additionalProperty;
+	}
 }
-

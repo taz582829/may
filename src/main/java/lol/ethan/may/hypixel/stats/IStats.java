@@ -6,10 +6,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import java.util.List;
 
 public interface IStats {
-    IStats buildStats(PlayerResponse.Player var1, String var2);
-
-    List<String> getDisplayStats(NetworkPlayerInfo var1);
-
+    IStats buildStats(PlayerResponse.Player player, String mode);
+    List<String> getDisplayStats(NetworkPlayerInfo playerInfo);
     int getPing();
 }
-

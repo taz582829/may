@@ -10,10 +10,6 @@ public class TestHUD extends BasicHud {
 
     @Override
     protected List<String> getLines(boolean example) {
-        if (example) {
-            return Arrays.asList("hi", "example");
-        }
         return Arrays.asList("hi!", "test hud");
     }
 }
-

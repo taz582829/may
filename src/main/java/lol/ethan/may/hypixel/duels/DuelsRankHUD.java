@@ -1,0 +1,54 @@
+package lol.ethan.may.hypixel.duels;
+
+import lol.ethan.may.render.huds.BasicHud;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Team;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class DuelsRankHUD extends BasicHud {
+    public DuelsRankHUD() {
+        super(true, 200, 200);
+    }
+
+    @Override
+    public boolean shouldShow() {
+        return super.shouldShow() &&
+                DuelsUtils.isInDuels() &&
+                mc.theWorld != null &&
+                mc.theWorld.getScoreboard() != null &&
+                DuelsUtils.isInPregame();
+    }
+
+    @Override
+    protected List<String> getLines(boolean example) {
+        List<String> result = new ArrayList<>();
+        if (mc.theWorld == null || mc.theWorld.getScoreboard() == null) return Collections.emptyList();
+        for (ScorePlayerTeam team : mc.theWorld.getScoreboard().getTeams()) {
+            if (team.getMembershipCollection().size() == 0) continue;
+            String prefix = team.getColorPrefix();
+            if (prefix == null) continue;
+            if (prefix.startsWith("§k")) {
+                String color = prefix.substring(0, 2);
+                String rank = getRankFromColor(color);
+                result.add(rank);
+            }
+        }
+        if (result.size() > 0) result.add(0, "§f§lPregame Ranks");
+        return result;
+    }
+
+    private String getRankFromColor(@NotNull String teamColor) {
+        switch (teamColor) {
+            case "§7": return "§7Non";
+            case "§a": return "§aVIP§f/§aVIP§6+";
+            case "§b": return "§bMVP§f/§bMVP§c+";
+            case "§6": return "§6MVP§c++";
+            case "§c": return "§cYoutube§f/§cStaff";
+            default: return "§cUnknown";
+        }
+    }
+}

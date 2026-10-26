@@ -1,27 +1,28 @@
 package lol.ethan.may.hypixel.api.other;
 
+import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+public class NameHistoryResponse{
 
-public class NameHistoryResponse {
-    @SerializedName(value = "names")
-    private List<NamesItem> names;
-    @SerializedName(value = "success")
-    private boolean success;
-    @SerializedName(value = "cached")
-    private boolean cached;
+	@SerializedName("names")
+	private List<NamesItem> names;
 
-    public List<NamesItem> getNames() {
-        return this.names;
-    }
+	@SerializedName("success")
+	private boolean success;
 
-    public boolean isSuccess() {
-        return this.success;
-    }
+	@SerializedName("cached")
+	private boolean cached;
 
-    public boolean isCached() {
-        return this.cached;
-    }
+	public List<NamesItem> getNames(){
+		return names;
+	}
+
+	public boolean isSuccess(){
+		return success;
+	}
+
+	public boolean isCached(){
+		return cached;
+	}
 }
-

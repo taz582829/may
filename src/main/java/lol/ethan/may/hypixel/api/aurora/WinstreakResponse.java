@@ -2,18 +2,19 @@ package lol.ethan.may.hypixel.api.aurora;
 
 import com.google.gson.annotations.SerializedName;
 
-public class WinstreakResponse {
-    @SerializedName(value = "data")
-    private WinstreakData winstreakData;
-    @SerializedName(value = "success")
-    private boolean success;
+public class WinstreakResponse{
 
-    public WinstreakData getData() {
-        return this.winstreakData;
-    }
+	@SerializedName("data")
+	private WinstreakData winstreakData;
 
-    public boolean isSuccess() {
-        return this.success;
-    }
+	@SerializedName("success")
+	private boolean success;
+
+	public WinstreakData getData(){
+		return winstreakData;
+	}
+
+	public boolean isSuccess(){
+		return success;
+	}
 }
-

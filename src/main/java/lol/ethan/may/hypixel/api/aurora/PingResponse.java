@@ -1,21 +1,21 @@
 package lol.ethan.may.hypixel.api.aurora;
 
+import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+public class PingResponse{
 
-public class PingResponse {
-    @SerializedName(value = "data")
-    private List<PingData> data;
-    @SerializedName(value = "success")
-    private boolean success;
+	@SerializedName("data")
+	private List<PingData> data;
 
-    public List<PingData> getData() {
-        return this.data;
-    }
+	@SerializedName("success")
+	private boolean success;
 
-    public boolean isSuccess() {
-        return this.success;
-    }
+	public List<PingData> getData(){
+		return data;
+	}
+
+	public boolean isSuccess(){
+		return success;
+	}
 }
-

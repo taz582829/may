@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import lol.ethan.may.asm.ITransformer;
 import lol.ethan.may.config.Config;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
@@ -29,17 +30,18 @@ public class HitboxesHook implements ITransformer {
     public void transform(ClassNode node) {
         for (MethodNode method : node.methods) {
             if (!method.name.equals("func_85094_b") && !method.name.equals("renderDebugBoundingBox")) continue;
-            InsnList insnList = new InsnList();
-            insnList.add(new VarInsnNode(Opcodes.ALOAD, 1));
-            insnList.add(new VarInsnNode(Opcodes.DLOAD, 2));
-            insnList.add(new VarInsnNode(Opcodes.DLOAD, 4));
-            insnList.add(new VarInsnNode(Opcodes.DLOAD, 6));
-            insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(HitboxesHook.class), "may$renderHitboxes", "(Lnet/minecraft/entity/Entity;DDD)Z"));
-            LabelNode label = new LabelNode();
-            insnList.add(new JumpInsnNode(Opcodes.IFEQ, label));
-            insnList.add(new InsnNode(Opcodes.RETURN));
-            insnList.add(label);
-            method.instructions.insert(insnList);
+            method.instructions.insert(ASMUtils.asm(a -> {
+                a.load(1, Type.getType(Entity.class));
+                a.load(2, Type.DOUBLE_TYPE);
+                a.load(4, Type.DOUBLE_TYPE);
+                a.load(6, Type.DOUBLE_TYPE);
+                a.invokestatic(Type.getInternalName(HitboxesHook.class), "may$renderHitboxes",
+                        "(Lnet/minecraft/entity/Entity;DDD)Z", false);
+                Label end = new Label();
+                a.ifeq(end);
+                a.areturn(Type.VOID_TYPE);
+                a.mark(end);
+            }));
         }
     }
 

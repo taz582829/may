@@ -1,6 +1,11 @@
 package lol.ethan.may.hypixel.bedwars;
 
+import lol.ethan.may.events.LocationEvent;
+import lol.ethan.may.events.SubscribeEvent;
+import lol.ethan.may.events.WorldEvent;
+
 public class ResourceSpawnManager {
+
     public static int timeUntilEmerald = -1;
     public static int timeUntilDiamond = -1;
     public static int emeraldSpawnCount = 0;
@@ -19,9 +24,8 @@ public class ResourceSpawnManager {
     }
 
     public static void updateTimers() {
-        if (BedwarsUtils.ticksSinceGameStart % 20 != 0) {
-            return;
-        }
+        if (BedwarsUtils.ticksSinceGameStart % 20 != 0) return;
+
         if (secondsSinceGameStart >= 0 && emeraldStage != 1) {
             emeraldStage = 1;
             diamondStage = 1;
@@ -40,8 +44,10 @@ public class ResourceSpawnManager {
             diamondStage = 3;
             timeUntilDiamond = 12;
         }
+
         if (timeUntilDiamond == 0) {
-            ++diamondSpawnCount;
+            diamondSpawnCount++;
+
             if (diamondStage == 1) {
                 timeUntilDiamond = 30;
             } else if (diamondStage == 2) {
@@ -50,32 +56,26 @@ public class ResourceSpawnManager {
                 timeUntilDiamond = 12;
             }
         }
+
         if (timeUntilEmerald == 0) {
             BedwarsUtils.Mode mode = BedwarsUtils.currentMode;
-            ++emeraldSpawnCount;
+
+            emeraldSpawnCount++;
+
             if (emeraldStage == 1) {
-                if (mode == BedwarsUtils.Mode.SOLO || mode == BedwarsUtils.Mode.DOUBLES) {
-                    timeUntilEmerald = 65;
-                } else if (mode == BedwarsUtils.Mode.FOURS || mode == BedwarsUtils.Mode.THREES) {
-                    timeUntilEmerald = 55;
-                }
+                if (mode == BedwarsUtils.Mode.SOLO || mode == BedwarsUtils.Mode.DOUBLES) timeUntilEmerald = 65;
+                else if (mode == BedwarsUtils.Mode.FOURS || mode == BedwarsUtils.Mode.THREES) timeUntilEmerald = 55;
             } else if (emeraldStage == 2) {
-                if (mode == BedwarsUtils.Mode.SOLO || mode == BedwarsUtils.Mode.DOUBLES) {
-                    timeUntilEmerald = 50;
-                } else if (mode == BedwarsUtils.Mode.FOURS || mode == BedwarsUtils.Mode.THREES) {
-                    timeUntilEmerald = 40;
-                }
+                if (mode == BedwarsUtils.Mode.SOLO || mode == BedwarsUtils.Mode.DOUBLES) timeUntilEmerald = 50;
+                else if (mode == BedwarsUtils.Mode.FOURS || mode == BedwarsUtils.Mode.THREES) timeUntilEmerald = 40;
             } else if (emeraldStage == 3) {
-                if (mode == BedwarsUtils.Mode.SOLO || mode == BedwarsUtils.Mode.DOUBLES) {
-                    timeUntilEmerald = 35;
-                } else if (mode == BedwarsUtils.Mode.FOURS || mode == BedwarsUtils.Mode.THREES) {
-                    timeUntilEmerald = 27;
-                }
+                if (mode == BedwarsUtils.Mode.SOLO || mode == BedwarsUtils.Mode.DOUBLES) timeUntilEmerald = 35;
+                else if (mode == BedwarsUtils.Mode.FOURS || mode == BedwarsUtils.Mode.THREES) timeUntilEmerald = 27;
             }
         }
-        --timeUntilEmerald;
-        --timeUntilDiamond;
-        ++secondsSinceGameStart;
+
+        timeUntilEmerald--;
+        timeUntilDiamond--;
+        secondsSinceGameStart++;
     }
 }
-

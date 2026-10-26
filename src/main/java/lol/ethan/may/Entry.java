@@ -1,7 +1,6 @@
 package lol.ethan.may;
 
 import lol.ethan.may.anticheat.checks.Autoblock;
-import lol.ethan.may.anticheat.checks.BedNuker;
 import lol.ethan.may.anticheat.checks.LegitScaffold;
 import lol.ethan.may.anticheat.checks.NoBreakDelay;
 import lol.ethan.may.anticheat.data.AnticheatData;
@@ -13,10 +12,7 @@ import lol.ethan.may.config.component.HUDComponent;
 import lol.ethan.may.events.*;
 import lol.ethan.may.housing.AntiInvis;
 import lol.ethan.may.housing.HousingESP;
-import lol.ethan.may.hypixel.BowDistance;
-import lol.ethan.may.hypixel.Denicker;
-import lol.ethan.may.hypixel.ModAPI;
-import lol.ethan.may.hypixel.NickHider;
+import lol.ethan.may.hypixel.*;
 import lol.ethan.may.hypixel.bedwars.BedwarsUtils;
 import lol.ethan.may.hypixel.bedwars.MiddleClickShop;
 import lol.ethan.may.hypixel.bedwars.PartyCounter;
@@ -26,7 +22,6 @@ import lol.ethan.may.hypixel.duels.DuelsRankInfo;
 import lol.ethan.may.hypixel.duels.DuelsStatsManager;
 import lol.ethan.may.hypixel.duels.DuelsUtils;
 import lol.ethan.may.hypixel.modapi.LocationData;
-import lol.ethan.may.hypixel.skywars.SkywarsStatsManager;
 import lol.ethan.may.mappings.Mappings;
 import lol.ethan.may.render.huds.BasicHud;
 import net.hypixel.modapi.HypixelModAPI;
@@ -228,7 +223,7 @@ public class Entry {
         EventBus.subscribe(new ChatListener());
         EventBus.subscribe(new AnticheatData());
         EventBus.subscribe(new Autoblock());
-        EventBus.subscribe(new BedNuker());
+        //EventBus.subscribe(new BedNuker());
         EventBus.subscribe(new LegitScaffold());
         EventBus.subscribe(new NoBreakDelay());
         EventBus.subscribe(new BedwarsUtils());
@@ -238,8 +233,6 @@ public class Entry {
         EventBus.subscribe(new Denicker());
         EventBus.subscribe(new DuelsUtils());
         EventBus.subscribe(new DuelsRankInfo());
-        EventBus.subscribe(new SkywarsStatsManager());
-        EventBus.subscribe(new NickHider());
         EventBus.subscribe(new HousingESP());
         EventBus.subscribe(new AntiInvis());
         EventBus.subscribe(new MiddleClickShop());
@@ -247,6 +240,7 @@ public class Entry {
         EventBus.subscribe(new MiddleClickShop());
         EventBus.subscribe(new BowDistance());
         EventBus.subscribe(new LobbyOneHelper());
+        EventBus.subscribe(new BlacklistInfo());
         CommandHandler.register(new TestCommand());
         CommandHandler.register(new HypixelStats());
         CommandHandler.register(new ConfigCommand());

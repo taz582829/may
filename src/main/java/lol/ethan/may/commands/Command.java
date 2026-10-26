@@ -22,7 +22,7 @@ public abstract class Command {
         throw new RuntimeException("your command must have a name!");
     }
 
-    public abstract void execute(String[] var1);
+    public abstract void execute(String[] args);
 
     public String[] getTabCompletes(String[] args) {
         return new String[0];

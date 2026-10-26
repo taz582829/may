@@ -18,9 +18,10 @@ public enum BedwarsTeam {
 
     BedwarsTeam(String prefix) {
         this.prefix = prefix;
+
         String name = this.name();
-        this.displayName = StringUtils.stripControlCodes(String.valueOf(name.charAt(0)).toUpperCase() + name.substring(1).toLowerCase());
-        this.formattedDisplayName = prefix.substring(0, 2) + this.displayName;
+        displayName = StringUtils.stripControlCodes(String.valueOf(name.charAt(0)).toUpperCase() + name.substring(1).toLowerCase());
+
+        formattedDisplayName = prefix.substring(0, 2) + displayName;
     }
 }
-

@@ -3,6 +3,7 @@ package lol.ethan.may.asm;
 import lol.ethan.may.events.Event;
 import lol.ethan.may.events.EventBus;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.InstructionAdapter;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -20,7 +21,7 @@ public class ASMUtils {
     public static final String POST_EVENT_DESC = "(L" + Type.getInternalName(Event.class) + ";)L" + Type.getInternalName(Event.class) + ";";
 
     public static MethodInsnNode postEvent() {
-        return new MethodInsnNode(184, Type.getInternalName(EventBus.class), "postEvent", "(L" + Type.getInternalName(Event.class) + ";)L" + Type.getInternalName(Event.class) + ";");
+        return new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(EventBus.class), "postEvent", "(L" + Type.getInternalName(Event.class) + ";)L" + Type.getInternalName(Event.class) + ";");
     }
 
     public static void postEvent(InstructionAdapter a) {
@@ -62,14 +63,6 @@ public class ASMUtils {
         printer.print(new PrintWriter(writer));
         System.out.println(writer);
         System.out.println("___________________________________________________________________");
-    }
-
-    public static AbstractInsnNode findReturn(MethodNode method) {
-        for (AbstractInsnNode insn : method.instructions.toArray()) {
-            if (insn.getOpcode() < 172 || insn.getOpcode() > 177) continue;
-            return insn;
-        }
-        return null;
     }
 }
 

@@ -2,10 +2,9 @@ package lol.ethan.may.asm;
 
 import java.util.Collections;
 import java.util.List;
-import lol.ethan.may.asm.ASMUtils;
-import lol.ethan.may.asm.ITransformer;
+
 import lol.ethan.may.events.EventBus;
-import lol.ethan.may.events.player.NameFormatInTabEvent;
+import lol.ethan.may.events.player.RenderPlayerInTabEvent;
 import lol.ethan.may.events.player.PlayerPingEvent;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -45,7 +44,7 @@ public class NetworkPlayerInfoTransformer implements ITransformer {
     }
 
     public static IChatComponent may$formatTabName(IChatComponent displayName, NetworkPlayerInfo playerInfo) {
-        NameFormatInTabEvent event = EventBus.postEvent(new NameFormatInTabEvent(displayName, playerInfo));
+        RenderPlayerInTabEvent event = EventBus.postEvent(new RenderPlayerInTabEvent(displayName, playerInfo));
         return event.getTextAsComponent();
     }
 

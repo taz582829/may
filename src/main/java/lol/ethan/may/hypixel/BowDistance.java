@@ -1,11 +1,11 @@
 package lol.ethan.may.hypixel;
 
-import lol.ethan.may.config.Config;
-import lol.ethan.may.events.ChatEvent;
-import lol.ethan.may.events.SubscribeEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
+import lol.ethan.may.events.ChatEvent;
+import lol.ethan.may.events.SubscribeEvent;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,25 +16,27 @@ public class BowDistance {
 
     @SubscribeEvent
     public void onChat(ChatEvent.Received event) {
-        if (this.mc.theWorld == null || this.mc.thePlayer == null || Config.bowDistance.enabled) {
-            return;
-        }
-        String msg = event.getMessage().getUnformattedText();
-        Matcher matcher = this.bowPattern.matcher(msg);
+        if (mc.theWorld == null || mc.thePlayer == null) return;
+        final String msg = event.getMessage().getUnformattedText();
+        final Matcher matcher = bowPattern.matcher(msg);
+
         if (matcher.find()) {
-            String ign = matcher.group(1);
-            EntityPlayer player = this.mc.theWorld.getPlayerEntityByName(ign);
-            if (player == null) {
-                return;
-            }
-            double dist = player.getDistanceToEntity(this.mc.thePlayer);
-            event.getMessage().appendText(" §7(" + this.formatDistance(dist) + "m§7)");
+            final String ign = matcher.group(1);
+            final EntityPlayer player = mc.theWorld.getPlayerEntityByName(ign);
+            if (player == null) return;
+
+            final double dist = player.getDistanceToEntity(mc.thePlayer);
+            event.getMessage().appendText(" §7(" + formatDistance(dist) + "m§7)");
         }
     }
 
     private String formatDistance(double dist) {
-        EnumChatFormatting color = dist < 15.0 ? EnumChatFormatting.GREEN : (dist < 30.0 ? EnumChatFormatting.YELLOW : (dist < 45.0 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED));
+        EnumChatFormatting color;
+        if (dist < 15) color = EnumChatFormatting.GREEN;
+        else if (dist < 30) color = EnumChatFormatting.YELLOW;
+        else if (dist < 45) color = EnumChatFormatting.GOLD;
+        else color = EnumChatFormatting.RED;
+
         return color + String.format("%.2f", dist);
     }
 }
-
