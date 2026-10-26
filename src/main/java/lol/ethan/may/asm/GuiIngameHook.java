@@ -21,8 +21,7 @@ import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 import net.minecraft.scoreboard.Team;
 
-public class GuiIngameHook
-implements ITransformer {
+public class GuiIngameHook implements ITransformer {
     private static final String CALLBACK_INFO_CLASS = "org/spongepowered/asm/mixin/injection/callback/CallbackInfo";
 
     @Override

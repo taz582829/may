@@ -12,8 +12,7 @@ import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-public class ModTransformer
-implements ITransformer {
+public class ModTransformer implements ITransformer {
     @Override
     public void transform(ClassNode node) {
         for (MethodNode method : node.methods) {

@@ -12,8 +12,7 @@ import org.objectweb.asm.tree.InvokeDynamicInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-public class Remapper
-implements ITransformer {
+public class Remapper implements ITransformer {
     @Override
     public void transform(ClassNode node) {
         if (Mappings.getMappingType() != Mappings.MappingType.MCP) {

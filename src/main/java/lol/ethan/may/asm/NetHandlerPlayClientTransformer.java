@@ -12,8 +12,7 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 
-public class NetHandlerPlayClientTransformer
-implements ITransformer {
+public class NetHandlerPlayClientTransformer implements ITransformer {
     @Override
     public void transform(ClassNode node) {
         for (MethodNode method : node.methods) {

@@ -16,8 +16,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 
-public class EntityRendererTransformer
-implements ITransformer {
+public class EntityRendererTransformer implements ITransformer {
     @Override
     public void transform(ClassNode node) {
         for (MethodNode method : node.methods) {

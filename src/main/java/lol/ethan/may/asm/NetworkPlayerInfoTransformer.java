@@ -18,8 +18,7 @@ import org.objectweb.asm.tree.VarInsnNode;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.IChatComponent;
 
-public class NetworkPlayerInfoTransformer
-implements ITransformer {
+public class NetworkPlayerInfoTransformer implements ITransformer {
     private final String formatNameDesc = "(Lnet/minecraft/util/IChatComponent;Lnet/minecraft/client/network/NetworkPlayerInfo;)L" + Type.getInternalName(IChatComponent.class) + ";";
 
     @Override

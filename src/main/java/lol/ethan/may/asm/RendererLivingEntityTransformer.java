@@ -14,8 +14,7 @@ import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 import net.minecraft.entity.EntityLivingBase;
 
-public class RendererLivingEntityTransformer
-implements ITransformer {
+public class RendererLivingEntityTransformer implements ITransformer {
     private static final Class<?> compClass;
 
     @Override

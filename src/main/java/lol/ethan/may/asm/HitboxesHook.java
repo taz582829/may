@@ -24,8 +24,7 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
 
-public class HitboxesHook
-implements ITransformer {
+public class HitboxesHook implements ITransformer {
     @Override
     public void transform(ClassNode node) {
         for (MethodNode method : node.methods) {

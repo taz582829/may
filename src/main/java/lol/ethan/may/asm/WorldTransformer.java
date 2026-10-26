@@ -15,8 +15,7 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 import net.minecraft.client.multiplayer.WorldClient;
 
-public class WorldTransformer
-implements ITransformer {
+public class WorldTransformer implements ITransformer {
     Mappings.MappingType mappings = Mappings.getMappingType();
 
     @Override

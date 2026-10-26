@@ -29,8 +29,7 @@ import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-public class MinecraftTransformer
-implements ITransformer {
+public class MinecraftTransformer implements ITransformer {
     @Override
     public void transform(ClassNode node) {
         for (MethodNode method : node.methods) {

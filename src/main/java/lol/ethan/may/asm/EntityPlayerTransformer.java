@@ -17,8 +17,7 @@ import org.objectweb.asm.tree.VarInsnNode;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
 
-public class EntityPlayerTransformer
-implements ITransformer {
+public class EntityPlayerTransformer implements ITransformer {
     @Override
     public void transform(ClassNode node) {
         for (MethodNode method : node.methods) {

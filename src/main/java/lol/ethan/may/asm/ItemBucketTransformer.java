@@ -16,8 +16,7 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemBucketTransformer
-implements ITransformer {
+public class ItemBucketTransformer implements ITransformer {
     @Override
     public void transform(ClassNode node) {
         for (MethodNode method : node.methods) {

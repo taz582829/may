@@ -10,8 +10,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 import net.minecraft.inventory.Slot;
 
-public class GuiContainerTransformer
-implements ITransformer {
+public class GuiContainerTransformer implements ITransformer {
     private static final String SLOT_CLICK_EVENT = Type.getInternalName(SlotClickEvent.class);
     private static final Type SLOT_CLICK_TYPE = Type.getType(SlotClickEvent.class);
 

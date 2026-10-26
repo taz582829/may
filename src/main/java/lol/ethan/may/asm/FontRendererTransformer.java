@@ -6,8 +6,7 @@ import lol.ethan.may.asm.ITransformer;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-public class FontRendererTransformer
-implements ITransformer {
+public class FontRendererTransformer implements ITransformer {
     @Override
     public void transform(ClassNode node) {
         for (MethodNode method : node.methods) {
