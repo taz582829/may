@@ -1,0 +1,408 @@
+{
+  "prestige_schemes": {
+    "prestige_scheme_none": {
+      "colors": ["7"],
+      "prestige": 0
+    },
+    "prestige_scheme_iron": {
+      "colors": ["f"],
+      "prestige": 100
+    },
+    "prestige_scheme_6": {
+      "colors": ["6"],
+      "prestige": 200
+    },
+    "prestige_scheme_diamond": {
+      "colors": ["b"],
+      "prestige": 300
+    },
+    "prestige_scheme_emerald": {
+      "colors": ["2"],
+      "prestige": 400
+    },
+    "prestige_scheme_sapphire": {
+      "colors": ["3"],
+      "prestige": 500
+    },
+    "prestige_scheme_ruby": {
+      "colors": ["4"],
+      "prestige": 600
+    },
+    "prestige_scheme_crystal": {
+      "colors": ["d"],
+      "prestige": 700
+    },
+    "prestige_scheme_opal": {
+      "colors": ["9"],
+      "prestige": 800
+    },
+    "prestige_scheme_amethyst": {
+      "colors": ["5"],
+      "prestige": 900
+    },
+    "prestige_scheme_rainbow": {
+      "colors": ["c", "6", "e", "a", "b", "d", "5"],
+      "prestige": 1000
+    },
+    "prestige_scheme_iron_prime": {
+      "colors": ["7", "f", "f", "f", "f", "7", "7"],
+      "prestige": 1100
+    },
+    "prestige_scheme_6_prime": {
+      "colors": ["7", "e", "e", "e", "e", "6", "7"],
+      "prestige": 1200
+    },
+    "prestige_scheme_diamond_prime": {
+      "colors": ["7", "b", "b", "b", "b", "3", "7"],
+      "prestige": 1300
+    },
+    "prestige_scheme_emerald_prime": {
+      "colors": ["7", "a", "a", "a", "a", "2", "7"],
+      "prestige": 1400
+    },
+    "prestige_scheme_sapphire_prime": {
+      "colors": ["7", "3", "3", "3", "3", "9", "7"],
+      "prestige": 1500
+    },
+    "prestige_scheme_ruby_prime": {
+      "colors": ["7", "c", "c", "c", "c", "4", "7"],
+      "prestige": 1600
+    },
+    "prestige_scheme_crystal_prime": {
+      "colors": ["7", "d", "d", "d", "d", "5", "7"],
+      "prestige": 1700
+    },
+    "prestige_scheme_opal_prime": {
+      "colors": ["7", "9", "9", "9", "9", "1", "7"],
+      "prestige": 1800
+    },
+    "prestige_scheme_amethyst_prime": {
+      "colors": ["7", "5", "5", "5", "5", "8", "7"],
+      "prestige": 1900
+    },
+    "prestige_scheme_mirror": {
+      "colors": ["8", "7", "f", "f", "7", "7", "8"],
+      "prestige": 2000
+    },
+    "prestige_scheme_light": {
+      "colors": ["f", "f", "e", "e", "6", "6", "6"],
+      "prestige": 2100
+    },
+    "prestige_scheme_dawn": {
+      "colors": ["6", "6", "f", "f", "b", "3", "3"],
+      "prestige": 2200
+    },
+    "prestige_scheme_dusk": {
+      "colors": ["5", "5", "d", "d", "6", "e", "e"],
+      "prestige": 2300
+    },
+    "prestige_scheme_air": {
+      "colors": ["b", "b", "f", "f", "7", "7", "8"],
+      "prestige": 2400
+    },
+    "prestige_scheme_wind": {
+      "colors": ["f", "f", "a", "a", "2", "2", "2"],
+      "prestige": 2500
+    },
+    "prestige_scheme_nebula": {
+      "colors": ["4", "4", "c", "c", "d", "d", "5"],
+      "prestige": 2600
+    },
+    "prestige_scheme_thunder": {
+      "colors": ["e", "e", "f", "f", "8", "8", "8"],
+      "prestige": 2700
+    },
+    "prestige_scheme_earth": {
+      "colors": ["a", "a", "2", "2", "6", "6", "e"],
+      "prestige": 2800
+    },
+    "prestige_scheme_water": {
+      "colors": ["b", "b", "3", "3", "9", "9", "1"],
+      "prestige": 2900
+    },
+    "prestige_scheme_fire": {
+      "colors": ["e", "e", "6", "6", "c", "c", "4"],
+      "prestige": 3000
+    },
+    "prestige_scheme_sunrise": {
+      "colors": ["9", "9", "3", "3", "6", "6", "e"],
+      "prestige": 3100
+    },
+    "prestige_scheme_eclipse": {
+      "colors": ["c", "4", "7", "7", "4", "c", "c"],
+      "prestige": 3200
+    },
+    "prestige_scheme_gamma": {
+      "colors": ["9", "9", "9", "d", "c", "c", "4"],
+      "prestige": 3300
+    },
+    "prestige_scheme_majestic": {
+      "colors": ["2", "a", "d", "d", "5", "5", "2"],
+      "prestige": 3400
+    },
+    "prestige_scheme_andesine": {
+      "colors": ["c", "c", "4", "4", "2", "a", "a"],
+      "prestige": 3500
+    },
+    "prestige_scheme_marine": {
+      "colors": ["a", "a", "a", "b", "9", "9", "1"],
+      "prestige": 3600
+    },
+    "prestige_scheme_element": {
+      "colors": ["4", "4", "c", "c", "b", "3", "3"],
+      "prestige": 3700
+    },
+    "prestige_scheme_galaxy": {
+      "colors": ["1", "1", "9", "5", "5", "d", "1"],
+      "prestige": 3800
+    },
+    "prestige_scheme_atomic": {
+      "colors": ["c", "c", "a", "a", "3", "9", "9"],
+      "prestige": 3900
+    },
+    "prestige_scheme_sunset": {
+      "colors": ["5", "5", "c", "c", "6", "6", "e"],
+      "prestige": 4000
+    },
+    "prestige_scheme_time": {
+      "colors": ["e", "e", "6", "c", "d", "d", "5"],
+      "prestige": 4100
+    },
+    "prestige_scheme_winter": {
+      "colors": ["1", "9", "3", "b", "f", "7", "7"],
+      "prestige": 4200
+    },
+    "prestige_scheme_obsidian": {
+      "colors": ["0", "5", "8", "8", "5", "5", "0"],
+      "prestige": 4300
+    },
+    "prestige_scheme_spring": {
+      "colors": ["2", "2", "a", "e", "6", "5", "d"],
+      "prestige": 4400
+    },
+    "prestige_scheme_ice": {
+      "colors": ["f", "f", "b", "b", "3", "3", "3"],
+      "prestige": 4500
+    },
+    "prestige_scheme_summer": {
+      "colors": ["3", "b", "e", "6", "6", "d", "5"],
+      "prestige": 4600
+    },
+    "prestige_scheme_spinel": {
+      "colors": ["f", "4", "c", "c", "9", "1", "9"],
+      "prestige": 4700
+    },
+    "prestige_scheme_autumn": {
+      "colors": ["5", "5", "c", "6", "6", "b", "3"],
+      "prestige": 4800
+    },
+    "prestige_scheme_mystic": {
+      "colors": ["2", "a", "f", "f", "f", "a", "2"],
+      "prestige": 4900
+    },
+    "prestige_scheme_eternal": {
+      "colors": ["4", "4", "5", "9", "9", "1", "0"],
+      "prestige": 5000
+    },
+    "prestige_scheme_burnout": {
+      "colors": ["4", "c", "c", "6", "e", "f", "4"],
+      "prestige": 5100
+    },
+    "prestige_scheme_cooldown": {
+      "colors": ["1", "9", "3", "b", "f", "e", "1"],
+      "prestige": 5200
+    },
+    "prestige_scheme_obliteration": {
+      "colors": ["5", "d", "e", "f", "e", "d", "5"],
+      "prestige": 5300
+    },
+    "prestige_scheme_ender": {
+      "colors": ["3", "a", "2", "8", "2", "a", "3"],
+      "prestige": 5400
+    },
+    "prestige_scheme_brust": {
+      "colors": ["2", "a", "e", "f", "b", "d", "5"],
+      "prestige": 5500
+    },
+    "prestige_scheme_comical": {
+      "colors": ["4", "c", "e", "f", "e", "c", "4"],
+      "prestige": 5600
+    },
+    "prestige_scheme_lusterlost": {
+      "colors": ["4", "6", "2", "3", "9", "5", "8"],
+      "prestige": 5700
+    },
+    "prestige_scheme_maelstrom": {
+      "colors": ["5", "c", "6", "f", "b", "3", "9"],
+      "prestige": 5800
+    },
+    "prestige_scheme_time_undone": {
+      "colors": ["7", "0", "8", "7", "f", "f", "7"],
+      "prestige": 5900
+    },
+    "prestige_scheme_umbrella": {
+      "colors": ["c", "f", "f", "f", "f", "c", "f"],
+      "prestige": 6000
+    },
+    "prestige_scheme_luminous": {
+      "colors": ["6", "e", "f", "f", "f", "b", "3"],
+      "prestige": 6100
+    },
+    "prestige_scheme_tortilla": {
+      "colors": ["e", "f", "e", "6", "6", "f", "e"],
+      "prestige": 6200
+    },
+    "prestige_scheme_corn": {
+      "colors": ["a", "e", "e", "e", "e", "a", "2"],
+      "prestige": 6300
+    },
+    "prestige_scheme_bittersweet": {
+      "colors": ["b", "b", "c", "c", "c", "a", "a"],
+      "prestige": 6400
+    },
+    "prestige_scheme_sweetsour": {
+      "colors": ["3", "3", "a", "a", "f", "a", "3"],
+      "prestige": 6500
+    },
+    "prestige_scheme_pop": {
+      "colors": ["9", "d", "d", "d", "d", "b", "9"],
+      "prestige": 6600
+    },
+    "prestige_scheme_bubblegum": {
+      "colors": ["5", "d", "d", "d", "d", "f", "5"],
+      "prestige": 6700
+    },
+    "prestige_scheme_contrast": {
+      "colors": ["0", "6", "6", "e", "e", "f", "f"],
+      "prestige": 6800
+    },
+    "prestige_scheme_blended": {
+      "colors": ["a", "a", "a", "a", "2", "2", "8"],
+      "prestige": 6900
+    },
+    "prestige_scheme_allay": {
+      "colors": ["3", "b", "b", "b", "b", "f", "3"],
+      "prestige": 7000
+    },
+    "prestige_scheme_blaze": {
+      "colors": ["4", "c", "6", "e", "c", "6", "e"],
+      "prestige": 7100
+    },
+    "prestige_scheme_creeper": {
+      "colors": ["2", "a", "f", "2", "a", "f", "8"],
+      "prestige": 7200
+    },
+    "prestige_scheme_drowned": {
+      "colors": ["2", "3", "3", "b", "b", "a", "2"],
+      "prestige": 7300
+    },
+    "prestige_scheme_enderman": {
+      "colors": ["8", "8", "8", "8", "8", "d", "8"],
+      "prestige": 7400
+    },
+    "prestige_scheme_frog": {
+      "colors": ["6", "6", "2", "2", "f", "f", "f"],
+      "prestige": 7500
+    },
+    "prestige_scheme_ghast": {
+      "colors": ["f", "f", "f", "7", "7", "c", "8"],
+      "prestige": 7600
+    },
+    "prestige_scheme_hoglin": {
+      "colors": ["d", "c", "c", "c", "c", "6", "d"],
+      "prestige": 7700
+    },
+    "prestige_scheme_iron_golem": {
+      "colors": ["8", "7", "f", "f", "f", "e", "8"],
+      "prestige": 7800
+    },
+    "prestige_scheme_jerry": {
+      "colors": ["6", "f", "2", "6", "2", "f", "6"],
+      "prestige": 7900
+    },
+    "prestige_scheme_kringle": {
+      "colors": ["2", "a", "a", "a", "c", "4", "2"],
+      "prestige": 8000
+    },
+    "prestige_scheme_liquid": {
+      "colors": ["8", "7", "f", "b", "3", "9", "1"],
+      "prestige": 8100
+    },
+    "prestige_scheme_mint": {
+      "colors": ["f", "f", "f", "f", "f", "a", "f"],
+      "prestige": 8200
+    },
+    "prestige_scheme_neglected": {
+      "colors": ["8", "8", "4", "4", "c", "c", "8"],
+      "prestige": 8300
+    },
+    "prestige_scheme_onion": {
+      "colors": ["f", "d", "d", "d", "a", "a", "f"],
+      "prestige": 8400
+    },
+    "prestige_scheme_poser": {
+      "colors": ["3", "6", "6", "6", "6", "e", "3"],
+      "prestige": 8500
+    },
+    "prestige_scheme_quartz": {
+      "colors": ["d", "f", "f", "f", "f", "e", "d"],
+      "prestige": 8600
+    },
+    "prestige_scheme_rich": {
+      "colors": ["8", "6", "6", "6", "6", "6", "8"],
+      "prestige": 8700
+    },
+    "prestige_scheme_sanguine": {
+      "colors": ["4", "4", "4", "c", "c", "f", "f"],
+      "prestige": 8800
+    },
+    "prestige_scheme_titanic": {
+      "colors": ["9", "b", "b", "b", "3", "3", "9"],
+      "prestige": 8900
+    },
+    "prestige_scheme_unorthodox": {
+      "colors": ["d", "d", "d", "d", "d", "5", "8"],
+      "prestige": 9000
+    },
+    "prestige_scheme_volcanic": {
+      "colors": ["0", "c", "6", "6", "c", "c", "4"],
+      "prestige": 9100
+    },
+    "prestige_scheme_weeping_cherry": {
+      "colors": ["2", "d", "d", "d", "d", "a", "2"],
+      "prestige": 9200
+    },
+    "prestige_scheme_x-ray": {
+      "colors": ["f", "8", "8", "8", "8", "f", "f"],
+      "prestige": 9300
+    },
+    "prestige_scheme_yearn": {
+      "colors": ["e", "6", "4", "8", "8", "8", "8"],
+      "prestige": 9400
+    },
+    "prestige_scheme_zebra": {
+      "colors": ["0", "0", "8", "8", "7", "7", "f"],
+      "prestige": 9500
+    },
+    "prestige_scheme_caution": {
+      "colors": ["e", "e", "e", "0", "0", "e", "0"],
+      "prestige": 9600
+    },
+    "prestige_scheme_indescribable": {
+      "colors": ["d", "d", "d", "e", "e", "b", "e"],
+      "prestige": 9700
+    },
+    "prestige_scheme_forgotten": {
+      "colors": ["0", "8", "8", "8", "8", "8", "0"],
+      "prestige": 9800
+    },
+    "prestige_scheme_fuse": {
+      "colors": ["8", "7", "f", "f", "f", "e", "f"],
+      "prestige": 9900
+    },
+    "prestige_scheme_prestigious": {
+      "colors": ["9", "b", "f", "f", "f", "f", "c", "4"],
+      "prestige": 10000
+    }
+  }
+}
