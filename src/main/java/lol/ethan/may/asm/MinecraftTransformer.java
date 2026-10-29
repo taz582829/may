@@ -1,6 +1,8 @@
 package lol.ethan.may.asm;
 
 import lol.ethan.may.events.*;
+import lol.ethan.may.events.gui.GuiCloseEvent;
+import lol.ethan.may.events.gui.GuiOpenEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
@@ -74,12 +76,19 @@ public class MinecraftTransformer implements ITransformer {
                 a.invokespecial(Type.getInternalName(GuiCloseEvent.class), "<init>", "()V", false);
                 ASMUtils.postEvent(a);
                 a.pop();
+
                 a.mark(top);
                 a.anew(ASMUtils.getType(GuiOpenEvent.class));
                 a.dup();
                 a.load(1, ASMUtils.getType(GuiScreen.class));
                 a.invokespecial(Type.getInternalName(GuiOpenEvent.class), "<init>", "(Lnet/minecraft/client/gui/GuiScreen;)V", false);
                 ASMUtils.postEvent(a);
+                a.checkcast(Type.getType(GuiOpenEvent.class));
+                a.dup();
+                ASMUtils.ifEventCancel(a, asm -> {
+                    asm.pop();
+                    asm.areturn(Type.VOID_TYPE);
+                });
                 a.pop();
             }));
         }

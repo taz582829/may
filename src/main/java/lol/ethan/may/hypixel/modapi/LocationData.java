@@ -29,7 +29,6 @@ public class LocationData {
 
     public LocationData() {
         INSTANCE = this;
-        HypixelModAPI.getInstance().subscribeToEventPacket(ClientboundLocationPacket.class);
         HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket.class, packet -> {
             this.server = packet.getServerName();
             this.serverType = packet.getServerType().orElse(null);
@@ -39,6 +38,7 @@ public class LocationData {
             this.map = packet.getMap().orElse(null);
             EventBus.postEvent(new LocationEvent(this.server, this.serverType, this.gameType, this.lobbyName, this.mode, this.map));
         });
+        HypixelModAPI.getInstance().subscribeToEventPacket(ClientboundLocationPacket.class);
     }
 
     public static String getServer() {

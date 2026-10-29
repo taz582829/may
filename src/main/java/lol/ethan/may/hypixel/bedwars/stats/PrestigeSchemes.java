@@ -17,7 +17,7 @@ import java.util.Map;
 public class PrestigeSchemes {
     public static Map<Integer, PrestigeScheme> SCHEMES = new HashMap<>();
     static {
-        try (final InputStream stream = Entry.class.getClassLoader().getResourceAsStream("assets/may/bedwars/bedwars_stars.json")) {
+        try (final InputStream stream = Entry.getResourceAsStream("assets/may/bedwars/bedwars_stars.json")) {
             if (stream == null) throw new RuntimeException("couldn't find bedwars stars in assets!");
 
             final JsonObject root = new JsonParser().parse(new InputStreamReader(stream, StandardCharsets.UTF_8))

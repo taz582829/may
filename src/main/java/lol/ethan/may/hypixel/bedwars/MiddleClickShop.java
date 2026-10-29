@@ -1,5 +1,6 @@
 package lol.ethan.may.hypixel.bedwars;
 
+import lol.ethan.may.config.Config;
 import lol.ethan.may.events.SlotClickEvent;
 import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.utils.GuiUtils;
@@ -27,6 +28,7 @@ public class MiddleClickShop {
     @SubscribeEvent
     public void onSlotClick(final SlotClickEvent event) {
         if (GuiScreen.isShiftKeyDown()) return;
+        if (!Config.middleClickShop.enabled) return;
         final String guiTitle = GuiUtils.getTitle();
         if (guiTitle == null || guiTitle.trim().isEmpty()) return;
 

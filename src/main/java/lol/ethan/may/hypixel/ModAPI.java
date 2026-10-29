@@ -1,6 +1,7 @@
 package lol.ethan.may.hypixel;
 
 import io.netty.buffer.Unpooled;
+import lol.ethan.may.Entry;
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.PacketEvent;
 import lol.ethan.may.events.SubscribeEvent;
@@ -23,6 +24,7 @@ public class ModAPI implements HypixelModAPIImplementation {
     private static boolean isOnHypixel;
 
     public static void setIsOnHypixel(final boolean isOnHypixel) {
+        Entry.debug("is on hypixel: " + isOnHypixel);
         ModAPI.isOnHypixel = isOnHypixel;
     }
 
@@ -52,12 +54,12 @@ public class ModAPI implements HypixelModAPIImplementation {
 
     @SubscribeEvent
     public void onDisconnect(final lol.ethan.may.events.ClientDisconnectFromServerEvent event) {
-        isOnHypixel = false;
+        setIsOnHypixel(false);
     }
 
     @Override
     public void onInit() {
-        HypixelModAPI.getInstance().createHandler(ClientboundHelloPacket.class, packet -> isOnHypixel = true);
+        HypixelModAPI.getInstance().createHandler(ClientboundHelloPacket.class, packet -> setIsOnHypixel(true));
         EventBus.subscribe(this);
     }
 

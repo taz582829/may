@@ -22,7 +22,6 @@ public class NetworkManagerHook implements ITransformer {
                 insnList.add(new InsnNode(Opcodes.DUP));
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 1));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, Type.getInternalName(PacketEvent.Send.class), "<init>", "(Lnet/minecraft/network/Packet;)V"));
-                insnList.add(new InsnNode(Opcodes.DUP));
                 insnList.add(ASMUtils.postEvent());
                 end = new LabelNode();
                 insnList.add(new InsnNode(Opcodes.DUP));
@@ -76,6 +75,6 @@ public class NetworkManagerHook implements ITransformer {
 
     @Override
     public List<String> getTargets() {
-        return Collections.singletonList("net.minecraft.network.NetworkManagerHook");
+        return Collections.singletonList("net.minecraft.network.NetworkManager");
     }
 }

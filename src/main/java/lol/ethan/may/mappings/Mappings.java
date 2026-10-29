@@ -1,5 +1,6 @@
 package lol.ethan.may.mappings;
 
+import lol.ethan.may.Entry;
 import net.minecraft.client.Minecraft;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
@@ -130,7 +131,7 @@ public class Mappings {
     }
 
     public static String mapMethodInHierarchy(final String owner, final String name, final String desc) {
-        return Mappings.mapMethodInHierarchy(owner, name, desc, null);
+        return Mappings.mapMethodInHierarchy(owner, name, desc, name);
     }
 
     public static String mapMethodInHierarchy(final String owner, final String name, final String desc, final String fallback) {
@@ -158,21 +159,19 @@ public class Mappings {
     }
 
     private static String superOf(final String internalName) {
-        if (internalName.equals("java/lang/Object")) {
-            return null;
+        if (internalName.equals("java/lang/Object")) return null;
+        final String cached = superCache.get(internalName);
+        if (cached != null) return cached;
+        String result = null;
+        try {
+            final Class<?> c = Class.forName(internalName.replace('/', '.'), false, Entry.loader);
+            final Class<?> s = c.getSuperclass();
+            result = s == null ? "java/lang/Object" : s.getName().replace('.', '/');
+        } catch (final Throwable ignored) {
         }
-        return superCache.computeIfAbsent(internalName, n -> {
-            try (final InputStream in = Mappings.class.getClassLoader().getResourceAsStream(n + ".class")) {
-                if (in == null) {
-                    final String string2 = "java/lang/Object";
-                    return string2;
-                }
-                final String string = new ClassReader(in).getSuperName();
-                return string;
-            } catch (final IOException e) {
-                return "java/lang/Object";
-            }
-        });
+        if (result == null) return "java/lang/Object";
+        superCache.put(internalName, result);
+        return result;
     }
 
     public enum MappingType {

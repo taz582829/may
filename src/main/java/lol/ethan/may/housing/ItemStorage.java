@@ -61,7 +61,7 @@ public class ItemStorage extends GuiChest {
     private static File getSaveFile() {
         return new File(Entry.FILE_PATH, "items.dat");
     }
-
+    
     public static void load() {
         final File file = ItemStorage.getSaveFile();
         if (!file.exists()) {

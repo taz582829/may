@@ -1,15 +1,15 @@
 package lol.ethan.may.anticheat.data;
 
 import lol.ethan.may.anticheat.AnticheatFlag;
-import lol.ethan.may.events.PacketEvent;
-import lol.ethan.may.events.SubscribeEvent;
-import lol.ethan.may.events.TickEvent;
-import lol.ethan.may.events.WorldEvent;
+import lol.ethan.may.events.*;
+import lol.ethan.may.events.player.BlockBreakEvent;
 import lol.ethan.may.events.player.NameFormatEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S0BPacketAnimation;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 
 import java.util.*;
@@ -20,6 +20,7 @@ public class AnticheatData {
     public static Entry getEntry(final UUID uuid) {
         return entryMap.computeIfAbsent(uuid, id -> new Entry());
     }
+
     @SubscribeEvent
     public void onTick(final TickEvent.Post event) {
         final Minecraft mc = Minecraft.getMinecraft();
@@ -33,6 +34,7 @@ public class AnticheatData {
             final double dx = player.posX - player.prevPosX;
             final double dz = player.posZ - player.prevPosZ;
             data.moveSpeed = Math.sqrt(dx * dx + dz * dz) * 20;
+            data.verticalMoveSpeed = (player.posY - player.prevPosY) * 20;
             data.breakDelay = Math.max(0, data.breakDelay - 1);
 
             if (player.isUsingItem()) {
@@ -66,7 +68,7 @@ public class AnticheatData {
             if (!player.onGround) data.lastAirTime = time;
             data.wasShifting = player.isSneaking();
             if (data.shiftEvents.size() > 50) {
-                data.shiftEvents.remove(data.shiftEvents.size() - 1);
+                data.shiftEvents.removeFirst();
             }
         }
     }
@@ -96,29 +98,16 @@ public class AnticheatData {
                 if (player.getUniqueID().version() == 2) return;
                 if (player == mc.thePlayer) return;
 
-                getEntry(player.getUniqueID()).lastSwing = System.currentTimeMillis();
-            }
-        }
-        if (event.getPacket() instanceof S0BPacketAnimation) {
-            final S0BPacketAnimation packet = (S0BPacketAnimation) event.getPacket();
-            final int entityId = packet.getEntityID();
-            final int animationType = packet.getAnimationType();
+                final Entry dataEntry = getEntry(player.getUniqueID());
+                final long now = System.currentTimeMillis();
+                dataEntry.lastSwing = now;
+                final MovingObjectPosition mop = player.rayTrace(
+                        5.0D,
+                        1.0F
+                );
 
-            if (animationType == 0) {
-                final Entity entity = mc.theWorld.getEntityByID(entityId);
-                if (entity instanceof EntityPlayer) {
-                    final EntityPlayer player = (EntityPlayer) entity;
-                    final Entry dataEntry = getEntry(player.getUniqueID());
-                    final long now = System.currentTimeMillis();
-                    dataEntry.lastSwing = now;
-                    final MovingObjectPosition mop = player.rayTrace(
-                            5.0D,
-                            1.0F
-                    );
-
-                    if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-                        dataEntry.lastSwingAtBlock = now;
-                    }
+                if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+                    dataEntry.lastSwingAtBlock = now;
                 }
             }
         }
@@ -135,36 +124,29 @@ public class AnticheatData {
         }
         event.setText(text.toString());
     }
+    @SubscribeEvent(priority = Priority.LOWEST)
+    public void onBlockBreak(final BlockBreakEvent event) {
+        final EntityPlayer player = event.getPlayer();
+
+        Entry data = getEntry(player.getUniqueID());
+        data.breakDelay = 5;
+    }
 
     public static class Entry {
         public long lastSwing;
         public long lastShiftEvent;
         public int useItemTicks;
         public double moveSpeed;
+        public double verticalMoveSpeed;
         public boolean wasShifting;
-        public List<ShiftEvent> shiftEvents = new ArrayList<>();
+        public LinkedList<ShiftEvent> shiftEvents = new LinkedList<>();
         public final Map<AnticheatFlag, Integer> flags = new HashMap<>();
         public final Map<AnticheatFlag, Integer> violations = new HashMap<>();
         public long lastSwingAtBlock;
         public int breakDelay;
         public long lastAirTime;
-        public float lastYaw;
-        public int displaceStage;
-        public int ticksSinceDisplace;
-
-        public List<RotationEvent> rotationEvents = new ArrayList<>();
     }
-    public static class RotationEvent {
-        public long timestamp;
-        public float yaw;
-        public float pitch;
 
-        public RotationEvent(final long timestamp, final float yaw, final float pitch) {
-            this.timestamp = timestamp;
-            this.yaw = yaw;
-            this.pitch = pitch;
-        }
-    }
     public static class ShiftEvent {
         public enum Type{
             START,

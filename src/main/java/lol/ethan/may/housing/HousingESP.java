@@ -1,7 +1,7 @@
 package lol.ethan.may.housing;
 
 import lol.ethan.may.config.Config;
-import lol.ethan.may.events.RenderWorldEvent;
+import lol.ethan.may.events.render.RenderWorldEvent;
 import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.utils.ColorUtils;
 import lol.ethan.may.utils.RenderUtils;

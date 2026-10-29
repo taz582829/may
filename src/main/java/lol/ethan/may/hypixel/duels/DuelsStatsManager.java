@@ -89,6 +89,44 @@ public class DuelsStatsManager {
                                 this.mc.addScheduledTask(() -> {
                                     try {
                                         this.tabStats.refreshPlayer(profile.getId(), res.player, "bedwars");
+                                        DuelsUtils.showDuelsStats(res.player, DuelsUtils.DuelsMode.BEDWARS);
+                                    } catch (final Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                })
+                        );
+                    }
+                }
+            }, 5);
+        } else if (msg.equals("Destroy the enemy bed and then eliminate them!")) {
+            TimeUtils.setTickDelay(() -> {
+                for (final NetworkPlayerInfo playerInfo : this.mc.getNetHandler().getPlayerInfoMap()) {
+                    final GameProfile profile = playerInfo.getGameProfile();
+                    if (profile.getId().equals(this.mc.thePlayer.getUniqueID())) continue;
+                    if (profile.getId().version() == 2) continue;
+
+                    final UUID targetUUID;
+
+                    if (profile.getId().version() == 1) {
+                        final Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
+                        if (denick == null) {
+                            targetUUID = profile.getId();
+
+                            this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
+                        } else {
+                            targetUUID = UUID.fromString(denick.uuid);
+                        }
+                    } else {
+                        targetUUID = profile.getId();
+                    }
+                    final IStats stats = this.tabStats.getStats(targetUUID);
+
+                    if (stats == null && profile.getId().version() == 4) {
+                        HypixelAPI.getPlayer(targetUUID).thenAccept(res ->
+                                this.mc.addScheduledTask(() -> {
+                                    try {
+                                        this.tabStats.refreshPlayer(profile.getId(), res.player, "bedwars");
+                                        DuelsUtils.showDuelsStats(res.player, DuelsUtils.DuelsMode.BEDWARS_RUSH);
                                     } catch (final Exception e) {
                                         e.printStackTrace();
                                     }
@@ -108,7 +146,7 @@ public class DuelsStatsManager {
 
             final IStats stats = this.tabStats.getStats(profile.getId());
 
-            event.text = this.tabStats.getDisplayName(event.playerInfo, stats);
+            event.setText(this.tabStats.getDisplayName(event.playerInfo, stats));
         }
     }
 

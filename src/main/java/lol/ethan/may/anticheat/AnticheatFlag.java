@@ -59,7 +59,7 @@ public abstract class AnticheatFlag {
                 player.getTeam(),
                 player.getName()
         );
-        Entry.chat(Entry.PREFIX + "§r" + display + " §rflags §3" + this.name);
+        Entry.chat(Entry.PREFIX + display + " §rflags §5" + this.name);
         if (Config.flagPlaySound.enabled) Entry.playSound("note.pling", 1, 2);
     }
 }

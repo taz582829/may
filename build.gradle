@@ -85,7 +85,7 @@ shadowJar {
         )
     }
     relocate 'net.hypixel', 'lol.ethan.may.shaded.hypixel'
-    //relocate 'org.objectweb.asm', 'lol.ethan.may.shaded.asm'
+    relocate 'org.objectweb.asm', 'lol.ethan.may.shaded.asm'
     destinationDirectory = file("C:/agent")
     archiveFileName = "agent.jar"
 }

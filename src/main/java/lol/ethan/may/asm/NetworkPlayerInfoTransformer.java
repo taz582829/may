@@ -18,29 +18,29 @@ public class NetworkPlayerInfoTransformer implements ITransformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (method.name.equals("getDisplayName") || method.name.equals("func_178854_k")) {
-                for (final AbstractInsnNode insnNode : method.instructions) {
-                    if (insnNode.getOpcode() != Opcodes.ARETURN) continue;
-
+            for (final AbstractInsnNode insnNode : method.instructions) {
+                if (insnNode instanceof FieldInsnNode) {
+                    FieldInsnNode fn = (FieldInsnNode) insnNode;
+                    if (fn.name.equals("displayName") && fn.getOpcode() == Opcodes.GETFIELD) {
+                        method.instructions.insert(insnNode, ASMUtils.asm(a -> {
+                            a.load(0, ASMUtils.getType(NetworkPlayerInfo.class));
+                            a.invokestatic(Type.getInternalName(NetworkPlayerInfoTransformer.class), "may$formatTabName",
+                                    formatNameDesc, false);
+                        }));
+                        //method.instructions.remove(insnNode);
+                    }
+                }
+            }
+            if (method.name.equals("getResponseTime")) {
+                for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
+                    if (insnNode.getOpcode() < Opcodes.IRETURN || insnNode.getOpcode() > Opcodes.RETURN) continue;
                     method.instructions.insertBefore(insnNode, ASMUtils.asm(a -> {
-                        a.load(0, Type.getType(NetworkPlayerInfo.class));
-                        a.invokestatic(
-                                Type.getInternalName(NetworkPlayerInfoTransformer.class),
-                                "may$formatTabName",
-                                formatNameDesc,
-                                false
-                        );
+                        a.load(0, ASMUtils.getType(NetworkPlayerInfo.class));
+                        a.invokestatic(Type.getInternalName(NetworkPlayerInfoTransformer.class), "may$setPlayerPing", "(IL" + Type.getInternalName(NetworkPlayerInfo.class) + ";)I", false);
                     }));
                 }
             }
-            if (!method.name.equals("func_178853_c") && !method.name.equals("getResponseTime")) continue;
-            for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
-                if (insnNode.getOpcode() < Opcodes.IRETURN || insnNode.getOpcode() > Opcodes.RETURN) continue;
-                method.instructions.insertBefore(insnNode, ASMUtils.asm(a -> {
-                    a.load(0, ASMUtils.getType(NetworkPlayerInfo.class));
-                    a.invokestatic(Type.getInternalName(NetworkPlayerInfoTransformer.class), "may$setPlayerPing", "(IL" + Type.getInternalName(NetworkPlayerInfo.class) + ";)I", false);
-                }));
-            }
+
         }
     }
 

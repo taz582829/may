@@ -12,6 +12,7 @@ public class HypixelUtils {
     public static boolean isOnHypixel() {
         return ModAPI.isOnHypixel();
     }
+
     public static void showGeneralStats(final PlayerResponse.Player player) {
         if (player.stats == null) return;
         final String displayName = HypixelAPI.getDisplayName(player);
@@ -23,8 +24,8 @@ public class HypixelUtils {
         final LocalDateTime firstLogin = player.getFirstLogin();
         final LocalDateTime lastLogin = player.getLastLogin();
         String msg = Entry.PREFIX + displayName + " §fLvl: " + nwlFormatted + " §fAP: §e" + ap + " §fRanks: §1" + ranks;
-        msg += "\n" + Entry.SHORT_PREFIX + "§fFL: §3" + TimeUtils.formatTime(firstLogin);
-        msg += " §fLL: §3" + (lastLogin == null ? "§4HIDDEN" : TimeUtils.formatTime(lastLogin));
+        msg += "\n" + Entry.SHORT_PREFIX + "§fFL: §5" + TimeUtils.formatTime(firstLogin);
+        msg += " §fLL: §5" + (lastLogin == null ? "§4HIDDEN" : TimeUtils.formatTime(lastLogin));
         Entry.chat(msg);
     }
 }

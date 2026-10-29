@@ -124,8 +124,7 @@ public class ClickGUI extends GuiScreen {
         try {
             for (final Component comp : components) {
                 if (!this.shouldShow(comp, selected)) continue;
-                if (scrollOffset > visibleIndex) continue;
-                visibleIndex++;
+                if (scrollOffset > visibleIndex++) continue;
 
                 comp.x = this.x + sidebarWidth;
                 comp.y = categoryY;
@@ -181,8 +180,8 @@ public class ClickGUI extends GuiScreen {
         int visibleIndex = 0;
         for (final Component comp : components) {
             if (this.shouldShow(comp, selected)) {
-                if (scrollOffset > visibleIndex) continue;
-                visibleIndex++;
+                if (scrollOffset > visibleIndex++) continue;
+
                 comp.onMouseClick(mx, my, button);
                 if (this.hoveringOn(mx, my, (int) comp.x, (int) comp.y, xSize - sidebarWidth, comp.componentHeight)) {
                     if (button == 0) {
@@ -220,6 +219,15 @@ public class ClickGUI extends GuiScreen {
     }
     public boolean hoveringOn(final int mx, final int my, final int targetX, final int targetY, final int width, final int height) {
         return my >= targetY && my < targetY + height && mx >= targetX && mx < targetX + width;
+    }
+
+    private int getMaxScroll() {
+        final Category selected = Category.values()[categorySelected];
+        int visible = 0;
+        for (Component comp : getCurrentComponents()) {
+            if (this.shouldShow(comp, selected)) visible++;
+        }
+        return Math.max(0, visible - 1);
     }
 
     @Override
@@ -263,8 +271,8 @@ public class ClickGUI extends GuiScreen {
         super.handleMouseInput();
         final int wheel = Mouse.getEventDWheel();
         if (wheel != 0) {
-            scrollOffset += (wheel > 0 ? -1 : 1);
-            scrollOffset = Math.max(0, scrollOffset);
+            scrollOffset -= Integer.signum(wheel);
+            scrollOffset = Math.max(0, Math.min(scrollOffset, this.getMaxScroll()));
         }
     }
 

@@ -1,12 +1,10 @@
 package lol.ethan.may.asm;
 
 import lol.ethan.may.config.Config;
-import lol.ethan.may.events.Event;
-import lol.ethan.may.events.RenderWorldEvent;
+import lol.ethan.may.events.render.RenderWorldEvent;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;

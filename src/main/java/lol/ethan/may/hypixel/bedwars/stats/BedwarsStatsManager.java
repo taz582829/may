@@ -15,6 +15,7 @@ import lol.ethan.may.hypixel.api.aurora.AuroraAPI;
 import lol.ethan.may.hypixel.api.responses.PlayerResponse;
 import lol.ethan.may.hypixel.bedwars.BedwarsUtils;
 import lol.ethan.may.hypixel.bedwars.enums.BedwarsTeam;
+import lol.ethan.may.hypixel.duels.DuelsUtils;
 import lol.ethan.may.hypixel.modapi.LocationData;
 import lol.ethan.may.utils.JsonUtils;
 import lol.ethan.may.utils.TimeUtils;
@@ -104,6 +105,7 @@ public class BedwarsStatsManager {
     }
     @SubscribeEvent
     public void onRenderPlayer(final RenderPlayerInTabEvent event) {
+        if (DuelsUtils.isInDuels() || DuelsUtils.isInBwDuels()) return;
         if (this.inBedwars && Config.bedwarsTabStats.enabled) {
             final GameProfile profile = event.getPlayerInfo().getGameProfile();
             if (profile.getId().version() == 2) return;

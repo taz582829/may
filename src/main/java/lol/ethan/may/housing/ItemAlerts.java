@@ -38,7 +38,7 @@ public class ItemAlerts {
         final List<String> lore = ItemUtils.getLore(item);
         final UUID itemId = HousingUtils.addToItemMap(item);
         final String internalCommand = Entry.addInternalCommand(() -> HousingUtils.spawnItem(itemId));
-        final IChatComponent button = ChatUtils.createChatButton("§dMay §8» §r" + displayName + " §fis " + (wearing ? "wearing" : "holding") + " " + itemDisplayName, String.join("\n", lore), ClickEvent.Action.RUN_COMMAND, internalCommand);
+        final IChatComponent button = ChatUtils.createChatButton(Entry.PREFIX + displayName + " §fis " + (wearing ? "wearing" : "holding") + " " + itemDisplayName, String.join("\n", lore), ClickEvent.Action.RUN_COMMAND, internalCommand);
         final IChatComponent copyNBTButton = ChatUtils.createChatButton("§b[Copy NBT]", ClickEvent.Action.RUN_COMMAND, Entry.addInternalCommand(() -> GuiScreen.setClipboardString(ItemUtils.getFullNBT(item).toString())));
         final IChatComponent tpButton = ChatUtils.createChatButton("§5[Teleport]", ClickEvent.Action.RUN_COMMAND, "/tp " + player.getName());
         button.appendText(" ").appendSibling(copyNBTButton).appendText(" ").appendSibling(tpButton);
@@ -49,7 +49,7 @@ public class ItemAlerts {
         final List<String> lore = ItemUtils.getLore(item);
         final UUID itemId = HousingUtils.addToItemMap(item);
         final String internalCommand = Entry.addInternalCommand(() -> HousingUtils.spawnItem(itemId));
-        final IChatComponent button = ChatUtils.createChatButton("§dMay §8» §r§6Item Frame §fhas " + itemDisplayName, String.join("\n", lore), ClickEvent.Action.RUN_COMMAND, internalCommand);
+        final IChatComponent button = ChatUtils.createChatButton(Entry.PREFIX + "§6Item Frame §fhas " + itemDisplayName, String.join("\n", lore), ClickEvent.Action.RUN_COMMAND, internalCommand);
         final IChatComponent copyNBTButton = ChatUtils.createChatButton("§b[Copy NBT]", ClickEvent.Action.RUN_COMMAND, Entry.addInternalCommand(() -> GuiScreen.setClipboardString(ItemUtils.getFullNBT(item).toString())));
         final IChatComponent tpButton = ChatUtils.createChatButton("§5[Teleport]", ClickEvent.Action.RUN_COMMAND, "/tp " + user.posX + " " + user.posY + " " + user.posZ);
         button.appendText(" ").appendSibling(copyNBTButton).appendText(" ").appendSibling(tpButton);

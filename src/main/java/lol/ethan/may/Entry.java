@@ -3,13 +3,16 @@ package lol.ethan.may;
 import lol.ethan.may.anticheat.checks.Autoblock;
 import lol.ethan.may.anticheat.checks.LegitScaffold;
 import lol.ethan.may.anticheat.checks.NoBreakDelay;
+import lol.ethan.may.anticheat.checks.Timer;
 import lol.ethan.may.anticheat.data.AnticheatData;
 import lol.ethan.may.asm.*;
 import lol.ethan.may.commands.*;
 import lol.ethan.may.config.Config;
 import lol.ethan.may.config.component.Component;
 import lol.ethan.may.config.component.HUDComponent;
+import lol.ethan.may.config.component.KeybindComponent;
 import lol.ethan.may.events.*;
+import lol.ethan.may.events.render.RenderGameOverlayEvent;
 import lol.ethan.may.housing.AntiInvis;
 import lol.ethan.may.housing.HousingESP;
 import lol.ethan.may.hypixel.BlacklistInfo;
@@ -31,11 +34,16 @@ import net.hypixel.modapi.HypixelModAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
+import org.lwjgl.input.Keyboard;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.instrument.Instrumentation;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Entry {
 
@@ -48,9 +56,18 @@ public class Entry {
     public static ClassLoader loader;
     public static Entry INSTANCE;
     public static File FILE_PATH;
+    public static String VERSION;
     public static File DEBUG_DIR;
     private static long nanoTime;
 
+    public static MinecraftClient getClient() {
+        try {
+            Class.forName("com.moonsworth.lunar.lib.adventure.text.Component");
+            return MinecraftClient.LUNAR;
+        } catch (Exception e) {
+            return MinecraftClient.FORGE;
+        }
+    }
     static {
         huds = new ArrayList<>();
         commandIdMap = new HashMap<>();
@@ -73,24 +90,21 @@ public class Entry {
     }
 
     public static void load(final Instrumentation i, final ClassLoader loader) throws Exception {
+
         nanoTime = System.nanoTime();
         Entry.loader = loader;
         inst = i;
         Mappings.load(Entry.getMinecraft());
-        Entry.chat("§dMay §8» §rmodifying game code...");
         Thread.currentThread().setContextClassLoader(loader);
-        FILE_PATH = new File(Minecraft.getMinecraft().mcDataDir, "May");
-        DEBUG_DIR = new File(Entry.FILE_PATH, "debug");
-        if (!DEBUG_DIR.exists()) {
-            DEBUG_DIR.mkdirs();
-        }
+
+
         if (Mappings.getMappingType() == Mappings.MappingType.MCP) {
             transformers.add(new Remapper());
         }
         transformers.add(new MinecraftTransformer());
         transformers.add(new NetworkManagerHook());
         transformers.add(new WorldTransformer());
-        transformers.add(new RendererLivingEntityTransformer());
+        if (getClient() == MinecraftClient.LUNAR) transformers.add(new RendererLivingEntityTransformer());
         transformers.add(new EntityPlayerTransformer());
         transformers.add(new HitboxesHook());
         transformers.add(new GuiIngameHook());
@@ -100,6 +114,9 @@ public class Entry {
         transformers.add(new GuiContainerTransformer());
         transformers.add(new GuiNewChatTransformer());
         transformers.add(new EntityPlayerSPTransformer());
+        transformers.add(new SkinManagerTransformer());
+        transformers.add(new YggdrasilTransformer());
+
         for (final ITransformer t : transformers) {
             inst.addTransformer(t, true);
         }
@@ -115,9 +132,18 @@ public class Entry {
                 }
             }
         }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getResourceAsStream("version.txt"), StandardCharsets.UTF_8))) {
+            Entry.VERSION = reader.lines().collect(Collectors.joining("\n"));
+        } finally {
+            Installer.getLatestReleaseTag().thenAccept(r -> {
+                if (!VERSION.equals(r)) {
+                    Installer.notifyOnUpdate(r);
+                }
+            });
+        }
         new Entry().start(loader);
     }
-
     public static String addInternalCommand(final Runnable runnable) {
         final UUID uuid = UUID.randomUUID();
         commandIdMap.put(uuid, runnable);
@@ -145,13 +171,12 @@ public class Entry {
     }
 
     public static InputStream getResourceAsStream(final String path) {
-        final ClassLoader[] loaders;
-        for (final ClassLoader cl : loaders = new ClassLoader[]{ClassLoader.getSystemClassLoader(), Thread.currentThread().getContextClassLoader(), Mappings.class.getClassLoader()}) {
+        for (final ClassLoader cl : new ClassLoader[]{ClassLoader.getSystemClassLoader(), Thread.currentThread().getContextClassLoader(), Mappings.class.getClassLoader()}) {
             final InputStream in;
             if (cl == null || (in = cl.getResourceAsStream(path)) == null) continue;
             return in;
         }
-        throw new RuntimeException("couldnt find a resource");
+        throw new RuntimeException("couldnt find a resource at " + path);
     }
 
     public static void debug(final IChatComponent message) {
@@ -208,8 +233,15 @@ public class Entry {
     public void start(final ClassLoader loader) {
         Thread.currentThread().setContextClassLoader(loader);
 
-        Config.setConfigFile(new File(new File(Minecraft.getMinecraft().mcDataDir, "May"), "config.json"));
+        FILE_PATH = new File(Minecraft.getMinecraft().mcDataDir, "May");
+        DEBUG_DIR = new File(Entry.FILE_PATH, "debug");
+        if (!DEBUG_DIR.exists()) {
+        DEBUG_DIR.mkdirs();
+        }
+        Config.setConfigFile(new File(FILE_PATH, "config.json"));
         Config.load();
+
+
         for (final Component comp : Config.getAllComponents()) {
             if (!(comp instanceof HUDComponent)) continue;
             final HUDComponent hudComponent = (HUDComponent) comp;
@@ -219,9 +251,14 @@ public class Entry {
         if (Entry.getServerIP().contains("hypixel")) {
             ModAPI.setIsOnHypixel(true);
             Entry.debug("detected hypixel");
+            try {
+                HypixelModAPI.class.getDeclaredMethod("sendRegisterPacket", boolean.class)
+                        .invoke(HypixelModAPI.getInstance(), true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         EventBus.subscribe(new Object() {
-
             @SubscribeEvent
             public void onShutdown(final ShutdownEvent event) {
                 Config.save();
@@ -229,11 +266,9 @@ public class Entry {
         });
         EventBus.subscribe(this);
         EventBus.subscribe(new CommandHandler());
-        EventBus.subscribe(new KeyboardHandler());
-        EventBus.subscribe(new ChatListener());
         EventBus.subscribe(new AnticheatData());
         EventBus.subscribe(new Autoblock());
-        //EventBus.subscribe(new BedNuker());
+        EventBus.subscribe(new Timer());
         EventBus.subscribe(new LegitScaffold());
         EventBus.subscribe(new NoBreakDelay());
         EventBus.subscribe(new BedwarsUtils());
@@ -250,15 +285,38 @@ public class Entry {
         EventBus.subscribe(new BowDistance());
         EventBus.subscribe(new LobbyOneHelper());
         EventBus.subscribe(new BlacklistInfo());
-        CommandHandler.register(new TestCommand());
+
+
+        CommandHandler.register(new DebugCommand());
         CommandHandler.register(new HypixelStats());
         CommandHandler.register(new ConfigCommand());
         CommandHandler.register(new HypixelLocation());
         final long nanoTimeNow = System.nanoTime();
         final double diff = (((double) nanoTimeNow / 1000000.0) - ((double) nanoTime / 1000000.0)) / 1000.0;
-        Entry.chat("§dMay §8» §rinjection finished! took " + String.format("%.2fs", diff));
-    }
+        Entry.chat(Entry.PREFIX + "injection finished! took " + String.format("%.2fs", diff));
 
+        try {
+            Installer.getLatestReleaseTag().thenAccept(r -> {
+                if (r == null) {
+                    Entry.chat(Entry.PREFIX + "§ccouldn't get latest version!");
+                } else {
+                    Entry.debug("latest version: " + r + ", your version: " + r);
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @SubscribeEvent
+    public void onKeyPress(final KeyboardEvent event) {
+        if (event.getBind() == Keyboard.KEY_NONE || Minecraft.getMinecraft().currentScreen != null) return;
+        for (final Component comp : Config.getAllComponents()) {
+            if (!(comp instanceof KeybindComponent)) continue;
+            final KeybindComponent keybind = (KeybindComponent) comp;
+            if (keybind.bind != event.getBind() || !event.getState()) continue;
+            keybind.action.run();
+        }
+    }
     @SubscribeEvent
     public void onTick(final TickEvent.Post event) {
         if (Entry.getMinecraft().theWorld == null) {
@@ -270,6 +328,16 @@ public class Entry {
         }
     }
 
+//    @SubscribeEvent
+//    public void onPacketReceived(PacketEvent.Receive event) {
+//        Packet<?> raw = event.getPacket();
+//        if (raw instanceof S22PacketMultiBlockChange) {
+//            S22PacketMultiBlockChange packet = (S22PacketMultiBlockChange) raw;
+//            for (S22PacketMultiBlockChange.BlockUpdateData data : packet.getChangedBlocks()) {
+//
+//            }
+//        }
+//    }
     @SubscribeEvent
     public void onChat(final ChatEvent.Send e) {
         final String msg = e.getMessage();

@@ -1,10 +1,13 @@
 package lol.ethan.may.commands;
 
+import net.minecraft.client.Minecraft;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public abstract class Command {
+    protected final Minecraft mc = Minecraft.getMinecraft();
     public final String name;
     public String prefix = "/";
     public List<String> aliases = new ArrayList<>();

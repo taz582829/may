@@ -13,16 +13,18 @@ public class Remapper implements ITransformer {
         if (Mappings.getMappingType() != Mappings.MappingType.MCP) {
             return;
         }
-        System.out.println("remapping...");
+        System.out.println("remapping " + node.name);
         for (final MethodNode method : node.methods) {
             for (final AbstractInsnNode insnNode : method.instructions) {
                 if (insnNode instanceof MethodInsnNode) {
                     final MethodInsnNode insn = (MethodInsnNode) insnNode;
-                    insn.name = Mappings.getMethod(insn.owner, insn.name, insn.desc);
+                    if (!insn.owner.contains("net/minecraft") && !insn.owner.contains("com/mojang")) continue;
+                    insn.name = Mappings.mapMethodInHierarchy(insn.owner, insn.name, insn.desc);
                     continue;
                 }
                 if (insnNode instanceof FieldInsnNode) {
                     final FieldInsnNode f = (FieldInsnNode) insnNode;
+                    if (!f.owner.contains("net/minecraft") && !f.owner.contains("com/mojang")) continue;
                     f.name = Mappings.mapFieldInHierarchy(f.owner, f.name, f.name);
                     continue;
                 }
@@ -31,6 +33,7 @@ public class Remapper implements ITransformer {
                 for (int i = 0; i < dynamic.bsmArgs.length; i++) {
                     if (!(dynamic.bsmArgs[i] instanceof Handle)) continue;
                     final Handle h = (Handle) dynamic.bsmArgs[i];
+                    if (!h.getOwner().contains("net/minecraft") && !h.getOwner().contains("com/mojang")) continue;
                     final String name = h.getTag() <= 4 ? Mappings.mapFieldInHierarchy(h.getOwner(), h.getName(), h.getName()) : Mappings.mapMethodInHierarchy(h.getOwner(), h.getName(), h.getDesc(), h.getName());
                     dynamic.bsmArgs[i] = new Handle(h.getTag(), h.getOwner(), name, h.getDesc(), h.isInterface());
                 }

@@ -2,37 +2,31 @@ package lol.ethan.may.events;
 
 import net.minecraft.network.Packet;
 
-public class PacketEvent {
+public class PacketEvent extends Event {
+    private Packet<?> packet;
 
-    public static class Receive extends Event {
-        private Packet<?> packet;
+    public PacketEvent(Packet<?> packet) {
+        this.packet = packet;
+    }
 
-        public Receive(final Packet<?> packet) {
-            this.packet = packet;
-        }
+    public Packet<?> getPacket() {
+        return packet;
+    }
 
-        public Packet<?> getPacket() {
-            return packet;
-        }
+    public void setPacket(final Packet<?> packet) {
+        this.packet = packet;
+    }
 
-        public void setPacket(final Packet<?> packet) {
-            this.packet = packet;
+    public static class Receive extends PacketEvent {
+        public Receive(Packet<?> packet) {
+            super(packet);
         }
     }
 
-    public static class Send extends Event {
-        private Packet<?> packet;
+    public static class Send extends PacketEvent {
 
-        public Send(final Packet<?> packet) {
-            this.packet = packet;
-        }
-
-        public Packet<?> getPacket() {
-            return packet;
-        }
-
-        public void setPacket(final Packet<?> packet) {
-            this.packet = packet;
+        public Send(Packet<?> packet) {
+            super(packet);
         }
     }
 }

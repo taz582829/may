@@ -45,7 +45,7 @@ public class UrchinAPI {
         @NotNull final List<TagsItem> tags = res.getTags();
 
         final String displayName = res.getDisplayname() == null ? dpn : res.getDisplayname();
-        final IChatComponent comp = new ChatComponentText(Entry.PREFIX + displayName + " §fhas §3" + tags.size() + " §fUrchin tag" + (tags.size() > 1 ? "s" : "") + ":");
+        final IChatComponent comp = new ChatComponentText(Entry.PREFIX + displayName + " §fhas §5" + tags.size() + " §fUrchin tag" + (tags.size() > 1 ? "s" : "") + ":");
         for (final TagsItem tag : tags) {
             comp.appendText("\n");
             final ChatComponentText newComponent = new ChatComponentText(Entry.SHORT_PREFIX);

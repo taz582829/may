@@ -23,10 +23,14 @@ public class CommandHandler {
 
     public CommandHandler() {
         try {
-            matches = S3APacketTabComplete.class.getDeclaredField("matches");
+            matches = S3APacketTabComplete.class.getDeclaredField(
+                    Mappings.getMappingType() == Mappings.MappingType.MCP ? Mappings.getField(S3APacketTabComplete.class, "matches") : "matches"
+            );
         } catch (final Exception e) {
             try {
-                matches = S3APacketTabComplete.class.getDeclaredField(Mappings.getField(S3APacketTabComplete.class, "matches"));
+                matches = S3APacketTabComplete.class.getDeclaredField(
+                        Mappings.getMappingType() == Mappings.MappingType.MCP ? Mappings.getField(S3APacketTabComplete.class, "matches") : "matches"
+                );
             } catch (final NoSuchFieldException ex) {
                 throw new RuntimeException(ex);
             }
