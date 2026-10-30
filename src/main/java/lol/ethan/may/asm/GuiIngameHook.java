@@ -1,9 +1,9 @@
 package lol.ethan.may.asm;
 
 import lol.ethan.may.events.EventBus;
+import lol.ethan.may.events.ScoreboardLineEvent;
 import lol.ethan.may.events.render.RenderGameOverlayEvent;
 import lol.ethan.may.events.render.RenderXPEvent;
-import lol.ethan.may.events.ScoreboardLineEvent;
 import net.minecraft.scoreboard.Team;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;

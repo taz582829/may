@@ -77,17 +77,22 @@ public interface ITransformer extends ClassFileTransformer {
                 simpleName = className.substring(lastSlash + 1);
             }
 
-            final File file = new File(Entry.DEBUG_DIR, simpleName + "_transformed.class");
-            final File preFile = new File(Entry.DEBUG_DIR, simpleName + "_pretransform.class");
+            if (shouldSave(className.replace("/", "."))) {
+                final File file = new File(Entry.DEBUG_DIR, simpleName + "_transformed.class");
+                final File preFile = new File(Entry.DEBUG_DIR, simpleName + "_pretransform.class");
 
-            Files.write(preFile.toPath(), bytes);
-            Files.write(file.toPath(), transformed);
+                Files.write(preFile.toPath(), bytes);
+                Files.write(file.toPath(), transformed);
+            }
             return transformed;
         } catch (final Throwable t) {
             System.out.println(className + " failed to transform! (" + getClass().getName() + ")");
             t.printStackTrace();
             return null;
         }
+    }
+    default boolean shouldSave(String className) {
+        return true;
     }
 
     default boolean shouldComputeFrames() {

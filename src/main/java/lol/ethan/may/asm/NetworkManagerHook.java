@@ -3,6 +3,7 @@ package lol.ethan.may.asm;
 import lol.ethan.may.events.ClientDisconnectFromServerEvent;
 import lol.ethan.may.events.Event;
 import lol.ethan.may.events.PacketEvent;
+import net.minecraft.util.IChatComponent;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
@@ -55,16 +56,19 @@ public class NetworkManagerHook implements ITransformer {
                 method.instructions.insert(insnList);
             }
             if (!method.name.equals("func_150718_a") && !method.name.equals("closeChannel")) continue;
-            insnList = new InsnList();
-            insnList.add(new VarInsnNode(Opcodes.ALOAD, 1));
-            insnList.add(new TypeInsnNode(Opcodes.NEW, Type.getInternalName(ClientDisconnectFromServerEvent.class)));
-            insnList.add(new InsnNode(Opcodes.DUP));
-            insnList.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, Type.getInternalName(ClientDisconnectFromServerEvent.class), "<init>", "(Lnet/minecraft/util/IChatComponent;)V"));
-            insnList.add(new InsnNode(Opcodes.DUP));
-            insnList.add(ASMUtils.postEvent());
-            insnList.add(new InsnNode(Opcodes.DUP));
-            insnList.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, Type.getInternalName(ClientDisconnectFromServerEvent.class), "getReason", "()Lnet/minecraft/util/IChatComponent;"));
-            insnList.add(new VarInsnNode(Opcodes.ALOAD, 1));
+            method.instructions.insert(ASMUtils.asm(a -> {
+                a.anew(Type.getType(ClientDisconnectFromServerEvent.class));
+                a.dup();
+                a.load(1, Type.getType(IChatComponent.class));
+                a.invokespecial(Type.getInternalName(ClientDisconnectFromServerEvent.class), "<init>",
+                        "(Lnet/minecraft/util/IChatComponent;)V", false);
+                ASMUtils.postEvent(a);
+                a.checkcast(Type.getType(ClientDisconnectFromServerEvent.class));
+                a.dup();
+                a.invokevirtual(Type.getInternalName(ClientDisconnectFromServerEvent.class), "getReason",
+                        "()Lnet/minecraft/util/IChatComponent;", false);
+                a.store(1, Type.getType(IChatComponent.class));
+            }));
         }
     }
 

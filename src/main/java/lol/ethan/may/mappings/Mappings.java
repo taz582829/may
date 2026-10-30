@@ -2,7 +2,6 @@ package lol.ethan.may.mappings;
 
 import lol.ethan.may.Entry;
 import net.minecraft.client.Minecraft;
-import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
 import javax.swing.*;

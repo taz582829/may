@@ -15,6 +15,7 @@ import lol.ethan.may.events.*;
 import lol.ethan.may.events.render.RenderGameOverlayEvent;
 import lol.ethan.may.housing.AntiInvis;
 import lol.ethan.may.housing.HousingESP;
+import lol.ethan.may.housing.ItemAlerts;
 import lol.ethan.may.hypixel.BlacklistInfo;
 import lol.ethan.may.hypixel.BowDistance;
 import lol.ethan.may.hypixel.Denicker;
@@ -41,6 +42,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -104,7 +106,10 @@ public class Entry {
         transformers.add(new MinecraftTransformer());
         transformers.add(new NetworkManagerHook());
         transformers.add(new WorldTransformer());
-        if (getClient() == MinecraftClient.LUNAR) transformers.add(new RendererLivingEntityTransformer());
+        if (getClient() == MinecraftClient.LUNAR) {
+            transformers.add(new RendererLivingEntityTransformer());
+            //transformers.add(new ModTransformer());
+        }
         transformers.add(new EntityPlayerTransformer());
         transformers.add(new HitboxesHook());
         transformers.add(new GuiIngameHook());
@@ -236,7 +241,7 @@ public class Entry {
         FILE_PATH = new File(Minecraft.getMinecraft().mcDataDir, "May");
         DEBUG_DIR = new File(Entry.FILE_PATH, "debug");
         if (!DEBUG_DIR.exists()) {
-        DEBUG_DIR.mkdirs();
+            DEBUG_DIR.mkdirs();
         }
         Config.setConfigFile(new File(FILE_PATH, "config.json"));
         Config.load();
@@ -252,8 +257,9 @@ public class Entry {
             ModAPI.setIsOnHypixel(true);
             Entry.debug("detected hypixel");
             try {
-                HypixelModAPI.class.getDeclaredMethod("sendRegisterPacket", boolean.class)
-                        .invoke(HypixelModAPI.getInstance(), true);
+                Method method = HypixelModAPI.class.getDeclaredMethod("sendRegisterPacket", boolean.class);
+                method.setAccessible(true);
+                method.invoke(HypixelModAPI.getInstance(), true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -282,10 +288,10 @@ public class Entry {
         EventBus.subscribe(new AntiInvis());
         EventBus.subscribe(new MiddleClickShop());
         EventBus.subscribe(new PartyCounter());
+        EventBus.subscribe(new ItemAlerts());
         EventBus.subscribe(new BowDistance());
         EventBus.subscribe(new LobbyOneHelper());
         EventBus.subscribe(new BlacklistInfo());
-
 
         CommandHandler.register(new DebugCommand());
         CommandHandler.register(new HypixelStats());

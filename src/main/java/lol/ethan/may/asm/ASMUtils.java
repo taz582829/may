@@ -48,6 +48,8 @@ public class ASMUtils {
 
     public static void logCalls(final MethodNode node) {
         System.out.println("___________________________________________________________________");
+        System.out.println("Logging calls for " + node.name + " " + node.desc);
+        System.out.println("\u0000\n\u0000");
         final Textifier printer = new Textifier();
         node.accept(new TraceMethodVisitor(printer));
         final StringWriter writer = new StringWriter();

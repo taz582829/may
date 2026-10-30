@@ -5,14 +5,15 @@ import lol.ethan.may.events.*;
 import lol.ethan.may.events.player.BlockBreakEvent;
 import lol.ethan.may.events.player.NameFormatEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S0BPacketAnimation;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.UUID;
 
 public class AnticheatData {
     public static final String FLAG_ICON = "⚑";

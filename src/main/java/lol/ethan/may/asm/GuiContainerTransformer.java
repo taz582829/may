@@ -3,7 +3,6 @@ package lol.ethan.may.asm;
 import lol.ethan.may.Entry;
 import lol.ethan.may.events.Event;
 import lol.ethan.may.events.SlotClickEvent;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.inventory.Slot;
 import org.objectweb.asm.Label;

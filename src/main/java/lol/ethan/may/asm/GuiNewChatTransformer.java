@@ -11,7 +11,8 @@ import org.objectweb.asm.tree.MethodNode;
 import java.util.Collections;
 import java.util.List;
 
-import static lol.ethan.may.asm.ASMUtils.*;
+import static lol.ethan.may.asm.ASMUtils.asm;
+import static lol.ethan.may.asm.ASMUtils.postEvent;
 
 public class GuiNewChatTransformer implements ITransformer {
     @Override

@@ -6,7 +6,6 @@ import lol.ethan.may.events.PacketEvent;
 import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.mappings.Mappings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.network.play.client.C14PacketTabComplete;
 import net.minecraft.network.play.server.S3APacketTabComplete;
 

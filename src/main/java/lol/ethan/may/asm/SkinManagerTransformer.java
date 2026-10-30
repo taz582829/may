@@ -1,8 +1,5 @@
 package lol.ethan.may.asm;
 
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -10,7 +7,6 @@ import org.objectweb.asm.tree.MethodNode;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class SkinManagerTransformer implements ITransformer {
     @Override

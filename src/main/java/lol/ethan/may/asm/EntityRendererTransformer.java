@@ -7,10 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,18 +18,21 @@ public class EntityRendererTransformer implements ITransformer {
         for (final MethodNode method : node.methods) {
             MethodInsnNode min;
             if (method.name.equals("renderWorldPass")) {
-                method.instructions.insert(ASMUtils.asm(a -> {
-                    a.anew(ASMUtils.getType(RenderWorldEvent.class));
-                    a.dup();
-                    a.load(2, Type.FLOAT_TYPE);
-                    a.invokespecial(Type.getInternalName(RenderWorldEvent.class), "<init>", "(F)V", false);
-                    ASMUtils.postEvent(a);
-//                    final Label end = new Label();
-//                    a.invokevirtual(Type.getInternalName(Event.class), "isCancelled", "()Z", false);
-//                    a.ifeq(end);
-//                    a.areturn(Type.VOID_TYPE);
-//                    a.mark(end);
-                }));
+                for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
+                    if (!(insnNode instanceof LdcInsnNode)) continue;
+                    LdcInsnNode ldc = (LdcInsnNode) insnNode;
+                    if ("hand".equals(ldc.cst)) {
+                        method.instructions.insertBefore(ldc, ASMUtils.asm(a -> {
+                            a.anew(ASMUtils.getType(RenderWorldEvent.class));
+                            a.dup();
+                            a.load(2, Type.FLOAT_TYPE);
+                            a.invokespecial(Type.getInternalName(RenderWorldEvent.class), "<init>", "(F)V", false);
+                            ASMUtils.postEvent(a);
+                            a.pop();
+                        }));
+                    }
+                }
+
             }
             if (method.name.equals("updateLightmap")) {
                 for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
