@@ -37,16 +37,28 @@ public class HousingESP {
                     final int c = Integer.parseInt(hex, 16);
                     final Color _c = new Color(c);
                     final Color color = new Color(_c.getRed(), _c.getGreen(), _c.getBlue(), 100);
-                    RenderUtils.drawEntityBoundingBox(player, color, 2);
+                    if (Config.housingEspFilled.enabled) {
+                        RenderUtils.drawEntityBox(player, color);
+                    } else {
+                        RenderUtils.drawEntityBoundingBox(player, _c, 2);
+                    }
                     continue;
                 }
                 if (!(entity instanceof EntityItemFrame)) continue;
                 final EntityItemFrame frame = (EntityItemFrame) entity;
                 if (frame.getDisplayedItem() == null) {
-                    RenderUtils.drawEntityBoundingBox(frame, EMPTY_FRAME_COLOR, 2);
+                    if (Config.housingEspFilled.enabled) {
+                        RenderUtils.drawEntityBox(frame, EMPTY_FRAME_COLOR);
+                    } else {
+                        RenderUtils.drawEntityBoundingBox(frame, EMPTY_FRAME_COLOR, 2);
+                    }
                     continue;
                 }
-                RenderUtils.drawEntityBoundingBox(frame, FULL_FRAME_COLOR, 2);
+                if (Config.housingEspFilled.enabled) {
+                    RenderUtils.drawEntityBox(frame, FULL_FRAME_COLOR);
+                } else {
+                    RenderUtils.drawEntityBoundingBox(frame, FULL_FRAME_COLOR, 2);
+                }
             }
         }
     }

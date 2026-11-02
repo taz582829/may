@@ -1,5 +1,7 @@
 package lol.ethan.may.commands;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.UnpooledHeapByteBuf;
 import lol.ethan.may.Entry;
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.PacketEvent;
@@ -16,6 +18,8 @@ import net.minecraft.util.IChatComponent;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.lang.reflect.Field;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,8 +45,7 @@ public class ViewPackets extends Command {
     }
 
     @Override
-    public void execute(String[] strings) {
-        String[] args = Arrays.copyOfRange(strings, 1, strings.length);
+    public void execute(String[] args) {
         filter.clear();
         if (args.length == 0 || state != ViewPacketsState.DISABLED) {
             state = ViewPacketsState.DISABLED;
@@ -140,8 +143,16 @@ public class ViewPackets extends Command {
                         IChatComponent component = (IChatComponent) result;
                         tooltip.appendSibling(component);
                         packetInfo.append(IChatComponent.Serializer.componentToJson(component));
+                    } else if (result instanceof ByteBuf) {
+                        ByteBuf buf = (ByteBuf) result;
+                        int len = buf.writerIndex();
+                        byte[] bytes = new byte[len];
+                        buf.getBytes(0, bytes);
+                        String str = new String(bytes, StandardCharsets.UTF_8);
+                        packetInfo.append(str);
+                        tooltip.appendText(str);
                     } else {
-                        tooltip.appendText(ReflectionToStringBuilder.toString(result));
+                        tooltip.appendText(result.toString());
                         packetInfo.append(result);
                     }
                     packetInfo.append("\n");
@@ -164,7 +175,6 @@ public class ViewPackets extends Command {
         newComponent.setChatStyle(style);
         return newComponent;
     }
-
     private void buildFields(Object obj, IChatComponent tooltip) {
         Class<?> clazz = obj.getClass();
         while (clazz != null) {

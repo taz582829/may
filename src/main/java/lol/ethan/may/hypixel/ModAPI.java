@@ -1,14 +1,20 @@
 package lol.ethan.may.hypixel;
 
+import com.google.protobuf.NullValue;
+import com.google.protobuf.Value;
 import io.netty.buffer.Unpooled;
 import lol.ethan.may.Entry;
+import lol.ethan.may.config.Config;
 import lol.ethan.may.events.EventBus;
+import com.lunarclient.apollo.mods.impl.*;
 import lol.ethan.may.events.PacketEvent;
 import lol.ethan.may.events.SubscribeEvent;
+import lol.ethan.may.lunar.ApolloUtils;
 import net.hypixel.modapi.HypixelModAPI;
 import net.hypixel.modapi.HypixelModAPIImplementation;
 import net.hypixel.modapi.packet.HypixelPacket;
 import net.hypixel.modapi.packet.impl.clientbound.ClientboundHelloPacket;
+import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket;
 import net.hypixel.modapi.serializer.PacketSerializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
@@ -60,12 +66,15 @@ public class ModAPI implements HypixelModAPIImplementation {
     @Override
     public void onInit() {
         HypixelModAPI.getInstance().createHandler(ClientboundHelloPacket.class, packet -> setIsOnHypixel(true));
+        HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket.class, packet -> {
+            if (Config.forceFreelook.enabled) ApolloUtils.setModSetting(ModFreelook.ENABLED, Value.newBuilder().setBoolValue(true).build())
+        });
         EventBus.subscribe(this);
     }
 
     @Override
     public boolean sendPacket(final HypixelPacket packet) {
-        if (!isOnHypixel) return false;
+        if (!isOnHypixel || mc.getNetHandler() == null) return false;
 
         final PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
         final PacketSerializer serializer = new PacketSerializer(buffer);

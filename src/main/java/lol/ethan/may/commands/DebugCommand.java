@@ -1,0 +1,99 @@
+package lol.ethan.may.commands;
+
+import com.mojang.authlib.GameProfile;
+import lol.ethan.may.Entry;
+import lol.ethan.may.config.Config;
+import lol.ethan.may.utils.ChatUtils;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.util.StringUtils;
+
+public class DebugCommand extends Command {
+    public DebugCommand() {
+        super("mdebug", "dbg");
+    }
+
+    @Override
+    public void execute(String[] args) {
+        if (args.length == 0) {
+            Config.setDebugLogging(!Config.isDebugLogging());
+            Entry.chat(Entry.PREFIX + "Debug Logging: " + (Config.isDebugLogging() ? "§aOn" : "§cOff"));
+            return;
+        }
+        String arg1 = args[0].trim().toLowerCase();
+        if (arg1.equalsIgnoreCase("teams")) {
+            StringBuilder builder = new StringBuilder("§7" + ChatUtils.getChatBreak() + "\n");
+            for (ScorePlayerTeam team : mc.theWorld.getScoreboard().getTeams()) {
+                String displayName = team.getColorPrefix() + team.getColorSuffix();
+                if (args.length >= 2) {
+                    String arg2 = args[1];
+                    if (arg2.equalsIgnoreCase("filter")) {
+                        if (isTeamValid(team)) {
+                            builder.append(Entry.SHORT_PREFIX)
+                                    .append(team.getTeamName())
+                                    .append(" §f(")
+                                    .append(displayName)
+                                    .append("§f): Players (")
+                                    .append(team.getMembershipCollection().size())
+                                    .append("): ")
+                                    .append(String.join("§r, ", team.getMembershipCollection()))
+                                    .append("\n");
+                        }
+                        continue;
+                    }
+
+                }
+                builder.append(Entry.SHORT_PREFIX)
+                        .append(team.getTeamName())
+                        .append(" §f(")
+                        .append(displayName)
+                        .append("§f): Players (")
+                        .append(team.getMembershipCollection().size())
+                        .append("): ")
+                        .append(String.join("§r, ", team.getMembershipCollection()))
+                        .append("\n");
+            }
+            builder.append("§7").append(ChatUtils.getChatBreak());
+            Entry.chat(builder);
+        } else if (arg1.equalsIgnoreCase("players")) {
+            StringBuilder builder = new StringBuilder("§7" + ChatUtils.getChatBreak() + "\n");
+            for (NetworkPlayerInfo playerInfo : mc.getNetHandler().getPlayerInfoMap()) {
+                GameProfile profile = playerInfo.getGameProfile();
+                if (args.length >= 2) {
+                    String arg2 = args[1];
+                    if (arg2.equalsIgnoreCase("filter")) {
+                        if (profile.getId().version() != 2) {
+                            builder.append(Entry.SHORT_PREFIX)
+                                    .append(profile.getName())
+                                    .append(" §f(")
+                                    .append(playerInfo.getDisplayName() == null ? profile.getName() : playerInfo.getDisplayName().getFormattedText())
+                                    .append("§f): UUID: ")
+                                    .append(profile.getId())
+                                    .append("\n");
+                        }
+                        continue;
+                    }
+
+                }
+                builder.append(Entry.SHORT_PREFIX)
+                        .append(profile.getName())
+                        .append(" §f(")
+                        .append(playerInfo.getDisplayName() == null ? profile.getName() : playerInfo.getDisplayName().getFormattedText())
+                        .append("§f): UUID: ")
+                        .append(profile.getId())
+                        .append(")")
+                        .append("\n");
+            }
+            builder.append("§7").append(ChatUtils.getChatBreak());
+            Entry.chat(builder);
+        }
+    }
+
+    private boolean isTeamValid(ScorePlayerTeam team) {
+        boolean result = false;
+        for (String player : team.getMembershipCollection()) {
+            if (!StringUtils.stripControlCodes(player).trim().isEmpty()) result = true;
+        }
+        return result;
+    }
+}

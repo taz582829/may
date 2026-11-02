@@ -24,117 +24,118 @@ public class DuelsStatsManager {
     @SubscribeEvent
     public void onChat(final ChatEvent.Received event) {
         final String msg = event.getMessage().getUnformattedText().trim();
-        if (msg.equals("Eliminate your opponents!")) {
-            TimeUtils.setTickDelay(() -> {
-                for (final NetworkPlayerInfo playerInfo : this.mc.getNetHandler().getPlayerInfoMap()) {
-                    final GameProfile profile = playerInfo.getGameProfile();
-                    if (profile.getId().equals(this.mc.thePlayer.getUniqueID())) continue;
-                    if (profile.getId().version() == 2) continue;
+        switch (msg) {
+            case "Eliminate your opponents!":
+                TimeUtils.setTickDelay(() -> {
+                    for (final NetworkPlayerInfo playerInfo : this.mc.getNetHandler().getPlayerInfoMap()) {
+                        final GameProfile profile = playerInfo.getGameProfile();
+                        if (profile.getId().equals(this.mc.thePlayer.getUniqueID())) continue;
+                        if (profile.getId().version() == 2) continue;
 
-                    final UUID targetUUID;
+                        final UUID targetUUID;
 
-                    if (profile.getId().version() == 1) {
-                        final Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
-                        if (denick == null) {
-                            targetUUID = profile.getId();
+                        if (profile.getId().version() == 1) {
+                            final Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
+                            if (denick == null) {
+                                targetUUID = profile.getId();
 
-                            this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
+                                this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
+                            } else {
+                                targetUUID = UUID.fromString(denick.uuid);
+                            }
                         } else {
-                            targetUUID = UUID.fromString(denick.uuid);
-                        }
-                    } else {
-                        targetUUID = profile.getId();
-                    }
-                    final IStats stats = this.tabStats.getStats(targetUUID);
-
-                    if (stats == null && profile.getId().version() == 4) {
-                        HypixelAPI.getPlayer(targetUUID).thenAccept(res ->
-                                this.mc.addScheduledTask(() -> {
-                                    try {
-                                        this.tabStats.refreshPlayer(profile.getId(), res.player);
-                                        DuelsUtils.showDuelsStats(res.player, DuelsUtils.getCurrentMode());
-                                    } catch (final Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                })
-                        );
-                    }
-                }
-            }, 5);
-        } else if (msg.equals("Protect your bed and destroy the enemy bed.")) {
-            TimeUtils.setTickDelay(() -> {
-                for (final NetworkPlayerInfo playerInfo : this.mc.getNetHandler().getPlayerInfoMap()) {
-                    final GameProfile profile = playerInfo.getGameProfile();
-                    if (profile.getId().equals(this.mc.thePlayer.getUniqueID())) continue;
-                    if (profile.getId().version() == 2) continue;
-
-                    final UUID targetUUID;
-
-                    if (profile.getId().version() == 1) {
-                        final Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
-                        if (denick == null) {
                             targetUUID = profile.getId();
-
-                            this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
-                        } else {
-                            targetUUID = UUID.fromString(denick.uuid);
                         }
-                    } else {
-                        targetUUID = profile.getId();
+
+                        if (profile.getId().version() == 4) {
+                            HypixelAPI.getPlayer(targetUUID).thenAccept(res ->
+                                    this.mc.addScheduledTask(() -> {
+                                        try {
+                                            this.tabStats.refreshPlayer(profile.getId(), res.player);
+                                            DuelsUtils.showDuelsStats(res.player, DuelsUtils.getCurrentMode());
+                                        } catch (final Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    })
+                            );
+                        }
                     }
-                    final IStats stats = this.tabStats.getStats(targetUUID);
+                }, 5);
+                break;
+            case "Protect your bed and destroy the enemy bed.":
+                TimeUtils.setTickDelay(() -> {
+                    for (final NetworkPlayerInfo playerInfo : this.mc.getNetHandler().getPlayerInfoMap()) {
+                        final GameProfile profile = playerInfo.getGameProfile();
+                        if (profile.getId().equals(this.mc.thePlayer.getUniqueID())) continue;
+                        if (profile.getId().version() == 2) continue;
 
-                    if (stats == null && profile.getId().version() == 4) {
-                        HypixelAPI.getPlayer(targetUUID).thenAccept(res ->
-                                this.mc.addScheduledTask(() -> {
-                                    try {
-                                        this.tabStats.refreshPlayer(profile.getId(), res.player, "bedwars");
-                                        DuelsUtils.showDuelsStats(res.player, DuelsUtils.DuelsMode.BEDWARS);
-                                    } catch (final Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                })
-                        );
-                    }
-                }
-            }, 5);
-        } else if (msg.equals("Destroy the enemy bed and then eliminate them!")) {
-            TimeUtils.setTickDelay(() -> {
-                for (final NetworkPlayerInfo playerInfo : this.mc.getNetHandler().getPlayerInfoMap()) {
-                    final GameProfile profile = playerInfo.getGameProfile();
-                    if (profile.getId().equals(this.mc.thePlayer.getUniqueID())) continue;
-                    if (profile.getId().version() == 2) continue;
+                        final UUID targetUUID;
 
-                    final UUID targetUUID;
+                        if (profile.getId().version() == 1) {
+                            final Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
+                            if (denick == null) {
+                                targetUUID = profile.getId();
 
-                    if (profile.getId().version() == 1) {
-                        final Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
-                        if (denick == null) {
+                                this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
+                            } else {
+                                targetUUID = UUID.fromString(denick.uuid);
+                            }
+                        } else {
                             targetUUID = profile.getId();
-
-                            this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
-                        } else {
-                            targetUUID = UUID.fromString(denick.uuid);
                         }
-                    } else {
-                        targetUUID = profile.getId();
-                    }
-                    final IStats stats = this.tabStats.getStats(targetUUID);
 
-                    if (stats == null && profile.getId().version() == 4) {
-                        HypixelAPI.getPlayer(targetUUID).thenAccept(res ->
-                                this.mc.addScheduledTask(() -> {
-                                    try {
-                                        this.tabStats.refreshPlayer(profile.getId(), res.player, "bedwars");
-                                        DuelsUtils.showDuelsStats(res.player, DuelsUtils.DuelsMode.BEDWARS_RUSH);
-                                    } catch (final Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                })
-                        );
+                        if (profile.getId().version() == 4) {
+                            HypixelAPI.getPlayer(targetUUID).thenAccept(res ->
+                                    this.mc.addScheduledTask(() -> {
+                                        try {
+                                            this.tabStats.refreshPlayer(profile.getId(), res.player, "bedwars");
+                                            DuelsUtils.showDuelsStats(res.player, DuelsUtils.DuelsMode.BEDWARS);
+                                        } catch (final Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    })
+                            );
+                        }
                     }
-                }
-            }, 5);
+                }, 5);
+                break;
+            case "Destroy the enemy bed and then eliminate them!":
+                TimeUtils.setTickDelay(() -> {
+                    for (final NetworkPlayerInfo playerInfo : this.mc.getNetHandler().getPlayerInfoMap()) {
+                        final GameProfile profile = playerInfo.getGameProfile();
+                        if (profile.getId().equals(this.mc.thePlayer.getUniqueID())) continue;
+                        if (profile.getId().version() == 2) continue;
+
+                        final UUID targetUUID;
+
+                        if (profile.getId().version() == 1) {
+                            final Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
+                            if (denick == null) {
+                                targetUUID = profile.getId();
+
+                                this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
+                            } else {
+                                targetUUID = UUID.fromString(denick.uuid);
+                            }
+                        } else {
+                            targetUUID = profile.getId();
+                        }
+
+                        if (profile.getId().version() == 4) {
+                            HypixelAPI.getPlayer(targetUUID).thenAccept(res ->
+                                    this.mc.addScheduledTask(() -> {
+                                        try {
+                                            this.tabStats.refreshPlayer(profile.getId(), res.player, "bedwars");
+                                            DuelsUtils.showDuelsStats(res.player, DuelsUtils.DuelsMode.BEDWARS_RUSH);
+                                        } catch (final Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    })
+                            );
+                        }
+                    }
+                }, 5);
+                break;
         }
     }
     @SubscribeEvent

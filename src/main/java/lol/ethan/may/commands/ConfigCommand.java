@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class ConfigCommand extends Command {
     public ConfigCommand() {
-        super("config", "cfg");
+        super("mayconfig", "cfg");
     }
 
     @Override

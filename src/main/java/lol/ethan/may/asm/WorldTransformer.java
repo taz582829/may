@@ -2,18 +2,16 @@ package lol.ethan.may.asm;
 
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.WorldEvent;
-import lol.ethan.may.mappings.Mappings;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
 
-import java.util.Collections;
-import java.util.List;
-
-public class WorldTransformer implements ITransformer {
-    Mappings.MappingType mappings = Mappings.getMappingType();
-
+public class WorldTransformer extends Transformer {
+    public WorldTransformer() {
+        super(Minecraft.class);
+    }
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
@@ -31,10 +29,5 @@ public class WorldTransformer implements ITransformer {
         } else {
             EventBus.postEvent(new WorldEvent.Load());
         }
-    }
-
-    @Override
-    public List<String> getTargets() {
-        return Collections.singletonList("net.minecraft.client.Minecraft");
     }
 }

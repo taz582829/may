@@ -3,6 +3,7 @@ package lol.ethan.may.config.component;
 import com.google.gson.JsonElement;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.ClickGUI;
+import lol.ethan.may.config.ConfigEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class SubCategoryComponent extends Component {
     }
 
     @Override
-    public void onKeyPress(final char c, final int code) {
+    public void onKeyPress(final char c, final int code, final ConfigEvent event) {
 
     }
 

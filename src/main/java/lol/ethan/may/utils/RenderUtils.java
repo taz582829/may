@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 public class RenderUtils {
     private static final Field renderPosXField;
@@ -33,6 +34,7 @@ public class RenderUtils {
             throw new RuntimeException(e);
         }
     }
+
 
     private static Timer getTimer() {
         try {
@@ -155,7 +157,23 @@ public class RenderUtils {
         tessellator.draw();
         RenderUtils.disableRenderState();
     }
+    public static void drawEntityBox(Entity entity, Color color) {
 
+        float partialTicks = Objects.requireNonNull(getTimer()).renderPartialTicks;
+        double d2 = lerpDouble(entity.posX, entity.lastTickPosX, partialTicks);
+        double d3 = lerpDouble(entity.posY, entity.lastTickPosY, partialTicks);
+        double d4 = lerpDouble(entity.posZ, entity.lastTickPosZ, partialTicks);
+        AxisAlignedBB bb = entity.getEntityBoundingBox().expand(0.1f, 0.1f, 0.1f)
+                .offset(d2 - entity.posX, d3 - entity.posY, d4 - entity.posZ)
+                .offset(
+                        -(getRenderPos()[0]),
+                        -(getRenderPos()[1]),
+                        -(getRenderPos()[2])
+                );
+        enableRenderState();
+        drawFilledBox(bb, color);
+        disableRenderState();
+    }
     public static void drawEntityBoundingBox(final Entity entity, final Color color) {
         RenderUtils.drawEntityBoundingBox(entity, color, 1.0f);
     }

@@ -2,7 +2,6 @@ package lol.ethan.may.hypixel.duels;
 
 import lol.ethan.may.render.huds.BasicHud;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +39,7 @@ public class DuelsRankHUD extends BasicHud {
         return result;
     }
 
-    private String getRankFromColor(@NotNull final String teamColor) {
+    private String getRankFromColor(final String teamColor) {
         switch (teamColor) {
             case "§7": return "§7Non";
             case "§a": return "§aVIP§f/§aVIP§6+";

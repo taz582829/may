@@ -1,6 +1,7 @@
 package lol.ethan.may.asm;
 
 import lol.ethan.may.events.PlayerListEvent;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -8,10 +9,11 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import java.util.Collections;
-import java.util.List;
+public class NetHandlerPlayClientTransformer extends Transformer {
+    public NetHandlerPlayClientTransformer() {
+        super(NetHandlerPlayClient.class);
+    }
 
-public class NetHandlerPlayClientTransformer implements ITransformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
@@ -40,10 +42,5 @@ public class NetHandlerPlayClientTransformer implements ITransformer {
                 }));
             }
         }
-    }
-
-    @Override
-    public List<String> getTargets() {
-        return Collections.singletonList("net.minecraft.client.network.NetHandlerPlayClient");
     }
 }

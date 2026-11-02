@@ -14,6 +14,7 @@ import lol.ethan.may.config.component.KeybindComponent;
 import lol.ethan.may.events.*;
 import lol.ethan.may.events.render.RenderGameOverlayEvent;
 import lol.ethan.may.housing.AntiInvis;
+import lol.ethan.may.housing.HouseMatcher;
 import lol.ethan.may.housing.HousingESP;
 import lol.ethan.may.housing.ItemAlerts;
 import lol.ethan.may.hypixel.BlacklistInfo;
@@ -47,11 +48,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Entry {
+public final class Entry {
 
     public static final String PREFIX = "§dMay §8» §r";
     public static final String SHORT_PREFIX = "§5» §r";
-    public static final List<ITransformer> transformers = new ArrayList<>();
+    public static final List<Transformer> transformers = new ArrayList<>();
     private static final List<BasicHud> huds;
     private static final Map<UUID, Runnable> commandIdMap;
     public static Instrumentation inst;
@@ -90,6 +91,17 @@ public class Entry {
             }
         }
     }
+    private static File getDataDir() {
+        try {
+            Minecraft mc = getMinecraft();
+            Class<?> mcClass = mc.getClass();
+            return (File) mcClass.getDeclaredField(
+                    Mappings.getMappingType() == Mappings.MappingType.MCP ? "field_71412_D" : "mcDataDir"
+            ).get(mc);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void load(final Instrumentation i, final ClassLoader loader) throws Exception {
 
@@ -97,6 +109,15 @@ public class Entry {
         Entry.loader = loader;
         inst = i;
         Mappings.load(Entry.getMinecraft());
+        FILE_PATH = new File(getDataDir(), "May");
+
+        if (!FILE_PATH.exists()) {
+            FILE_PATH.mkdirs();
+        }
+        DEBUG_DIR = new File(Entry.FILE_PATH, "debug");
+        if (!DEBUG_DIR.exists()) {
+            DEBUG_DIR.mkdirs();
+        }
         Thread.currentThread().setContextClassLoader(loader);
 
 
@@ -105,6 +126,7 @@ public class Entry {
         }
         transformers.add(new MinecraftTransformer());
         transformers.add(new NetworkManagerHook());
+        //transformers.add(new ItemBucketTransformer());
         transformers.add(new WorldTransformer());
         if (getClient() == MinecraftClient.LUNAR) {
             transformers.add(new RendererLivingEntityTransformer());
@@ -122,11 +144,11 @@ public class Entry {
         transformers.add(new SkinManagerTransformer());
         transformers.add(new YggdrasilTransformer());
 
-        for (final ITransformer t : transformers) {
+        for (final Transformer t : transformers) {
             inst.addTransformer(t, true);
         }
         for (final Class<?> clazz : inst.getAllLoadedClasses()) {
-            for (final ITransformer t : transformers) {
+            for (final Transformer t : transformers) {
                 try {
                     if (!t.shouldTransform(clazz.getName().replace('/', '.')) || !inst.isModifiableClass(clazz))
                         continue;
@@ -238,11 +260,7 @@ public class Entry {
     public void start(final ClassLoader loader) {
         Thread.currentThread().setContextClassLoader(loader);
 
-        FILE_PATH = new File(Minecraft.getMinecraft().mcDataDir, "May");
-        DEBUG_DIR = new File(Entry.FILE_PATH, "debug");
-        if (!DEBUG_DIR.exists()) {
-            DEBUG_DIR.mkdirs();
-        }
+
         Config.setConfigFile(new File(FILE_PATH, "config.json"));
         Config.load();
 
@@ -291,12 +309,17 @@ public class Entry {
         EventBus.subscribe(new ItemAlerts());
         EventBus.subscribe(new BowDistance());
         EventBus.subscribe(new LobbyOneHelper());
+        EventBus.subscribe(new HouseMatcher());
         EventBus.subscribe(new BlacklistInfo());
 
         CommandHandler.register(new DebugCommand());
         CommandHandler.register(new HypixelStats());
+        CommandHandler.register(new MatcherCommand());
         CommandHandler.register(new ConfigCommand());
         CommandHandler.register(new HypixelLocation());
+        CommandHandler.register(new ViewPackets());
+        CommandHandler.register(new SimulateCommand());
+
         final long nanoTimeNow = System.nanoTime();
         final double diff = (((double) nanoTimeNow / 1000000.0) - ((double) nanoTime / 1000000.0)) / 1000.0;
         Entry.chat(Entry.PREFIX + "injection finished! took " + String.format("%.2fs", diff));
@@ -333,17 +356,6 @@ public class Entry {
             hud.updateLineCache();
         }
     }
-
-//    @SubscribeEvent
-//    public void onPacketReceived(PacketEvent.Receive event) {
-//        Packet<?> raw = event.getPacket();
-//        if (raw instanceof S22PacketMultiBlockChange) {
-//            S22PacketMultiBlockChange packet = (S22PacketMultiBlockChange) raw;
-//            for (S22PacketMultiBlockChange.BlockUpdateData data : packet.getChangedBlocks()) {
-//
-//            }
-//        }
-//    }
     @SubscribeEvent
     public void onChat(final ChatEvent.Send e) {
         final String msg = e.getMessage();

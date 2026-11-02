@@ -3,6 +3,7 @@ package lol.ethan.may.config.component;
 import com.google.gson.JsonElement;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.ClickGUI;
+import lol.ethan.may.config.ConfigEvent;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public abstract class Component {
     public abstract void drawComponent(int componentX, int componentY, int guiX, int guiY, int guiWidth, int guiHeight);
     public abstract void onClick();
     public abstract void onRightClick();
-    public abstract void onKeyPress(char c, int code);
+    public abstract void onKeyPress(char c, int code, ConfigEvent event);
     public abstract void onMouseClick(int x, int y, int button);
     public abstract void onScroll(int direction);
 

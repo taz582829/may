@@ -20,6 +20,7 @@ public class TradeIndicator extends BasicHud {
     }
     public Button centered = new Button("Centered HUD", Category.General, true, "centers the x coordinate of the hud");
     public Button showHeart = new Button("Show Heart Sign", Category.General, true, "shows a ❤ symbol next to the text");
+    public Button onlyOnHypixel = new Button("Only On Hypixel", Category.General, true);
     public ColorComponent winningTextColor = new ColorComponent("Winning Text Color", Category.General, 0x52D881);
     public ColorComponent losingTextColor = new ColorComponent("Losing Text Color", Category.General, 0xE14040);
     private EntityPlayer lastAttacked;
@@ -69,6 +70,6 @@ public class TradeIndicator extends BasicHud {
         final float healthDifference = (this.lastAttacked.getHealth() + this.lastAttacked.getAbsorptionAmount()) / 2 - (this.mc.thePlayer.getHealth() + this.mc.thePlayer.getAbsorptionAmount()) / 2;
         if (healthDifference == 0) return Collections.emptyList();
         this.winning = (this.mc.thePlayer.getHealth() + this.mc.thePlayer.getAbsorptionAmount()) > (this.lastAttacked.getHealth() + this.lastAttacked.getAbsorptionAmount());
-        return Collections.singletonList((this.winning ? "+" : "-") + String.format("%.2f", Math.abs(healthDifference)) + "❤");
+        return Collections.singletonList((this.winning ? "+" : "-") + String.format("%.2f", Math.abs(healthDifference)) + (this.showHeart.enabled ? "❤" : ""));
     }
 }

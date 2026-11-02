@@ -19,6 +19,22 @@ import java.util.function.Consumer;
 public class ASMUtils {
     public static final String POST_EVENT_DESC = "(L" + Type.getInternalName(Event.class) + ";)L" + Type.getInternalName(Event.class) + ";";
 
+    public static MethodInsnNode invokeConstructor(final Class<?> clazz, final String desc) {
+        return new MethodInsnNode(
+                Opcodes.INVOKESPECIAL,
+                Type.getInternalName(clazz),
+                "<init>",
+                desc
+        );
+    }
+    public static void invokeConstructor(final Class<?> clazz, final String desc, final InstructionAdapter a) {
+        a.invokespecial(
+                Type.getInternalName(clazz),
+                "<init>",
+                desc,
+                false
+        );
+    }
     public static MethodInsnNode postEvent() {
         return new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(EventBus.class), "postEvent", "(L" + Type.getInternalName(Event.class) + ";)L" + Type.getInternalName(Event.class) + ";");
     }

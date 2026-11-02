@@ -5,11 +5,11 @@ import com.google.gson.JsonObject;
 import lol.ethan.may.Entry;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.ClickGUI;
+import lol.ethan.may.config.ConfigEvent;
 import lol.ethan.may.config.component.text.NumberTextBox;
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.render.huds.BasicHud;
 import lol.ethan.may.render.huds.HUDHelper;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -90,7 +90,7 @@ public class HUDComponent extends Component {
     }
 
     @Override
-    public void onKeyPress(final char c, final int code) {
+    public void onKeyPress(final char c, final int code, final ConfigEvent event) {
 
     }
 
@@ -125,7 +125,7 @@ public class HUDComponent extends Component {
         return obj;
     }
 
-    private @NotNull JsonObject getHUDObject() {
+    private JsonObject getHUDObject() {
         final JsonObject obj = new JsonObject();
         obj.addProperty("enabled", this.hud.enabled);
         obj.addProperty("background", this.hud.background);

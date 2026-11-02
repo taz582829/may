@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.ClickGUI;
+import lol.ethan.may.config.ConfigEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,12 +76,12 @@ public class ChoiceComponent extends Component {
     }
 
     @Override
-    public void onKeyPress(final char c, final int code) {
+    public void onKeyPress(final char c, final int code, final ConfigEvent event) {
         for (final Component comp : this.children) {
             if (comp instanceof TextBox) {
-                final TextBox tb = (TextBox) comp;
+                final TextBox<?> tb = (TextBox<?>) comp;
                 if (tb.drawingField) {
-                    tb.onKeyPress(c, code);
+                    tb.onKeyPress(c, code, event);
                     return;
                 }
             }

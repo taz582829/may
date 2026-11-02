@@ -54,13 +54,22 @@ public class CommandHandler {
                 return;
             }
             final String[] args = msg.split(" ");
+            final String[] cmdArgs = Arrays.stream(args).skip(1).toArray(String[]::new);
             final String cmdName = args[0].substring(1);
             if (args.length == 1) {
-                lastSuggestions = commands.stream().filter(c -> c.matches(cmdName)).map(Command::toString).toArray(String[]::new);
+                lastSuggestions = commands
+                        .stream()
+                        .flatMap(c -> c.matching(cmdName))
+                        .map(c -> "/" + c)
+                        .toArray(String[]::new);
             } else {
                 for (final Command cmd : commands) {
-                    if (!cmd.name.startsWith(cmdName)) continue;
-                    lastSuggestions = cmd.getTabCompletes(Arrays.stream(args).skip(1L).toArray(String[]::new));
+                    if (!cmd.matches(cmdName)) continue;
+                    String[] suggestions = cmd.getTabCompletes(cmdArgs);
+                    if (suggestions == null) continue;
+
+                    lastSuggestions = suggestions;
+                    break;
                 }
             }
         }
@@ -97,20 +106,19 @@ public class CommandHandler {
 
     @SubscribeEvent
     public void onPacketReceive(final PacketEvent.Receive event) {
-        if (event.getPacket() instanceof S3APacketTabComplete && this.lastSuggestions != null) {
+        if (event.getPacket() instanceof S3APacketTabComplete) {
             final S3APacketTabComplete packet = (S3APacketTabComplete) event.getPacket();
-            final String[] lastSuggestions = this.lastSuggestions;
+
+            final String[] clientSuggestions = this.lastSuggestions;
             final String[] serverSuggestions = packet.func_149630_c();
+
             this.lastSuggestions = null;
+            if (clientSuggestions == null) return;
             final ArrayList<String> list = new ArrayList<>();
-            list.addAll(Arrays.asList(lastSuggestions));
+            list.addAll(Arrays.asList(clientSuggestions));
             list.addAll(Arrays.asList(serverSuggestions));
             final String[] ordered = list.stream().distinct().sorted().toArray(String[]::new);
-            try {
-                matches.set(packet, ordered);
-            } catch (final Exception e) {
-                throw new RuntimeException(e);
-            }
+            event.setPacket(new S3APacketTabComplete(ordered));
         }
     }
 }

@@ -1,18 +1,21 @@
 package lol.ethan.may.asm;
 
 import lol.ethan.may.events.ChatEvent;
+import net.minecraft.client.entity.EntityPlayerSP;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import java.util.Collections;
-import java.util.List;
+public class EntityPlayerSPTransformer extends Transformer {
+    public EntityPlayerSPTransformer() {
+        super(EntityPlayerSP.class);
+    }
 
-public class EntityPlayerSPTransformer implements ITransformer {
     @Override
-    public void transform(ClassNode node) {
-        for (MethodNode method : node.methods) {
-            if (method.name.equals("sendChatMessage")) {
+    public void transform(final ClassNode node) {
+
+        for (final MethodNode method : node.methods) {
+            if (method.name.equals(mapMethod(EntityPlayerSP.class, "sendChatMessage", "()V"))) {
                 method.instructions.insert(ASMUtils.asm(a -> {
                     a.anew(Type.getType(ChatEvent.Send.class));
                     a.dup();
@@ -32,11 +35,6 @@ public class EntityPlayerSPTransformer implements ITransformer {
                 }));
             }
         }
-    }
-
-    @Override
-    public List<String> getTargets() {
-        return Collections.singletonList("net.minecraft.client.entity.EntityPlayerSP");
     }
 
     @Override

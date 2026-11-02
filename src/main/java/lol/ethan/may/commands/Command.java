@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class Command {
     protected final Minecraft mc = Minecraft.getMinecraft();
@@ -18,6 +19,7 @@ public abstract class Command {
 
     public Command(final String name, final String... aliases) {
         this.name = name;
+        this.aliases.add(name);
         this.aliases.addAll(Arrays.asList(aliases));
     }
 
@@ -36,14 +38,13 @@ public abstract class Command {
     }
 
     public boolean matches(final String text) {
-        if (text.toLowerCase().startsWith(name.toLowerCase())) {
-            return true;
-        }
-        for (final String a : aliases) {
-            if (!text.toLowerCase().startsWith(a.toLowerCase())) continue;
-            return true;
+        for (String cmd : aliases) {
+            if (cmd.equalsIgnoreCase(text)) return true;
         }
         return false;
+    }
+    public Stream<String> matching(final String text) {
+        return aliases.stream().filter(a -> a.toLowerCase().startsWith(text.toLowerCase()));
     }
 }
 

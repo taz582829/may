@@ -11,7 +11,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class FlatScaffold extends AnticheatFlag {
     public FlatScaffold() {
-        super(5, EnumChatFormatting.GREEN);
+        super(12, EnumChatFormatting.DARK_RED);
     }
 
     @SubscribeEvent

@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import lol.ethan.may.Entry;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.ClickGUI;
+import lol.ethan.may.config.ConfigEvent;
 import lol.ethan.may.render.huds.HUDHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -129,7 +130,7 @@ public abstract class TextBox<T> extends Component {
     }
 
     @Override
-    public void onKeyPress(final char c, final int code) {
+    public void onKeyPress(final char c, final int code, final ConfigEvent event) {
         if (this.drawingField) {
             if (code == Keyboard.KEY_ESCAPE || (code == Keyboard.KEY_RETURN && !GuiScreen.isShiftKeyDown())) {
                 this.finish();

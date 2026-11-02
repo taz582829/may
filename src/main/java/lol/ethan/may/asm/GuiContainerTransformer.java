@@ -2,7 +2,8 @@ package lol.ethan.may.asm;
 
 import lol.ethan.may.Entry;
 import lol.ethan.may.events.Event;
-import lol.ethan.may.events.SlotClickEvent;
+import lol.ethan.may.events.gui.SlotClickEvent;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.inventory.Slot;
 import org.objectweb.asm.Label;
@@ -12,21 +13,23 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import java.util.Collections;
-import java.util.List;
-
-public class GuiContainerTransformer implements ITransformer {
+public class GuiContainerTransformer extends Transformer {
     private static final String SLOT_CLICK_EVENT = Type.getInternalName(SlotClickEvent.class);
     private static final Type SLOT_CLICK_TYPE = Type.getType(SlotClickEvent.class);
+
+    public GuiContainerTransformer() {
+        super(GuiContainer.class);
+    }
 
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            for (AbstractInsnNode insnNode : method.instructions.toArray()) {
+            for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                 if (insnNode instanceof MethodInsnNode) {
-                    MethodInsnNode mn = (MethodInsnNode) insnNode;
-                    if (mn.owner.equals(Type.getInternalName(PlayerControllerMP.class)) && mn.name.equals("windowClick")) {
-                        final int eventLocal = method.maxLocals++;
+                    final MethodInsnNode mn = (MethodInsnNode) insnNode;
+                    if (mn.owner.equals(Type.getInternalName(PlayerControllerMP.class)) && (mn.name.equals("func_78753_a") || mn.name.equals("windowClick"))) {
+                        final int eventLocal = method.maxLocals;
+                        method.maxLocals++;
 
                         method.instructions.insert(ASMUtils.asm(a -> {
                             a.visitLdcInsn("slot clicked");
@@ -71,10 +74,5 @@ public class GuiContainerTransformer implements ITransformer {
     @Override
     public boolean shouldComputeFrames() {
         return true;
-    }
-
-    @Override
-    public List<String> getTargets() {
-        return Collections.singletonList("net.minecraft.client.gui.inventory.GuiContainer");
     }
 }

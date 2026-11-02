@@ -11,7 +11,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -42,7 +41,7 @@ public class UrchinAPI {
     }
 
     public static IChatComponent formatTags(final UrchinTagsResponse res, final String dpn) {
-        @NotNull final List<TagsItem> tags = res.getTags();
+        final List<TagsItem> tags = res.getTags();
 
         final String displayName = res.getDisplayname() == null ? dpn : res.getDisplayname();
         final IChatComponent comp = new ChatComponentText(Entry.PREFIX + displayName + " §fhas §5" + tags.size() + " §fUrchin tag" + (tags.size() > 1 ? "s" : "") + ":");

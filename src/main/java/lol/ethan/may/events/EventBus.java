@@ -20,7 +20,7 @@ public class EventBus {
                 final Class<?> eventType = method.getParameterTypes()[0];
                 final List<EventListener> list = listeners.computeIfAbsent(eventType, k -> new CopyOnWriteArrayList<>());
                 list.add(new EventListener(method, obj, annotation.priority()));
-                list.sort(Comparator.comparingInt(l -> l.priority.ordinal()));
+                list.sort(Comparator.comparingInt(l -> ((EventListener) l).priority).reversed());
             }
         } catch (final Exception e) {
             throw new RuntimeException(e);
@@ -46,9 +46,9 @@ public class EventBus {
     static class EventListener implements Consumer<Event> {
         public final Method method;
         public final Object owner;
-        public final Priority priority;
+        public final int priority;
 
-        public EventListener(final Method method, final Object owner, final Priority priority) {
+        public EventListener(final Method method, final Object owner, final int priority) {
             this.method = method;
             this.owner = owner;
             this.priority = priority;

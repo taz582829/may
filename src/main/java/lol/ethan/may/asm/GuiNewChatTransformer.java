@@ -2,23 +2,22 @@ package lol.ethan.may.asm;
 
 import lol.ethan.may.events.ChatEvent;
 import lol.ethan.may.events.Event;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.util.IChatComponent;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import java.util.Collections;
-import java.util.List;
+public class GuiNewChatTransformer extends Transformer {
+    public GuiNewChatTransformer() {
+        super(GuiNewChat.class);
+    }
 
-import static lol.ethan.may.asm.ASMUtils.asm;
-import static lol.ethan.may.asm.ASMUtils.postEvent;
-
-public class GuiNewChatTransformer implements ITransformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (method.name.equals("printChatMessageWithOptionalDeletion")) {
+            if (method.name.equals("printChatMessageWithOptionalDeletion") || method.name.equals("func_146234_a")) {
                 method.instructions.insert(asm(a -> {
                     a.anew(Type.getType(ChatEvent.Received.class));
                     a.dup();
@@ -46,9 +45,5 @@ public class GuiNewChatTransformer implements ITransformer {
     @Override
     public boolean shouldComputeFrames() {
         return true;
-    }
-    @Override
-    public List<String> getTargets() {
-        return Collections.singletonList("net.minecraft.client.gui.GuiNewChat");
     }
 }

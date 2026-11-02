@@ -5,6 +5,7 @@ import com.google.gson.JsonPrimitive;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.ClickGUI;
 import lol.ethan.may.config.Config;
+import lol.ethan.may.config.ConfigEvent;
 import org.lwjgl.input.Keyboard;
 
 public class KeybindComponent extends Component {
@@ -55,10 +56,11 @@ public class KeybindComponent extends Component {
     }
 
     @Override
-    public void onKeyPress(final char c, final int code) {
+    public void onKeyPress(final char c, final int code, final ConfigEvent event) {
         if (this.listening) {
-            this.bind = code == Keyboard.KEY_ESCAPE ? 0 : code;
+            this.bind = (code == Keyboard.KEY_ESCAPE || code == Keyboard.KEY_DELETE) ? 0 : code;
             this.listening = false;
+            if (code == Keyboard.KEY_ESCAPE) event.setCancelled(true);
         }
     }
 

@@ -84,8 +84,7 @@ public class Config {
     public static Button noBreakDelayFlags = new Button("No Break Delay Flags", Category.Anticheat, true, "experimental, can false flag");
     public static HUDComponent tradeIndicator = new HUDComponent("Trade Indicator", Category.General, new TradeIndicator());
     public static Button hypixelKeyless = new Button("Hypixel Keyless", Category.General, true);
-    public static StringTextBox hypixelKey = new StringTextBox("Hypixel Keyless", Category.General, true) {
-
+    public static StringTextBox hypixelKey = new StringTextBox("Hypixel Key", Category.General, true) {
         @Override
         public boolean shouldDraw() {
             return !Config.hypixelKeyless.enabled;
@@ -106,6 +105,12 @@ public class Config {
     public static Button hideXP = new Button("Hide XP Bar", Category.General, false, "hides xp bar (useful as a nick hider)");
     public static Button antiInvis = new Button("Anti Invis", Category.Housing);
     public static Button housingEsp = new Button("Housing ESP", Category.Housing);
+    public static Button housingEspFilled = new Button("Filled Box ESP", Category.Housing) {
+        @Override
+        public boolean shouldDraw() {
+            return housingEsp.enabled;
+        }
+    };
     public static Button housingEspInvisOnly = new Button("Invis Only ESP", Category.Housing) {
 
         @Override
@@ -121,6 +126,7 @@ public class Config {
     private static File configFile;
     private static boolean debugLogging;
     public static Button debugLoggingBtn = new Button("Debug Logging", Category.General, false, Config::setDebugLogging);
+    public static Button forceFreelook = new Button("Force Freelook", Category.General, true, "forces freelook on (lunar only)");
 
     static {
         executor = Executors.newSingleThreadExecutor();

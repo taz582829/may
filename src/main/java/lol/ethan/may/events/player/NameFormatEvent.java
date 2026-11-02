@@ -9,9 +9,9 @@ public class NameFormatEvent extends Event {
     private final EntityPlayer player;
     private String text;
 
-    public NameFormatEvent(final EntityPlayer player, final String text) {
+    public NameFormatEvent(final IChatComponent text, final EntityPlayer player) {
+        this.text = text == null ? player.getName() : text.getFormattedText();
         this.player = player;
-        this.text = text;
     }
 
     public EntityPlayer getPlayer() {

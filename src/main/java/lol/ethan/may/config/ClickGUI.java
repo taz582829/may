@@ -224,7 +224,7 @@ public class ClickGUI extends GuiScreen {
     private int getMaxScroll() {
         final Category selected = Category.values()[categorySelected];
         int visible = 0;
-        for (Component comp : getCurrentComponents()) {
+        for (final Component comp : getCurrentComponents()) {
             if (this.shouldShow(comp, selected)) visible++;
         }
         return Math.max(0, visible - 1);
@@ -237,13 +237,18 @@ public class ClickGUI extends GuiScreen {
             scrollOffset = 0;
             return;
         }
-        super.keyTyped(c, i);
+
         final Category selected = Category.values()[this.categorySelected];
+        boolean shouldReturn = false;
+        final ConfigEvent event = new ConfigEvent();
         for (final Component comp : this.getCurrentComponents()) {
             if (comp.category == selected) {
-                comp.onKeyPress(c, i);
+                comp.onKeyPress(c, i, event);
+                shouldReturn = event.isCancelled();
             }
         }
+        if (shouldReturn) return;
+        super.keyTyped(c, i);
     }
 
     @Override

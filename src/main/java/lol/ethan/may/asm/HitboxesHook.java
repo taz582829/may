@@ -4,6 +4,7 @@ import lol.ethan.may.config.Config;
 import lol.ethan.may.utils.ColorUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -15,10 +16,11 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import java.util.Collections;
-import java.util.List;
+public class HitboxesHook extends Transformer {
+    public HitboxesHook() {
+        super(RenderManager.class);
+    }
 
-public class HitboxesHook implements ITransformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
@@ -100,11 +102,6 @@ public class HitboxesHook implements ITransformer {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public List<String> getTargets() {
-        return Collections.singletonList("net.minecraft.client.renderer.entity.RenderManager");
     }
 
     @Override

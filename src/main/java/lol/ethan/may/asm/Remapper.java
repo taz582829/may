@@ -4,15 +4,17 @@ import lol.ethan.may.mappings.Mappings;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.tree.*;
 
-import java.util.Collections;
-import java.util.List;
+public class Remapper extends Transformer {
+    public Remapper() {
+        super("*");
+    }
 
-public class Remapper implements ITransformer {
     @Override
     public void transform(final ClassNode node) {
         if (Mappings.getMappingType() != Mappings.MappingType.MCP) {
             return;
         }
+
         System.out.println("remapping " + node.name);
         for (final MethodNode method : node.methods) {
             for (final AbstractInsnNode insnNode : method.instructions) {
@@ -39,11 +41,6 @@ public class Remapper implements ITransformer {
                 }
             }
         }
-    }
-
-    @Override
-    public List<String> getTargets() {
-        return Collections.emptyList();
     }
 
     @Override

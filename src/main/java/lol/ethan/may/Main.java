@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class Main {
+public final class Main {
     public static Instrumentation inst;
     public static ClassLoader targetLoader;
 
@@ -31,7 +31,7 @@ public class Main {
 
     public static ClassLoader findMinecraftLoader(final Instrumentation inst) {
         try {
-            for (final Class clazz : inst.getAllLoadedClasses()) {
+            for (final Class<?> clazz : inst.getAllLoadedClasses()) {
                 if (!clazz.getName().replace("/", ".").equals("net.minecraft.client.Minecraft")) continue;
                 return clazz.getClassLoader();
             }
@@ -72,7 +72,6 @@ public class Main {
     }
 
     static void defineAll(final ClassLoader target) throws Exception {
-        Main.openJavaLang();
         final Method define = ClassLoader.class.getDeclaredMethod("defineClass", String.class, byte[].class, Integer.TYPE, Integer.TYPE, ProtectionDomain.class);
         define.setAccessible(true);
         final File agent = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());

@@ -1,5 +1,6 @@
-package lol.ethan.may.events;
+package lol.ethan.may.events.gui;
 
+import lol.ethan.may.events.Event;
 import net.minecraft.inventory.Slot;
 
 public class SlotClickEvent extends Event {

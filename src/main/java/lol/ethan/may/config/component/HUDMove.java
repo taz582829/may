@@ -3,6 +3,7 @@ package lol.ethan.may.config.component;
 import com.google.gson.JsonElement;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.ClickGUI;
+import lol.ethan.may.config.ConfigEvent;
 import lol.ethan.may.config.DragElement;
 import lol.ethan.may.render.huds.BasicHud;
 import lol.ethan.may.utils.GuiUtils;
@@ -45,7 +46,7 @@ public class HUDMove extends Component {
     }
 
     @Override
-    public void onKeyPress(final char c, final int code) {
+    public void onKeyPress(final char c, final int code, final ConfigEvent event) {
 
     }
 

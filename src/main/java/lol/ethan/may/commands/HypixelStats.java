@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class HypixelStats extends Command {
     public HypixelStats() {
-        super("sc");
+        super("statcheck", "sc");
     }
 
     @Override
@@ -34,13 +34,17 @@ public class HypixelStats extends Command {
                 }
                 switch (subcommand) {
                     case "bw": {
+                        final boolean doGamemode = args.length > 2;
+                        BedwarsUtils.Mode mode = null;
+                        if (doGamemode) {
+                            mode = BedwarsUtils.Mode.parseMode(args[2].trim());
+                        }
                         BedwarsUtils.showStats(res.player);
                         break;
                     }
                     case "duels": {
-                        final boolean doGamemode;
                         DuelsUtils.DuelsMode mode = null;
-                        final boolean bl = doGamemode = args.length > 2;
+                        final boolean doGamemode = args.length > 2;
                         if (doGamemode) {
                             mode = DuelsUtils.DuelsMode.getModeFromString(args[2].toLowerCase());
                         }

@@ -1,6 +1,7 @@
 package lol.ethan.may.utils;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class MojangAPI {
             final List<String> sublist = igns.subList(i, end);
             final JsonArray arr = new JsonArray();
             for (final String ign : sublist) {
-                arr.add(ign);
+                arr.add(new JsonPrimitive(ign));
             }
             final CompletableFuture<Void> future = HttpUtils.post("https://api.mojang.com/profiles/minecraft", arr)
                     .thenAccept((res) -> {

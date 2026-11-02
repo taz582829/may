@@ -5,14 +5,15 @@ import com.google.gson.JsonPrimitive;
 import lol.ethan.may.Entry;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.ClickGUI;
+import lol.ethan.may.config.ConfigEvent;
 import lol.ethan.may.render.huds.HUDHelper;
 
 import java.awt.*;
 import java.util.function.Consumer;
 
 public class Button extends Component {
-    public static final Color ENABLED_COLOR = new Color(45, 180, 100, 160);
-    public static final Color DISABLED_COLOR = new Color(255, 0, 0, 160);
+    public static final Color ENABLED_COLOR = new Color(0xE666BC);
+    public static final Color DISABLED_COLOR = new Color(130, 104, 140, 108);
     public boolean enabled;
     public Consumer<Boolean> consumer;
     public Button(final String name, final Category category) {
@@ -75,7 +76,7 @@ public class Button extends Component {
     }
 
     @Override
-    public void onKeyPress(final char c, final int code) {
+    public void onKeyPress(final char c, final int code, ConfigEvent event) {
 
     }
 
