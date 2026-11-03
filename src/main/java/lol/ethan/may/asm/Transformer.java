@@ -18,6 +18,8 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.nio.file.Files;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public abstract class Transformer implements ClassFileTransformer {
@@ -27,11 +29,25 @@ public abstract class Transformer implements ClassFileTransformer {
         if (targets == null) return;
         this.targets = Arrays.stream(targets).map(t -> t.replace("/", ".")).toArray(String[]::new);
     }
+
     public Transformer(final Class<?>... targets) {
         this.targets = Arrays.stream(targets).map(Class::getName).toArray(String[]::new);
     }
 
+    static InsnList cloneList(final InsnList list) {
+        final Map<LabelNode, LabelNode> labels = new HashMap<>();
+        for (final AbstractInsnNode insn : list.toArray()) {
+            if (insn instanceof LabelNode) labels.put((LabelNode) insn, new LabelNode());
+        }
+        final InsnList copy = new InsnList();
+        for (final AbstractInsnNode insn : list.toArray()) {
+            copy.add(insn.clone(labels));
+        }
+        return copy;
+    }
+
     public abstract void transform(ClassNode node);
+
     @Override
     public byte[] transform(
             final ClassLoader loader,
@@ -40,73 +56,73 @@ public abstract class Transformer implements ClassFileTransformer {
             final ProtectionDomain prot,
             final byte[] bytes
     ) throws IllegalClassFormatException {
-        if (!shouldTransform(className.replace("/", "."))) {
-            return null;
-        }
-        try {
-            final ClassNode node = new ClassNode();
-            final ClassReader reader = new ClassReader(bytes);
-            reader.accept(node, 0);
+        if (shouldTransform(className.replace("/", "."))) {
             try {
-                transform(node);
-            } catch (final Throwable t) {
-                t.printStackTrace();
-            }
-            int flags = ClassWriter.COMPUTE_MAXS;
-            if (this.shouldComputeFrames()) flags |= ClassWriter.COMPUTE_FRAMES;
-            final ClassWriter writer = new ClassWriter(reader, flags) {
-                @Override
-                protected String getCommonSuperClass(final String type1, final String type2) {
-                    Class<?> class1;
-                    try {
-                        class1 = Class.forName(type1.replace('/', '.'), false, loader);
-                    } catch (final ClassNotFoundException e) {
-                        throw new TypeNotPresentException(type1, e);
-                    }
-                    final Class<?> class2;
-                    try {
-                        class2 = Class.forName(type2.replace('/', '.'), false, loader);
-                    } catch (final ClassNotFoundException e) {
-                        throw new TypeNotPresentException(type2, e);
-                    }
-                    if (class1.isAssignableFrom(class2)) {
-                        return type1;
-                    }
-                    if (class2.isAssignableFrom(class1)) {
-                        return type2;
-                    }
-                    if (class1.isInterface() || class2.isInterface()) {
-                        return "java/lang/Object";
-                    } else {
-                        do {
-                            class1 = class1.getSuperclass();
-                        } while (!class1.isAssignableFrom(class2));
-                        return class1.getName().replace('.', '/');
-                    }
+                final ClassNode node = new ClassNode();
+                final ClassReader reader = new ClassReader(bytes);
+                reader.accept(node, 0);
+                try {
+                    transform(node);
+                } catch (final Throwable t) {
+                    t.printStackTrace();
                 }
-            };
-            node.accept(writer);
-            final byte[] transformed = writer.toByteArray();
+                int flags = ClassWriter.COMPUTE_MAXS;
+                if (this.shouldComputeFrames()) flags |= ClassWriter.COMPUTE_FRAMES;
+                final ClassWriter writer = new ClassWriter(reader, flags) {
+                    @Override
+                    protected String getCommonSuperClass(final String type1, final String type2) {
+                        Class<?> class1;
+                        try {
+                            class1 = Class.forName(type1.replace('/', '.'), false, loader);
+                        } catch (final ClassNotFoundException e) {
+                            throw new TypeNotPresentException(type1, e);
+                        }
+                        final Class<?> class2;
+                        try {
+                            class2 = Class.forName(type2.replace('/', '.'), false, loader);
+                        } catch (final ClassNotFoundException e) {
+                            throw new TypeNotPresentException(type2, e);
+                        }
+                        if (class1.isAssignableFrom(class2)) {
+                            return type1;
+                        }
+                        if (class2.isAssignableFrom(class1)) {
+                            return type2;
+                        }
+                        if (class1.isInterface() || class2.isInterface()) {
+                            return "java/lang/Object";
+                        } else {
+                            do {
+                                class1 = class1.getSuperclass();
+                            } while (!class1.isAssignableFrom(class2));
+                            return class1.getName().replace('.', '/');
+                        }
+                    }
+                };
+                node.accept(writer);
+                final byte[] transformed = writer.toByteArray();
 
-            String simpleName = className;
-            final int lastSlash = className.lastIndexOf('/');
-            if (lastSlash != -1) {
-                simpleName = className.substring(lastSlash + 1);
+                String simpleName = className;
+                final int lastSlash = className.lastIndexOf('/');
+                if (lastSlash != -1) {
+                    simpleName = className.substring(lastSlash + 1);
+                }
+
+                if (shouldSave(className.replace("/", "."))) {
+                    final File file = new File(Entry.DEBUG_DIR, simpleName + "_transformed.class");
+                    final File preFile = new File(Entry.DEBUG_DIR, simpleName + "_pretransform.class");
+
+                    Files.write(preFile.toPath(), bytes);
+                    Files.write(file.toPath(), transformed);
+                }
+                return transformed;
+            } catch (final Throwable t) {
+                System.out.println(className + " failed to transform! (" + getClass().getName() + ")");
+                t.printStackTrace();
+                return null;
             }
-
-            if (shouldSave(className.replace("/", "."))) {
-                final File file = new File(Entry.DEBUG_DIR, simpleName + "_transformed.class");
-                final File preFile = new File(Entry.DEBUG_DIR, simpleName + "_pretransform.class");
-
-                Files.write(preFile.toPath(), bytes);
-                Files.write(file.toPath(), transformed);
-            }
-            return transformed;
-        } catch (final Throwable t) {
-            System.out.println(className + " failed to transform! (" + getClass().getName() + ")");
-            t.printStackTrace();
-            return null;
         }
+        return null;
     }
 
     /**
@@ -115,6 +131,7 @@ public abstract class Transformer implements ClassFileTransformer {
     public boolean shouldComputeFrames() {
         return false;
     }
+
     public boolean shouldTransform(final String className) {
         for (final String target : targets) {
             if (target.equals(className)) return true;
@@ -125,6 +142,7 @@ public abstract class Transformer implements ClassFileTransformer {
         }
         return false;
     }
+
     public boolean shouldSave(final String className) {
         return true;
     }
@@ -132,10 +150,12 @@ public abstract class Transformer implements ClassFileTransformer {
     public MethodInsnNode postEvent() {
         return new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(EventBus.class), "postEvent", "(L" + Type.getInternalName(Event.class) + ";)L" + Type.getInternalName(Event.class) + ";");
     }
+
     String mapField(final Class<?> owner, final String name) {
         if (Mappings.getMappingType() != Mappings.MappingType.MCP) return name;
         return Mappings.mapFieldInHierarchy(Type.getInternalName(owner), name, name);
     }
+
     String mapMethod(final Class<?> owner, final String name, final String desc) {
         if (Mappings.getMappingType() != Mappings.MappingType.MCP) return name;
         return Mappings.mapMethodInHierarchy(Type.getInternalName(owner), name, desc, name);
@@ -180,7 +200,7 @@ public abstract class Transformer implements ClassFileTransformer {
         for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
             final int opcode = insnNode.getOpcode();
             if (opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) {
-                method.instructions.insertBefore(insnNode, list);
+                method.instructions.insertBefore(insnNode, cloneList(list));
             }
         }
     }

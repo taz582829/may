@@ -15,6 +15,26 @@ public class EntityRendererTransformer extends Transformer {
         super(EntityRenderer.class);
     }
 
+    public static boolean updateLightmap_CancelNightVision(final EntityPlayerSP player, final Potion potion) {
+        if (player == null || potion == null) {
+            return false;
+        }
+        if (potion == Potion.nightVision && Config.clearNightVision != null && Config.clearNightVision.enabled) {
+            return false;
+        }
+        return player.isPotionActive(potion);
+    }
+
+    public static boolean updateFogColor_CancelNightVision(final EntityLivingBase entity, final Potion potion) {
+        if (entity == null || potion == null) {
+            return false;
+        }
+        if (potion == Potion.nightVision && Config.clearNightVision != null && Config.clearNightVision.enabled) {
+            return false;
+        }
+        return entity.isPotionActive(potion);
+    }
+
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
@@ -24,12 +44,12 @@ public class EntityRendererTransformer extends Transformer {
                     if (!(insnNode instanceof LdcInsnNode)) continue;
                     final LdcInsnNode ldc = (LdcInsnNode) insnNode;
                     if ("hand".equals(ldc.cst)) {
-                        method.instructions.insertBefore(ldc, ASMUtils.asm(a -> {
-                            a.anew(ASMUtils.getType(RenderWorldEvent.class));
+                        method.instructions.insertBefore(ldc, asm(a -> {
+                            a.anew(getType(RenderWorldEvent.class));
                             a.dup();
                             a.load(2, Type.FLOAT_TYPE);
                             a.invokespecial(Type.getInternalName(RenderWorldEvent.class), "<init>", "(F)V", false);
-                            ASMUtils.postEvent(a);
+                            postEvent(a);
                             a.pop();
                         }));
                     }
@@ -54,26 +74,6 @@ public class EntityRendererTransformer extends Transformer {
             }
 
         }
-    }
-
-    public static boolean updateLightmap_CancelNightVision(final EntityPlayerSP player, final Potion potion) {
-        if (player == null || potion == null) {
-            return false;
-        }
-        if (potion == Potion.nightVision && Config.clearNightVision != null && Config.clearNightVision.enabled) {
-            return false;
-        }
-        return player.isPotionActive(potion);
-    }
-
-    public static boolean updateFogColor_CancelNightVision(final EntityLivingBase entity, final Potion potion) {
-        if (entity == null || potion == null) {
-            return false;
-        }
-        if (potion == Potion.nightVision && Config.clearNightVision != null && Config.clearNightVision.enabled) {
-            return false;
-        }
-        return entity.isPotionActive(potion);
     }
 
     @Override

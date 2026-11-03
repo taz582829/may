@@ -2,27 +2,25 @@ package lol.ethan.may.events.render;
 
 import lol.ethan.may.events.Event;
 
-public class RenderGameOverlayEvent {
-    public static class Pre extends Event {
-        private final float partialTicks;
+public class RenderGameOverlayEvent extends Event {
+    private final float partialTicks;
 
-        public Pre(float partialTicks) {
-            this.partialTicks = partialTicks;
-        }
+    public RenderGameOverlayEvent(final float partialTicks) {
+        this.partialTicks = partialTicks;
+    }
 
-        public float getPartialTicks() {
-            return partialTicks;
+    public float getPartialTicks() {
+        return partialTicks;
+    }
+
+    public static class Pre extends RenderGameOverlayEvent {
+        public Pre(final float partialTicks) {
+            super(partialTicks);
         }
     }
-    public static class Post extends Event {
-        private final float partialTicks;
-
-        public Post(float partialTicks) {
-            this.partialTicks = partialTicks;
-        }
-
-        public float getPartialTicks() {
-            return partialTicks;
+    public static class Post extends RenderGameOverlayEvent {
+        public Post(final float partialTicks) {
+            super(partialTicks);
         }
     }
 }

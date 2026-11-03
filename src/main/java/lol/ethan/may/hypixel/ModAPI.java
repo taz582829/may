@@ -67,7 +67,7 @@ public class ModAPI implements HypixelModAPIImplementation {
     public void onInit() {
         HypixelModAPI.getInstance().createHandler(ClientboundHelloPacket.class, packet -> setIsOnHypixel(true));
         HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket.class, packet -> {
-            if (Config.forceFreelook.enabled) ApolloUtils.setModSetting(ModFreelook.ENABLED, Value.newBuilder().setBoolValue(true).build())
+            if (Config.forceFreelook.enabled) ApolloUtils.setModSetting(ModFreelook.ENABLED, Value.newBuilder().setBoolValue(true).build());
         });
         EventBus.subscribe(this);
     }

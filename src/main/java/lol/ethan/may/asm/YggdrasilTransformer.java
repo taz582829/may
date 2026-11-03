@@ -13,6 +13,14 @@ public class YggdrasilTransformer extends Transformer {
         super(YggdrasilMinecraftSessionService.class);
     }
 
+    public static boolean may$urlEndsWith(final String domain, final String wl_url) {
+        try {
+            return domain != null && domain.endsWith(wl_url);
+        } catch (final RuntimeException e) {
+            return false;
+        }
+    }
+
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
@@ -31,14 +39,6 @@ public class YggdrasilTransformer extends Transformer {
                     }
                 }
             }
-        }
-    }
-
-    public static boolean may$urlEndsWith(final String domain, final String wl_url) {
-        try {
-            return domain != null && domain.endsWith(wl_url);
-        } catch (final RuntimeException e) {
-            return false;
         }
     }
 }

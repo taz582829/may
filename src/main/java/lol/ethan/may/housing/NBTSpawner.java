@@ -17,13 +17,13 @@ public class NBTSpawner extends GuiScreen {
 
     public void initGui() {
         final int fieldWidth = 200;
-        final int fieldHeight = 11;
+        final int fieldHeight = 20;
         textField = new GuiTextField(0, fontRendererObj, (width - fieldWidth) / 2, (height - fieldHeight) / 2, fieldWidth, fieldHeight);
         textField.setMaxStringLength(Integer.MAX_VALUE);
         textField.setFocused(true);
         if (this.mc.thePlayer.getHeldItem() != null) {
-            final NBTTagCompound nbt = ItemUtils.getFullNBT(mc.thePlayer.getHeldItem());
-            textField.setText(nbt.toString());
+            String code = ItemUtils.getGiveCode(mc.thePlayer.getHeldItem());
+            textField.setText(code);
         }
     }
 
@@ -56,11 +56,7 @@ public class NBTSpawner extends GuiScreen {
     }
 
     public void onGuiClosed() {
-        try {
-            final NBTTagCompound nbt = JsonToNBT.getTagFromJson(textField.getText().replaceAll("(?i)&(\\w)", "§$1"));
-            HousingUtils.spawnItem(ItemStack.loadItemStackFromNBT(nbt));
-        } catch (final NBTException nBTException) {
-        }
+        HousingUtils.spawnItem(ItemUtils.getFromGiveCode(textField.getText()));
     }
 }
 

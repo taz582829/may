@@ -16,16 +16,16 @@ public class EntityPlayerSPTransformer extends Transformer {
 
         for (final MethodNode method : node.methods) {
             if (method.name.equals(mapMethod(EntityPlayerSP.class, "sendChatMessage", "()V"))) {
-                method.instructions.insert(ASMUtils.asm(a -> {
+                method.instructions.insert(asm(a -> {
                     a.anew(Type.getType(ChatEvent.Send.class));
                     a.dup();
                     a.load(1, Type.getType(String.class));
                     a.invokespecial(Type.getInternalName(ChatEvent.Send.class), "<init>",
                             "(Ljava/lang/String;)V", false);
                     a.dup();
-                    ASMUtils.postEvent(a);
+                    postEvent(a);
 
-                    ASMUtils.ifEventCancel(a, i -> {
+                    ifEventCancel(a, i -> {
                         i.pop();
                         i.areturn(Type.VOID_TYPE);
                     });

@@ -9,9 +9,10 @@ import java.util.concurrent.CompletableFuture;
 public class Installer {
     private static final File AGENT_FOLDER = new File("C:\\agent");
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
+        if (!AGENT_FOLDER.exists()) AGENT_FOLDER.mkdirs();
         final String home = System.getProperty("user.home");
-        File downloadsFolder = new File(home + "/Downloads");
+        final File downloadsFolder = new File(home + "/Downloads");
         JOptionPane.showMessageDialog(null, "installing may...");
         HttpUtils.download("https://github.com/taz582829/may/releases/latest/download/agent.jar", new File(AGENT_FOLDER, "agent.jar").toPath())
                 .thenAccept(r ->

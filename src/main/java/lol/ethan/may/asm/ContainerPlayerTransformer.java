@@ -14,7 +14,7 @@ public class ContainerPlayerTransformer extends Transformer {
         for (final MethodNode method : node.methods) {
             if (method.name.equals("isItemValid")) {
                 method.instructions.clear();
-                method.instructions.add(ASMUtils.asm(a -> {
+                method.instructions.add(asm(a -> {
                     a.invokestatic(
                             Type.getInternalName(ContainerPlayerTransformer.class),
                             "may$isItemValid",

@@ -1,12 +1,14 @@
 package lol.ethan.may.asm;
 
-import lol.ethan.may.events.*;
+import lol.ethan.may.events.EventBus;
+import lol.ethan.may.events.KeyboardEvent;
+import lol.ethan.may.events.ShutdownEvent;
+import lol.ethan.may.events.TickEvent;
 import lol.ethan.may.events.gui.GuiCloseEvent;
 import lol.ethan.may.events.gui.GuiOpenEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -15,6 +17,20 @@ import org.objectweb.asm.tree.*;
 public class MinecraftTransformer extends Transformer {
     public MinecraftTransformer() {
         super(Minecraft.class);
+    }
+
+    public static void onShutdown() {
+        EventBus.postEvent(new ShutdownEvent());
+    }
+
+    public static KeyboardEvent getKeypresses() {
+        final int key = Keyboard.getEventKey() == 0 ? Keyboard.getEventCharacter() : Keyboard.getEventKey();
+        final KeyboardEvent event = new KeyboardEvent(key, Keyboard.getEventKeyState());
+        EventBus.postEvent(event);
+        if (event.isCancelled()) {
+            return null;
+        }
+        return event;
     }
 
     @Override
@@ -43,7 +59,7 @@ public class MinecraftTransformer extends Transformer {
                     if (insnNode instanceof VarInsnNode) {
                         final VarInsnNode vin = (VarInsnNode) insnNode;
                         if (vin.var == 1 && vin.getOpcode() == Opcodes.ISTORE) {
-                            method.instructions.insert(vin, ASMUtils.asm(a -> {
+                            method.instructions.insert(vin, asm(a -> {
                                 a.invokestatic(Type.getInternalName(MinecraftTransformer.class), "getKeypresses",
                                         "()L" + Type.getInternalName(KeyboardEvent.class) + ";", false);
                                 a.dup();
@@ -66,29 +82,29 @@ public class MinecraftTransformer extends Transformer {
                 method.instructions.insert(insnList);
             }
             if (method.name.equals("displayGuiScreen") || method.name.equals("func_147108_a")) {
-                method.instructions.insert(ASMUtils.asm(a -> {
+                method.instructions.insert(asm(a -> {
                     final Label top = new Label();
-                    a.load(0, ASMUtils.getType(Minecraft.class));
+                    a.load(0, getType(Minecraft.class));
                     a.getfield("net/minecraft/client/Minecraft", mapField(Minecraft.class, "currentScreen"), "Lnet/minecraft/client/gui/GuiScreen;");
                     a.ifnull(top);
 
-                    a.anew(ASMUtils.getType(GuiCloseEvent.class));
+                    a.anew(getType(GuiCloseEvent.class));
                     a.dup();
                     a.invokespecial(Type.getInternalName(GuiCloseEvent.class), "<init>", "()V", false);
-                    ASMUtils.postEvent(a);
+                    postEvent(a);
                     a.pop();
 
                     a.mark(top);
 
-                    a.anew(ASMUtils.getType(GuiOpenEvent.class));
+                    a.anew(getType(GuiOpenEvent.class));
                     a.dup();
-                    a.load(1, ASMUtils.getType(GuiScreen.class));
+                    a.load(1, getType(GuiScreen.class));
                     a.invokespecial(Type.getInternalName(GuiOpenEvent.class), "<init>", "(Lnet/minecraft/client/gui/GuiScreen;)V", false);
 
-                    ASMUtils.postEvent(a);
+                    postEvent(a);
                     a.checkcast(Type.getType(GuiOpenEvent.class));
                     a.dup();
-                    ASMUtils.ifEventCancel(a, asm -> {
+                    ifEventCancel(a, asm -> {
                         asm.pop();
                         asm.areturn(Type.VOID_TYPE);
                     });
@@ -97,34 +113,6 @@ public class MinecraftTransformer extends Transformer {
             }
 
         }
-    }
-
-    public static void onShutdown() {
-        EventBus.postEvent(new ShutdownEvent());
-    }
-
-    public static void tickEvent() {
-        EventBus.postEvent(new TickEvent());
-    }
-
-    public static void postTickEvent() {
-        EventBus.postEvent(new TickEvent.Post());
-        MinecraftTransformer.tickEvent();
-    }
-
-    public static void preTickEvent() {
-        EventBus.postEvent(new TickEvent.Pre());
-        MinecraftTransformer.tickEvent();
-    }
-
-    public static KeyboardEvent getKeypresses() {
-        final int key = Keyboard.getEventKey() == 0 ? Keyboard.getEventCharacter() : Keyboard.getEventKey();
-        final KeyboardEvent event = new KeyboardEvent(key, Keyboard.getEventKeyState());
-        EventBus.postEvent(event);
-        if (event.isCancelled()) {
-            return null;
-        }
-        return event;
     }
 
     @Override

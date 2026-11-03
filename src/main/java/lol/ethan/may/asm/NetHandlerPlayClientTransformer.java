@@ -22,23 +22,24 @@ public class NetHandlerPlayClientTransformer extends Transformer {
                 if (!(insnNode instanceof MethodInsnNode)) continue;
                 final MethodInsnNode mn = (MethodInsnNode) insnNode;
                 if (mn.name.equals("put")) {
-                    method.instructions.insert(mn, ASMUtils.asm(a -> {
+                    method.instructions.insert(mn, asm(a -> {
                         a.pop();
-                        a.anew(ASMUtils.getType(PlayerListEvent.Add.class));
+                        a.anew(getType(PlayerListEvent.Add.class));
                         a.dup();
-                        a.load(3, ASMUtils.getType(S38PacketPlayerListItem.AddPlayerData.class));
+                        a.load(3, getType(S38PacketPlayerListItem.AddPlayerData.class));
                         a.invokespecial(Type.getInternalName(PlayerListEvent.Add.class), "<init>", "(Lnet/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData;)V", false);
-                        ASMUtils.postEvent(a);
+                        postEvent(a);
                     }));
                 }
+
                 if (!mn.name.equals("remove")) continue;
-                method.instructions.insert(mn, ASMUtils.asm(a -> {
+                method.instructions.insert(mn, asm(a -> {
                     a.pop();
-                    a.anew(ASMUtils.getType(PlayerListEvent.Remove.class));
+                    a.anew(getType(PlayerListEvent.Remove.class));
                     a.dup();
-                    a.load(3, ASMUtils.getType(S38PacketPlayerListItem.AddPlayerData.class));
+                    a.load(3, getType(S38PacketPlayerListItem.AddPlayerData.class));
                     a.invokespecial(Type.getInternalName(PlayerListEvent.Remove.class), "<init>", "(Lnet/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData;)V", false);
-                    ASMUtils.postEvent(a);
+                    postEvent(a);
                 }));
             }
         }
