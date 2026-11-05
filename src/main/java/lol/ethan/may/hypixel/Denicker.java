@@ -22,7 +22,6 @@ import net.minecraft.util.IChatComponent;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Denicker {
     private static final Minecraft mc = Minecraft.getMinecraft();
@@ -95,24 +94,16 @@ public class Denicker {
             future.complete(null);
             return future;
         }
-        AtomicBoolean foundDenick = new AtomicBoolean(false);
+        boolean foundDenick = false;
         for (final NetworkPlayerInfo info : mc.getNetHandler().getPlayerInfoMap()) {
             final GameProfile profile = info.getGameProfile();
             if (Objects.equals(profile.getName(), targetProfile.getName()) && profile.getId().version() == 4) {
-                foundDenick.set(true);
-                MojangAPI.getIGN(profile.getId().toString())
-                        .thenAccept(ign -> future.complete(new DenickResult(ign, profile.getId().toString())))
-                        .exceptionally(e -> {
-                            e.printStackTrace();
-                            Entry.chat("§cAn error occured while trying to denick " + targetProfile.getName() + ": §r" + e.getMessage());
-                            foundDenick.set(false);
-                            future.complete(null);
-                            return null;
-                        });
+                foundDenick = true;
+                MojangAPI.getIGN(profile.getId().toString()).thenAccept(ign -> future.complete(new DenickResult(ign, profile.getId().toString())));
                 break;
             }
         }
-        if (!foundDenick.get()) future.complete(null);
+        if (!foundDenick) future.complete(null);
 
         return future;
     }

@@ -1,6 +1,5 @@
 package lol.ethan.may.asm;
 
-import lol.ethan.may.events.ActionBarEvent;
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.ScoreboardLineEvent;
 import lol.ethan.may.events.render.RenderGameOverlayEvent;
@@ -20,6 +19,38 @@ public class GuiIngameHook extends Transformer {
         super(GuiIngame.class);
     }
 
+    @Override
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
+            if (method.name.equals("renderGameOverlay") || method.name.equals("func_175180_a")) {
+                insertBeforeReturn(method, asm(a -> {
+                    a.anew(Type.getType(RenderGameOverlayEvent.Post.class));
+                    a.dup();
+                    a.load(1, Type.FLOAT_TYPE);
+                    ASMUtils.invokeConstructor(RenderGameOverlayEvent.Post.class, "(F)V", a);
+                    ASMUtils.postEvent(a);
+                    a.pop();
+                }));
+                method.instructions.insert(ASMUtils.asm(a -> {
+                    a.anew(Type.getType(RenderGameOverlayEvent.Pre.class));
+                    a.dup();
+                    a.load(1, Type.FLOAT_TYPE);
+                    ASMUtils.invokeConstructor(RenderGameOverlayEvent.Pre.class, "(F)V", a);
+                    ASMUtils.postEvent(a);
+                    a.pop();
+                }));
+            }
+
+            if (!method.name.equals("renderScoreboard")) continue;
+            for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
+                if (!(insnNode instanceof MethodInsnNode)) continue;
+                final MethodInsnNode min = (MethodInsnNode) insnNode;
+                if (!min.name.equals("formatPlayerName")) continue;
+                method.instructions.set(min, new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(GuiIngameHook.class), "getScoreboardLine", "(Lnet/minecraft/scoreboard/Team;Ljava/lang/String;)Ljava/lang/String;"));
+            }
+        }
+    }
+
     public static boolean isScoreboardCancelled(final Object ci) {
         try {
             return (Boolean) ci.getClass().getMethod("isCancelled", new Class[0]).invoke(ci, new Object[0]);
@@ -34,51 +65,6 @@ public class GuiIngameHook extends Transformer {
         final ScoreboardLineEvent event = new ScoreboardLineEvent(team, name);
         EventBus.postEvent(event);
         return event.getLine();
-    }
-
-    @Override
-    public void transform(final ClassNode node) {
-        for (final MethodNode method : node.methods) {
-            if (method.name.equals("renderGameOverlay") || method.name.equals("func_175180_a")) {
-                insertBeforeReturn(method, asm(a -> {
-                    a.anew(Type.getType(RenderGameOverlayEvent.Post.class));
-                    a.dup();
-                    a.load(1, Type.FLOAT_TYPE);
-                    a.invokespecial(Type.getInternalName(RenderGameOverlayEvent.Post.class), "<init>",
-                            "(F)V", false);
-                    postEvent(a);
-                    a.pop();
-                }));
-                method.instructions.insert(asm(a -> {
-                    a.anew(Type.getType(RenderGameOverlayEvent.Pre.class));
-                    a.dup();
-                    a.load(1, Type.FLOAT_TYPE);
-                    a.invokespecial(Type.getInternalName(RenderGameOverlayEvent.Pre.class), "<init>",
-                            "(F)V", false);
-                    postEvent(a);
-                    a.pop();
-                }));
-            }
-
-            if (method.name.equals("setRecordPlaying") && method.desc.equals("(Ljava/lang/String;Z)V")) {
-                method.instructions.insert(asm(a -> {
-                    a.anew(Type.getType(ActionBarEvent.class));
-                    a.dup();
-                    a.load(1, Type.getType(String.class));
-                    a.invokespecial(Type.getInternalName(ActionBarEvent.class), "<init>",
-                            "(Ljava/lang/String;)V", false);
-                    postEvent(a);
-                    ifEventCancel(a, asm -> {
-                        asm.pop();
-                        asm.areturn(Type.VOID_TYPE);
-                    });
-                    a.checkcast(Type.getType(ActionBarEvent.class));
-                    a.invokevirtual(Type.getInternalName(ActionBarEvent.class), "getMessage",
-                            "()Ljava/lang/String;", false);
-                    a.store(1, Type.getType(String.class));
-                }));
-            }
-        }
     }
 
     @Override

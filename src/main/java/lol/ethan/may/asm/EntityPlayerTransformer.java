@@ -3,7 +3,9 @@ package lol.ethan.may.asm;
 import lol.ethan.may.events.player.NameFormatEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -11,7 +13,6 @@ public class EntityPlayerTransformer extends Transformer {
     private static final Type CHAT_COMPONENT_TYPE = Type.getType(IChatComponent.class);
     private static final Type PLAYER_TYPE = Type.getType(EntityPlayer.class);
     private static final Type EVENT_TYPE = Type.getType(NameFormatEvent.class);
-
     public EntityPlayerTransformer() {
         super(EntityPlayer.class);
     }

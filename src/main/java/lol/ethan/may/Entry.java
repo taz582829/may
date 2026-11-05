@@ -67,7 +67,7 @@ public final class Entry {
         try {
             Class.forName("com.moonsworth.lunar.lib.adventure.text.Component");
             return MinecraftClient.LUNAR;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return MinecraftClient.FORGE;
         }
     }
@@ -93,12 +93,12 @@ public final class Entry {
     }
     private static File getDataDir() {
         try {
-            Minecraft mc = getMinecraft();
-            Class<?> mcClass = mc.getClass();
+            final Minecraft mc = getMinecraft();
+            final Class<?> mcClass = mc.getClass();
             return (File) mcClass.getDeclaredField(
                     Mappings.getMappingType() == Mappings.MappingType.MCP ? "field_71412_D" : "mcDataDir"
             ).get(mc);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -112,11 +112,12 @@ public final class Entry {
         FILE_PATH = new File(getDataDir(), "May");
 
         if (!FILE_PATH.exists()) {
-            FILE_PATH.mkdirs();
+            final boolean made = FILE_PATH.mkdirs();
+            if (!made) System.out.println("files not made successfully!");
         }
         DEBUG_DIR = new File(Entry.FILE_PATH, "debug");
         if (!DEBUG_DIR.exists()) {
-            DEBUG_DIR.mkdirs();
+            if (!DEBUG_DIR.mkdirs()) System.out.println("files not made successfully");
         }
         Thread.currentThread().setContextClassLoader(loader);
 
@@ -160,7 +161,7 @@ public final class Entry {
             }
         }
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getResourceAsStream("version.txt"), StandardCharsets.UTF_8))) {
+        try (final BufferedReader reader = new BufferedReader(new InputStreamReader(getResourceAsStream("version.txt"), StandardCharsets.UTF_8))) {
             Entry.VERSION = reader.lines().collect(Collectors.joining("\n"));
         } finally {
             Installer.getLatestReleaseTag().thenAccept(r -> {
@@ -237,10 +238,6 @@ public final class Entry {
         mc.addScheduledTask(() -> mc.thePlayer.playSound(key, volume, pitch));
     }
 
-    public static void playSound(final String key, final float volume) {
-        Entry.playSound(key, volume, 1.0f);
-    }
-
     public static void playSound(final String key) {
         Entry.playSound(key, 1.0f, 1.0f);
     }
@@ -275,10 +272,10 @@ public final class Entry {
             ModAPI.setIsOnHypixel(true);
             Entry.debug("detected hypixel");
             try {
-                Method method = HypixelModAPI.class.getDeclaredMethod("sendRegisterPacket", boolean.class);
+                final Method method = HypixelModAPI.class.getDeclaredMethod("sendRegisterPacket", boolean.class);
                 method.setAccessible(true);
                 method.invoke(HypixelModAPI.getInstance(), true);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
@@ -332,7 +329,7 @@ public final class Entry {
                     Entry.debug("latest version: " + r + ", your version: " + r);
                 }
             });
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }

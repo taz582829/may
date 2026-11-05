@@ -4,10 +4,12 @@ import lol.ethan.may.events.player.RenderLivingEvent;
 import lol.ethan.may.events.render.RenderModelEvent;
 import lol.ethan.may.housing.AntiInvis;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -18,33 +20,8 @@ public class RendererLivingEntityTransformer extends Transformer {
     private static final Class<?> compClass;
     private static final Type ANTI_INVIS_TYPE = Type.getType(AntiInvis.class);
 
-    static {
-        try {
-            compClass = Class.forName("com.moonsworth.lunar.lib.adventure.text.Component");
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public RendererLivingEntityTransformer() {
         super(RendererLivingEntity.class);
-    }
-
-    public static Object may$modifyDisplayName(final Object componentObj, final Object entityObj) {
-        if (!(entityObj instanceof EntityLivingBase) || componentObj == null) {
-            return componentObj;
-        }
-        final EntityLivingBase entity = (EntityLivingBase) entityObj;
-        return RendererLivingEntityTransformer.textToComponent(entity.getDisplayName().getFormattedText());
-    }
-
-    public static Object textToComponent(final String text) {
-        try {
-            return compClass.getMethod("text", String.class).invoke(null, text);
-        } catch (final Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     @Override
@@ -146,8 +123,35 @@ public class RendererLivingEntityTransformer extends Transformer {
         }
     }
 
+    public static Object may$modifyDisplayName(final Object componentObj, final Object entityObj) {
+        if (!(entityObj instanceof EntityLivingBase) || componentObj == null) {
+            return componentObj;
+        }
+        final EntityLivingBase entity = (EntityLivingBase) entityObj;
+        return RendererLivingEntityTransformer.textToComponent(entity.getDisplayName().getFormattedText());
+    }
+
+    public static Object textToComponent(final String text) {
+        try {
+            return compClass.getMethod("text", String.class).invoke(null, text);
+        }
+        catch (final Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public boolean shouldComputeFrames() {
         return true;
+    }
+
+    static {
+        try {
+            compClass = Class.forName("com.moonsworth.lunar.lib.adventure.text.Component");
+        }
+        catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

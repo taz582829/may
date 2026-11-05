@@ -21,6 +21,25 @@ public class HitboxesHook extends Transformer {
         super(RenderManager.class);
     }
 
+    @Override
+    public void transform(final ClassNode node) {
+        for (final MethodNode method : node.methods) {
+            if (!method.name.equals("func_85094_b") && !method.name.equals("renderDebugBoundingBox")) continue;
+            method.instructions.insert(ASMUtils.asm(a -> {
+                a.load(1, Type.getType(Entity.class));
+                a.load(2, Type.DOUBLE_TYPE);
+                a.load(4, Type.DOUBLE_TYPE);
+                a.load(6, Type.DOUBLE_TYPE);
+                a.invokestatic(Type.getInternalName(HitboxesHook.class), "may$renderHitboxes",
+                        "(Lnet/minecraft/entity/Entity;DDD)Z", false);
+                final Label end = new Label();
+                a.ifeq(end);
+                a.areturn(Type.VOID_TYPE);
+                a.mark(end);
+            }));
+        }
+    }
+
     public static boolean may$renderHitboxes(final Entity entity, final double x, final double y, final double z) {
         if (entity instanceof EntityPlayer && Config.modifyPlayerHitboxes.enabled) {
             final EntityPlayer player = (EntityPlayer) entity;
@@ -67,7 +86,7 @@ public class HitboxesHook extends Transformer {
                 bb1 = bb1.expand(f, f, f);
             }
             int color = Config.hitboxColor.color;
-            final ScorePlayerTeam team = (ScorePlayerTeam) (shooter instanceof EntityPlayer ? ((EntityPlayer) shooter).getTeam() : null);
+            final ScorePlayerTeam team = (ScorePlayerTeam)(shooter instanceof EntityPlayer ? ((EntityPlayer) shooter).getTeam() : null);
             if (Config.teamColoredArrowHitboxes.enabled) {
                 color = Integer.parseInt(ColorUtils.getColorFromTeam(team), 16);
             }
@@ -83,25 +102,6 @@ public class HitboxesHook extends Transformer {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void transform(final ClassNode node) {
-        for (final MethodNode method : node.methods) {
-            if (!method.name.equals("func_85094_b") && !method.name.equals("renderDebugBoundingBox")) continue;
-            method.instructions.insert(asm(a -> {
-                a.load(1, Type.getType(Entity.class));
-                a.load(2, Type.DOUBLE_TYPE);
-                a.load(4, Type.DOUBLE_TYPE);
-                a.load(6, Type.DOUBLE_TYPE);
-                a.invokestatic(Type.getInternalName(HitboxesHook.class), "may$renderHitboxes",
-                        "(Lnet/minecraft/entity/Entity;DDD)Z", false);
-                final Label end = new Label();
-                a.ifeq(end);
-                a.areturn(Type.VOID_TYPE);
-                a.mark(end);
-            }));
-        }
     }
 
     @Override
