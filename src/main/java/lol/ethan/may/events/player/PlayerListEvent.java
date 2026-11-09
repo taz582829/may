@@ -1,5 +1,6 @@
-package lol.ethan.may.events;
+package lol.ethan.may.events.player;
 
+import lol.ethan.may.events.Event;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 
 public class PlayerListEvent {

@@ -53,6 +53,7 @@ public abstract class Transformer implements ClassFileTransformer {
                 transform(node);
             } catch (final Throwable t) {
                 t.printStackTrace();
+                return null;
             }
             int flags = ClassWriter.COMPUTE_MAXS;
             if (this.shouldComputeFrames()) flags |= ClassWriter.COMPUTE_FRAMES;
@@ -134,11 +135,11 @@ public abstract class Transformer implements ClassFileTransformer {
     public MethodInsnNode postEvent() {
         return new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(EventBus.class), "postEvent", "(L" + Type.getInternalName(Event.class) + ";)L" + Type.getInternalName(Event.class) + ";");
     }
-    String mapField(final Class<?> owner, final String name) {
+    public String mapField(final Class<?> owner, final String name) {
         if (Mappings.getMappingType() != Mappings.MappingType.MCP) return name;
         return Mappings.mapFieldInHierarchy(Type.getInternalName(owner), name, name);
     }
-    String mapMethod(final Class<?> owner, final String name, final String desc) {
+    public String mapMethod(final Class<?> owner, final String name, final String desc) {
         if (Mappings.getMappingType() != Mappings.MappingType.MCP) return name;
         return Mappings.mapMethodInHierarchy(Type.getInternalName(owner), name, desc, name);
     }
@@ -159,9 +160,9 @@ public abstract class Transformer implements ClassFileTransformer {
         return Type.getObjectType(Type.getInternalName(clazz));
     }
 
-    public InsnList asm(final Consumer<InstructionAdapter> body) {
+    public InsnList asm(final Consumer<MayInstructionAdapter> body) {
         final MethodNode temp = new MethodNode();
-        final InstructionAdapter a = new InstructionAdapter(temp);
+        final MayInstructionAdapter a = new MayInstructionAdapter(temp);
         body.accept(a);
         return temp.instructions;
     }
@@ -178,7 +179,7 @@ public abstract class Transformer implements ClassFileTransformer {
         System.out.println("___________________________________________________________________");
     }
 
-    void insertBeforeReturn(final MethodNode method, final InsnList list) {
+    public void insertBeforeReturn(final MethodNode method, final InsnList list) {
         for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
             final int opcode = insnNode.getOpcode();
             if (opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) {
@@ -187,7 +188,7 @@ public abstract class Transformer implements ClassFileTransformer {
         }
     }
 
-    static InsnList cloneList(final InsnList list) {
+    protected static InsnList cloneList(final InsnList list) {
         final Map<LabelNode, LabelNode> labels = new HashMap<>();
         for (final AbstractInsnNode insn : list.toArray()) {
             if (insn instanceof LabelNode) labels.put((LabelNode) insn, new LabelNode());
@@ -198,19 +199,19 @@ public abstract class Transformer implements ClassFileTransformer {
         }
         return copy;
     }
-    boolean isPublic(final int modifiers) {
+    protected boolean isPublic(final int modifiers) {
         return (modifiers & Opcodes.ACC_PUBLIC) != 0;
     }
-    boolean isPrivate(final int modifiers) {
+    protected boolean isPrivate(final int modifiers) {
         return (modifiers & Opcodes.ACC_PRIVATE) != 0;
     }
-    boolean isProtected(final int modifiers) {
+    protected boolean isProtected(final int modifiers) {
         return (modifiers & Opcodes.ACC_PROTECTED) != 0;
     }
-    boolean isStatic(final int modifiers) {
+    protected boolean isStatic(final int modifiers) {
         return (modifiers & Opcodes.ACC_STATIC) != 0;
     }
-    boolean isFinal(final int modifiers) {
+    protected boolean isFinal(final int modifiers) {
         return (modifiers & Opcodes.ACC_FINAL) != 0;
     }
 }

@@ -1,5 +1,6 @@
-package lol.ethan.may.events;
+package lol.ethan.may.events.user;
 
+import lol.ethan.may.events.Event;
 import net.minecraft.util.IChatComponent;
 
 public class ClientDisconnectFromServerEvent extends Event {

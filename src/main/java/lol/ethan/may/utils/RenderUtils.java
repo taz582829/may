@@ -157,13 +157,13 @@ public class RenderUtils {
         tessellator.draw();
         RenderUtils.disableRenderState();
     }
-    public static void drawEntityBox(Entity entity, Color color) {
+    public static void drawEntityBox(final Entity entity, final Color color) {
 
-        float partialTicks = Objects.requireNonNull(getTimer()).renderPartialTicks;
-        double d2 = lerpDouble(entity.posX, entity.lastTickPosX, partialTicks);
-        double d3 = lerpDouble(entity.posY, entity.lastTickPosY, partialTicks);
-        double d4 = lerpDouble(entity.posZ, entity.lastTickPosZ, partialTicks);
-        AxisAlignedBB bb = entity.getEntityBoundingBox().expand(0.1f, 0.1f, 0.1f)
+        final float partialTicks = Objects.requireNonNull(getTimer()).renderPartialTicks;
+        final double d2 = lerpDouble(entity.posX, entity.lastTickPosX, partialTicks);
+        final double d3 = lerpDouble(entity.posY, entity.lastTickPosY, partialTicks);
+        final double d4 = lerpDouble(entity.posZ, entity.lastTickPosZ, partialTicks);
+        final AxisAlignedBB bb = entity.getEntityBoundingBox().expand(0.1f, 0.1f, 0.1f)
                 .offset(d2 - entity.posX, d3 - entity.posY, d4 - entity.posZ)
                 .offset(
                         -(getRenderPos()[0]),

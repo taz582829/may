@@ -4,6 +4,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+
+import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.*;
 
@@ -124,5 +130,55 @@ public class HUDHelper {
     }
     public static int getFontHeight() {
         return Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
+    }
+    public static void drawRoundedRect(double left, double top, double right, double bottom, final double radius, final int color) {
+        final float alpha = (float)(color >> 24 & 255) / 255.0F;
+        final float red = (float)(color >> 16 & 255) / 255.0F;
+        final float green = (float)(color >> 8 & 255) / 255.0F;
+        final float blue = (float)(color & 255) / 255.0F;
+
+        if (left < right) {
+            final double i = left;
+            left = right;
+            right = i;
+        }
+        if (top < bottom) {
+            final double j = top;
+            top = bottom;
+            bottom = j;
+        }
+
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_TRUE, GL_FALSE);
+        GlStateManager.color(red, green, blue, alpha);
+
+        glEnable(GL_LINE_SMOOTH);
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+
+        final Tessellator tessellator = Tessellator.getInstance();
+        final WorldRenderer wr = tessellator.getWorldRenderer();
+
+        wr.begin(GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION);
+
+        wr.pos(left + (right - left) / 2.0D, top + (bottom - top) / 2.0D, 0.0D).endVertex();
+
+        for (int i = 0; i <= 90; i += 3) {
+            wr.pos(right - radius + Math.sin(Math.toRadians(i)) * radius, top + radius - Math.cos(Math.toRadians(i)) * radius, 0.0D).endVertex();
+        }
+        for (int i = 90; i <= 180; i += 3) {
+            wr.pos(right - radius + Math.sin(Math.toRadians(i)) * radius, bottom - radius - Math.cos(Math.toRadians(i)) * radius, 0.0D).endVertex();
+        }
+        for (int i = 180; i <= 270; i += 3) {
+            wr.pos(left + radius + Math.sin(Math.toRadians(i)) * radius, bottom - radius - Math.cos(Math.toRadians(i)) * radius, 0.0D).endVertex();
+        }
+        for (int i = 270; i <= 360; i += 3) {
+            wr.pos(left + radius + Math.sin(Math.toRadians(i)) * radius, top + radius - Math.cos(Math.toRadians(i)) * radius, 0.0D).endVertex();
+        }
+
+        tessellator.draw();
+        glDisable(GL_LINE_SMOOTH);
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 }

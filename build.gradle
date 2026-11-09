@@ -26,7 +26,7 @@ dependencies {
     compileOnly files('libs/forgeBin-1.8.9-11.15.1.2318-1.8.9.jar')
     compileOnly files('libs/tools.jar')
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
-    //implementation 'com.neovisionaries:nv-websocket-client:2.14'
+    implementation 'com.neovisionaries:nv-websocket-client:2.14'
     implementation 'org.ow2.asm:asm:9.6'
     implementation 'org.ow2.asm:asm-tree:9.6'
     implementation 'org.ow2.asm:asm-util:9.5'

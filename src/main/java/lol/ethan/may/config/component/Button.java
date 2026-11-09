@@ -76,7 +76,7 @@ public class Button extends Component {
     }
 
     @Override
-    public void onKeyPress(final char c, final int code, ConfigEvent event) {
+    public void onKeyPress(final char c, final int code, final ConfigEvent event) {
 
     }
 

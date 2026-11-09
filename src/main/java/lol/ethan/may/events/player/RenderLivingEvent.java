@@ -46,13 +46,13 @@ public class RenderLivingEvent extends Event {
     }
 
     public static class Post extends RenderLivingEvent {
-        public Post(EntityLivingBase entity, RendererLivingEntity<EntityLivingBase> renderer, double x, double y, double z, final float partialTicks) {
+        public Post(final EntityLivingBase entity, final RendererLivingEntity<EntityLivingBase> renderer, final double x, final double y, final double z, final float partialTicks) {
             super(entity, renderer, x, y, z, partialTicks);
         }
     }
 
     public static class Pre extends RenderLivingEvent {
-        public Pre(EntityLivingBase entity, RendererLivingEntity<EntityLivingBase> renderer, double x, double y, double z, final float partialTicks) {
+        public Pre(final EntityLivingBase entity, final RendererLivingEntity<EntityLivingBase> renderer, final double x, final double y, final double z, final float partialTicks) {
             super(entity, renderer, x, y, z, partialTicks);
         }
     }

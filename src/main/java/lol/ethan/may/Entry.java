@@ -3,9 +3,9 @@ package lol.ethan.may;
 import lol.ethan.may.anticheat.checks.Autoblock;
 import lol.ethan.may.anticheat.checks.LegitScaffold;
 import lol.ethan.may.anticheat.checks.NoBreakDelay;
-import lol.ethan.may.anticheat.checks.Timer;
 import lol.ethan.may.anticheat.data.AnticheatData;
 import lol.ethan.may.asm.*;
+import lol.ethan.may.asm.transformers.*;
 import lol.ethan.may.commands.*;
 import lol.ethan.may.config.Config;
 import lol.ethan.may.config.component.Component;
@@ -13,10 +13,11 @@ import lol.ethan.may.config.component.HUDComponent;
 import lol.ethan.may.config.component.KeybindComponent;
 import lol.ethan.may.events.*;
 import lol.ethan.may.events.render.RenderGameOverlayEvent;
-import lol.ethan.may.housing.AntiInvis;
-import lol.ethan.may.housing.HouseMatcher;
-import lol.ethan.may.housing.HousingESP;
-import lol.ethan.may.housing.ItemAlerts;
+import lol.ethan.may.events.render.RenderParticleEvent;
+import lol.ethan.may.events.user.KeyboardEvent;
+import lol.ethan.may.housing.*;
+import lol.ethan.may.housing.hc.HackChatCommand;
+import lol.ethan.may.housing.hc.HackChatHandler;
 import lol.ethan.may.hypixel.BlacklistInfo;
 import lol.ethan.may.hypixel.BowDistance;
 import lol.ethan.may.hypixel.Denicker;
@@ -31,9 +32,12 @@ import lol.ethan.may.hypixel.duels.DuelsStatsManager;
 import lol.ethan.may.hypixel.duels.DuelsUtils;
 import lol.ethan.may.hypixel.modapi.LocationData;
 import lol.ethan.may.mappings.Mappings;
+import lol.ethan.may.rbw.RBWOverlay;
 import lol.ethan.may.render.huds.BasicHud;
 import net.hypixel.modapi.HypixelModAPI;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntityHeartFX;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import org.lwjgl.input.Keyboard;
@@ -127,11 +131,12 @@ public final class Entry {
         }
         transformers.add(new MinecraftTransformer());
         transformers.add(new NetworkManagerHook());
-        //transformers.add(new ItemBucketTransformer());
+        transformers.add(new ContainerPlayerTransformer());
         transformers.add(new WorldTransformer());
+        transformers.add(new ChatStyleTransformer());
         if (getClient() == MinecraftClient.LUNAR) {
             transformers.add(new RendererLivingEntityTransformer());
-            //transformers.add(new ModTransformer());
+            transformers.add(new ModTransformer());
         }
         transformers.add(new EntityPlayerTransformer());
         transformers.add(new HitboxesHook());
@@ -144,20 +149,33 @@ public final class Entry {
         transformers.add(new EntityPlayerSPTransformer());
         transformers.add(new SkinManagerTransformer());
         transformers.add(new YggdrasilTransformer());
+        transformers.add(new EntityFXTransformer());
 
         for (final Transformer t : transformers) {
             inst.addTransformer(t, true);
         }
+        final List<Class<?>> classesToTransform = new ArrayList<>();
         for (final Class<?> clazz : inst.getAllLoadedClasses()) {
+            if (!inst.isModifiableClass(clazz)) continue;
+            final String className = clazz.getName().replace("/", ".");
+            boolean needsTransform = false;
+
             for (final Transformer t : transformers) {
-                try {
-                    if (!t.shouldTransform(clazz.getName().replace('/', '.')) || !inst.isModifiableClass(clazz))
-                        continue;
-                    inst.retransformClasses(clazz);
-                } catch (final Throwable e) {
-                    System.out.println(clazz.getName() + " failed to transform (" + t.getClass().getName() + ")");
-                    e.printStackTrace();
+                if (t.shouldTransform(className)) {
+                    needsTransform = true;
+                    break;
                 }
+            }
+
+            if (needsTransform) {
+                classesToTransform.add(clazz);
+            }
+        }
+        if (classesToTransform.size() != 0) {
+            try {
+                inst.retransformClasses(classesToTransform.toArray(new Class[0]));
+            } catch (final Throwable e) {
+                e.printStackTrace();
             }
         }
 
@@ -183,7 +201,7 @@ public final class Entry {
     }
 
     public static void chat(final Object message) {
-        Entry.chat(new ChatComponentText(message.toString().replaceAll("&([0-9A-FK-OR])", "§$1")));
+        Entry.chat(new ChatComponentText(String.valueOf(message).replaceAll("&([0-9A-FK-OR])", "§$1")));
     }
 
     public static void chat(final IChatComponent message) {
@@ -289,7 +307,7 @@ public final class Entry {
         EventBus.subscribe(new CommandHandler());
         EventBus.subscribe(new AnticheatData());
         EventBus.subscribe(new Autoblock());
-        EventBus.subscribe(new Timer());
+        //EventBus.subscribe(new PitClassicNuker());
         EventBus.subscribe(new LegitScaffold());
         EventBus.subscribe(new NoBreakDelay());
         EventBus.subscribe(new BedwarsUtils());
@@ -301,14 +319,18 @@ public final class Entry {
         EventBus.subscribe(new DuelsRankInfo());
         EventBus.subscribe(new HousingESP());
         EventBus.subscribe(new AntiInvis());
+        EventBus.subscribe(new CopySet());
         EventBus.subscribe(new MiddleClickShop());
         EventBus.subscribe(new PartyCounter());
+        EventBus.subscribe(new HackChatHandler());
         EventBus.subscribe(new ItemAlerts());
         EventBus.subscribe(new BowDistance());
         EventBus.subscribe(new LobbyOneHelper());
+        EventBus.subscribe(new RBWOverlay());
         EventBus.subscribe(new HouseMatcher());
         EventBus.subscribe(new BlacklistInfo());
 
+        CommandHandler.register(new HackChatCommand());
         CommandHandler.register(new DebugCommand());
         CommandHandler.register(new HypixelStats());
         CommandHandler.register(new MatcherCommand());
@@ -354,7 +376,7 @@ public final class Entry {
         }
     }
     @SubscribeEvent
-    public void onChat(final ChatEvent.Send e) {
+    public void onChatSend(final ChatEvent.Send e) {
         final String msg = e.getMessage();
         if (msg.startsWith("/mayinternal")) {
             final UUID uuid = UUID.fromString(msg.split(" ")[1]);
@@ -375,12 +397,11 @@ public final class Entry {
     }
 
     @SubscribeEvent
-    public void onScoreboardLine(final ScoreboardLineEvent event) {
-        if (Entry.getMinecraft().theWorld == null) {
-            return;
-        }
-        if (Config.isDebugLogging()) {
-            event.setLine("debug");
+    public void onParticle(final RenderParticleEvent.Pre event) {
+        final EntityFX particle = event.getParticle();
+        if (particle instanceof EntityHeartFX && Config.isDebugLogging()) {
+            System.out.println(event.getScale());
+            event.setScale(5.0F);
         }
     }
 }

@@ -17,17 +17,17 @@ public class ConfigCommand extends Command {
             ClickGUI.open();
             return;
         }
-        String arg1 = args[0].trim();
+        final String arg1 = args[0].trim();
         if (arg1.equalsIgnoreCase("folder")) {
             try {
                 Desktop.getDesktop().open(Entry.FILE_PATH);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
         } else if (arg1.equalsIgnoreCase("file")) {
             try {
                 Desktop.getDesktop().open(Config.getConfigFile());
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
         }

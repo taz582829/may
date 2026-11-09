@@ -4,9 +4,9 @@ import lol.ethan.may.events.Event;
 import net.minecraft.client.gui.GuiScreen;
 
 public class GuiOpenEvent extends Event {
-    private GuiScreen screen;
+    private final GuiScreen screen;
 
-    public GuiOpenEvent(GuiScreen screen) {
+    public GuiOpenEvent(final GuiScreen screen) {
         this.screen = screen;
     }
 

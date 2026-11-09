@@ -3,7 +3,7 @@ package lol.ethan.may.hypixel;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import lol.ethan.may.Entry;
-import lol.ethan.may.events.PlayerListEvent;
+import lol.ethan.may.events.player.PlayerListEvent;
 import lol.ethan.may.events.Priority;
 import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.events.player.NameFormatEvent;

@@ -4,7 +4,7 @@ public enum Category {
     Bedwars,
     Duels,
     Housing,
-    Tag,
+    Ranked,
     Anticheat,
     General,
     Hitboxes

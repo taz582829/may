@@ -21,7 +21,9 @@ import lol.ethan.may.utils.JsonUtils;
 import lol.ethan.may.utils.TimeUtils;
 import net.hypixel.data.type.GameType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -41,7 +43,7 @@ public class BedwarsStatsManager {
     @SubscribeEvent
     public void onChat(final ChatEvent.Received event) {
         final String msg = event.getMessage().getUnformattedText().trim();
-        if (msg.equals("Protect your bed and destroy the enemy beds.") || msg.equals("bw-test") || msg.equals("You will respawn in 10 seconds!")) {
+        if (msg.startsWith("Protect your bed and destroy the enemy bed") || msg.equals("bw-test") || msg.equals("You will respawn in 10 seconds!")) {
             this.inBedwars = true;
             Entry.debug("in bedwars");
 
@@ -105,7 +107,7 @@ public class BedwarsStatsManager {
     }
     @SubscribeEvent
     public void onRenderPlayer(final RenderPlayerInTabEvent event) {
-        if (DuelsUtils.isInDuels() || DuelsUtils.isInBwDuels()) return;
+        if (DuelsUtils.isInDuels()) return;
         if (this.inBedwars && Config.bedwarsTabStats.enabled) {
             final GameProfile profile = event.getPlayerInfo().getGameProfile();
             if (profile.getId().version() == 2) return;

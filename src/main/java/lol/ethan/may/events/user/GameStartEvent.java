@@ -1,4 +1,6 @@
-package lol.ethan.may.events;
+package lol.ethan.may.events.user;
+
+import lol.ethan.may.events.Event;
 
 public class GameStartEvent extends Event {
     private final Mode mode;

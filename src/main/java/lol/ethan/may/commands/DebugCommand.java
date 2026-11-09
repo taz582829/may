@@ -14,19 +14,19 @@ public class DebugCommand extends Command {
     }
 
     @Override
-    public void execute(String[] args) {
+    public void execute(final String[] args) {
         if (args.length == 0) {
             Config.setDebugLogging(!Config.isDebugLogging());
             Entry.chat(Entry.PREFIX + "Debug Logging: " + (Config.isDebugLogging() ? "§aOn" : "§cOff"));
             return;
         }
-        String arg1 = args[0].trim().toLowerCase();
+        final String arg1 = args[0].trim().toLowerCase();
         if (arg1.equalsIgnoreCase("teams")) {
-            StringBuilder builder = new StringBuilder("§7" + ChatUtils.getChatBreak() + "\n");
-            for (ScorePlayerTeam team : mc.theWorld.getScoreboard().getTeams()) {
-                String displayName = team.getColorPrefix() + team.getColorSuffix();
+            final StringBuilder builder = new StringBuilder("§7" + ChatUtils.getChatBreak() + "\n");
+            for (final ScorePlayerTeam team : mc.theWorld.getScoreboard().getTeams()) {
+                final String displayName = team.getColorPrefix() + team.getColorSuffix();
                 if (args.length >= 2) {
-                    String arg2 = args[1];
+                    final String arg2 = args[1];
                     if (arg2.equalsIgnoreCase("filter")) {
                         if (isTeamValid(team)) {
                             builder.append(Entry.SHORT_PREFIX)
@@ -56,11 +56,11 @@ public class DebugCommand extends Command {
             builder.append("§7").append(ChatUtils.getChatBreak());
             Entry.chat(builder);
         } else if (arg1.equalsIgnoreCase("players")) {
-            StringBuilder builder = new StringBuilder("§7" + ChatUtils.getChatBreak() + "\n");
-            for (NetworkPlayerInfo playerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-                GameProfile profile = playerInfo.getGameProfile();
+            final StringBuilder builder = new StringBuilder("§7" + ChatUtils.getChatBreak() + "\n");
+            for (final NetworkPlayerInfo playerInfo : mc.getNetHandler().getPlayerInfoMap()) {
+                final GameProfile profile = playerInfo.getGameProfile();
                 if (args.length >= 2) {
-                    String arg2 = args[1];
+                    final String arg2 = args[1];
                     if (arg2.equalsIgnoreCase("filter")) {
                         if (profile.getId().version() != 2) {
                             builder.append(Entry.SHORT_PREFIX)
@@ -89,9 +89,9 @@ public class DebugCommand extends Command {
         }
     }
 
-    private boolean isTeamValid(ScorePlayerTeam team) {
+    private boolean isTeamValid(final ScorePlayerTeam team) {
         boolean result = false;
-        for (String player : team.getMembershipCollection()) {
+        for (final String player : team.getMembershipCollection()) {
             if (!StringUtils.stripControlCodes(player).trim().isEmpty()) result = true;
         }
         return result;

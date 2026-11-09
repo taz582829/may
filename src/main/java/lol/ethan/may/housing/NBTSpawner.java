@@ -22,7 +22,7 @@ public class NBTSpawner extends GuiScreen {
         textField.setMaxStringLength(Integer.MAX_VALUE);
         textField.setFocused(true);
         if (this.mc.thePlayer.getHeldItem() != null) {
-            String code = ItemUtils.getGiveCode(mc.thePlayer.getHeldItem());
+            final String code = ItemUtils.getGiveCode(mc.thePlayer.getHeldItem());
             textField.setText(code);
         }
     }

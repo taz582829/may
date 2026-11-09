@@ -13,14 +13,14 @@ public class MatcherCommand extends Command {
 
 
     @Override
-    public void execute(String[] args) {
+    public void execute(final String[] args) {
         final List<String> targets = HouseMatcher.getTargets();
         if (args.length == 0) {
             targets.add(LocationData.getServer());
             Entry.chat(Entry.PREFIX + "Added §3" + LocationData.getServer() + " §fto the target list!");
             return;
         }
-        String arg = args[0].trim().toLowerCase();
+        final String arg = args[0].trim().toLowerCase();
         switch (arg) {
             case "start": {
                 HouseMatcher.toggle(true);
@@ -32,9 +32,9 @@ public class MatcherCommand extends Command {
                 break;
             }
             case "list": {
-                StringBuilder builder = new StringBuilder();
+                final StringBuilder builder = new StringBuilder();
                 builder.append(Entry.PREFIX).append("Targets:");
-                for (String target : targets) {
+                for (final String target : targets) {
                     builder.append("\n").append(Entry.SHORT_PREFIX).append(target);
                 }
                 Entry.chat(builder.toString());
@@ -56,7 +56,7 @@ public class MatcherCommand extends Command {
                 break;
             }
             case "exclude": {
-                String excluded = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+                final String excluded = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
                 targets.add(excluded);
                 if (HouseMatcher.getExcluded().contains(excluded)) {
                     Entry.chat("unexcluded " + excluded + "!");
@@ -72,7 +72,7 @@ public class MatcherCommand extends Command {
     }
 
     @Override
-    public String[] getTabCompletes(String[] args) {
+    public String[] getTabCompletes(final String[] args) {
         return new String[]{ "start", "stop", "list", "clear", "add", "remove" };
     }
 }

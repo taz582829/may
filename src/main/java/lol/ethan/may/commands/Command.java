@@ -38,7 +38,7 @@ public abstract class Command {
     }
 
     public boolean matches(final String text) {
-        for (String cmd : aliases) {
+        for (final String cmd : aliases) {
             if (cmd.equalsIgnoreCase(text)) return true;
         }
         return false;

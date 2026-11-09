@@ -9,9 +9,9 @@ public class SimulateCommand extends Command {
     }
 
     @Override
-    public void execute(String[] arr) {
-        String args = String.join(" ", arr).replaceAll("&(.)", "§$1");
-        S02PacketChat packet = new S02PacketChat(new ChatComponentText(args), (byte) 0);
+    public void execute(final String[] arr) {
+        final String args = String.join(" ", arr).replaceAll("&(.)", "§$1");
+        final S02PacketChat packet = new S02PacketChat(new ChatComponentText(args), (byte) 0);
         mc.getNetHandler().handleChat(packet);
     }
 }

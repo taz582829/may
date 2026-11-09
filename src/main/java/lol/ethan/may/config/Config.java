@@ -126,7 +126,7 @@ public class Config {
     private static File configFile;
     private static boolean debugLogging;
     public static Button debugLoggingBtn = new Button("Debug Logging", Category.General, false, Config::setDebugLogging);
-    public static Button forceFreelook = new Button("Force Freelook", Category.General, true, "forces freelook on (lunar only)");
+    public static Button rankedTabStats = new Button("RBW Tab Stats", Category.Ranked, true);
 
     static {
         executor = Executors.newSingleThreadExecutor();

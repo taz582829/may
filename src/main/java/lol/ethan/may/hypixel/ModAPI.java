@@ -1,20 +1,15 @@
 package lol.ethan.may.hypixel;
 
-import com.google.protobuf.NullValue;
-import com.google.protobuf.Value;
 import io.netty.buffer.Unpooled;
 import lol.ethan.may.Entry;
-import lol.ethan.may.config.Config;
 import lol.ethan.may.events.EventBus;
-import com.lunarclient.apollo.mods.impl.*;
 import lol.ethan.may.events.PacketEvent;
 import lol.ethan.may.events.SubscribeEvent;
-import lol.ethan.may.lunar.ApolloUtils;
+import lol.ethan.may.events.user.ClientDisconnectFromServerEvent;
 import net.hypixel.modapi.HypixelModAPI;
 import net.hypixel.modapi.HypixelModAPIImplementation;
 import net.hypixel.modapi.packet.HypixelPacket;
 import net.hypixel.modapi.packet.impl.clientbound.ClientboundHelloPacket;
-import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket;
 import net.hypixel.modapi.serializer.PacketSerializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
@@ -25,7 +20,7 @@ import java.util.logging.Logger;
 
 @SuppressWarnings("ApiStatus.Internal")
 public class ModAPI implements HypixelModAPIImplementation {
-    private static final Logger LOGGER = Logger.getLogger("frost-hypixel-modapi");
+    private static final Logger LOGGER = Logger.getLogger("Entry-hypixel-modapi");
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static boolean isOnHypixel;
 
@@ -59,16 +54,14 @@ public class ModAPI implements HypixelModAPIImplementation {
     }
 
     @SubscribeEvent
-    public void onDisconnect(final lol.ethan.may.events.ClientDisconnectFromServerEvent event) {
+    public void onDisconnect(final ClientDisconnectFromServerEvent event) {
         setIsOnHypixel(false);
     }
 
     @Override
     public void onInit() {
         HypixelModAPI.getInstance().createHandler(ClientboundHelloPacket.class, packet -> setIsOnHypixel(true));
-        HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket.class, packet -> {
-            if (Config.forceFreelook.enabled) ApolloUtils.setModSetting(ModFreelook.ENABLED, Value.newBuilder().setBoolValue(true).build());
-        });
+
         EventBus.subscribe(this);
     }
 

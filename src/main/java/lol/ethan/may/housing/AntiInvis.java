@@ -73,9 +73,9 @@ public class AntiInvis {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.Post event) {
+    public void onTick(final TickEvent.Post event) {
         if (mc.thePlayer == null || mc.theWorld == null || !HousingUtils.isInHousing()) return;
-        for (EntityPlayer player : mc.theWorld.playerEntities) {
+        for (final EntityPlayer player : mc.theWorld.playerEntities) {
             if (player.isInvisible()) INVISIBLE.add(player);
             else INVISIBLE.remove(player);
         }

@@ -2,8 +2,7 @@ package lol.ethan.may.hypixel.modapi;
 
 import com.google.common.base.Objects;
 import lol.ethan.may.events.EventBus;
-import lol.ethan.may.events.LocationEvent;
-import lol.ethan.may.lunar.ApolloUtils;
+import lol.ethan.may.events.user.LocationEvent;
 import net.hypixel.data.type.GameType;
 import net.hypixel.data.type.ServerType;
 import net.hypixel.modapi.HypixelModAPI;

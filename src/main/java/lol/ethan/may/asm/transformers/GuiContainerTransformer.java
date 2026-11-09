@@ -1,6 +1,7 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers;
 
 import lol.ethan.may.Entry;
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.Event;
 import lol.ethan.may.events.gui.SlotClickEvent;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -31,7 +32,7 @@ public class GuiContainerTransformer extends Transformer {
                         final int eventLocal = method.maxLocals;
                         method.maxLocals++;
 
-                        method.instructions.insert(ASMUtils.asm(a -> {
+                        method.instructions.insert(asm(a -> {
                             a.visitLdcInsn("slot clicked");
                             a.invokestatic(
                                     Type.getInternalName(Entry.class),
@@ -47,7 +48,7 @@ public class GuiContainerTransformer extends Transformer {
                             a.invokespecial(SLOT_CLICK_EVENT, "<init>", "(Lnet/minecraft/inventory/Slot;II)V", false);
 
                             a.dup();
-                            ASMUtils.postEvent(a);
+                            a.postEvent();
                             a.checkcast(SLOT_CLICK_TYPE);
                             a.store(eventLocal, SLOT_CLICK_TYPE);
 

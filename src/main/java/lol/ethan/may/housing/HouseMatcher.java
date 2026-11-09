@@ -3,7 +3,7 @@ package lol.ethan.may.housing;
 import lol.ethan.may.Entry;
 import lol.ethan.may.config.Config;
 import lol.ethan.may.events.EventBus;
-import lol.ethan.may.events.LocationEvent;
+import lol.ethan.may.events.user.LocationEvent;
 import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.events.gui.GuiOpenEvent;
 import lol.ethan.may.utils.GuiUtils;
@@ -58,12 +58,12 @@ public class HouseMatcher {
         load();
     }
     public static boolean toggle() {
-        boolean e = !enabled;
+        final boolean e = !enabled;
         toggle(e);
         return e;
 
     }
-    public static void toggle(boolean val) {
+    public static void toggle(final boolean val) {
         enabled = val;
         if (enabled) {
             //EventBus.subscribe(HouseMatcher.INSTANCE);
@@ -80,23 +80,23 @@ public class HouseMatcher {
         if (!excludedFile.exists()) return;
         executor.execute(() -> {
             try {
-                String excludedJoined = new String(
+                final String excludedJoined = new String(
                         Files.readAllBytes(excludedFile.toPath()),
                         StandardCharsets.UTF_8
                 );
                 Collections.addAll(excluded, excludedJoined.split("\n"));
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
 
         });
     }
-    public static void addExcludedHouse(String name) {
+    public static void addExcludedHouse(final String name) {
         excluded.add(name);
         executor.execute(() -> {
-            try (FileWriter writer = new FileWriter(excludedFile)) {
+            try (final FileWriter writer = new FileWriter(excludedFile)) {
                  writer.write(String.join("\n", excluded));
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
 
@@ -107,12 +107,12 @@ public class HouseMatcher {
         return excluded;
     }
 
-    public static void removeExcludedHouse(String name) {
+    public static void removeExcludedHouse(final String name) {
         excluded.remove(name);
         executor.execute(() -> {
-            try (FileWriter writer = new FileWriter(excludedFile)) {
+            try (final FileWriter writer = new FileWriter(excludedFile)) {
                 writer.write(String.join("\n", excluded));
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
 
@@ -121,7 +121,7 @@ public class HouseMatcher {
     public static void joinHouse() {
         if (!enabled) return;
 
-        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+        final EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
         if (player == null) {
             lol.ethan.may.utils.TimeUtils.setTimeout(HouseMatcher::joinHouse, 10);
             return;
@@ -129,26 +129,26 @@ public class HouseMatcher {
         player.sendChatMessage("/home");
         EventBus.subscribe(new Object() {
             @SubscribeEvent
-            public void onGuiOpen(GuiOpenEvent event) {
+            public void onGuiOpen(final GuiOpenEvent event) {
                 if (event.getScreen() instanceof GuiContainer) {
                     EventBus.unsubscribe(this);
                     TimeUtils.setTickDelay(() -> {
-                        String title = GuiUtils.getTitle();
+                        final String title = GuiUtils.getTitle();
                         if (!StringUtils.stripControlCodes(title).trim().equalsIgnoreCase("My Houses")) return;
                         if (!(Minecraft.getMinecraft().currentScreen instanceof GuiContainer)) return;
-                        GuiContainer container = (GuiContainer) Minecraft.getMinecraft().currentScreen;
-                        IInventory playerInv = Minecraft.getMinecraft().thePlayer.inventory;
+                        final GuiContainer container = (GuiContainer) Minecraft.getMinecraft().currentScreen;
+                        final IInventory playerInv = Minecraft.getMinecraft().thePlayer.inventory;
 
-                        List<Integer> houses = new ArrayList<>();
+                        final List<Integer> houses = new ArrayList<>();
 
                         matchLoop:
-                        for (Slot slot : container.inventorySlots.inventorySlots) {
+                        for (final Slot slot : container.inventorySlots.inventorySlots) {
                             if (slot.inventory == playerInv) continue;
-                            ItemStack item = slot.getStack();
+                            final ItemStack item = slot.getStack();
                             if (item == null) continue;
-                            String name = StringUtils.stripControlCodes(item.getDisplayName());
+                            final String name = StringUtils.stripControlCodes(item.getDisplayName());
 
-                            for (String blacklistedName : excluded) {
+                            for (final String blacklistedName : excluded) {
                                 if (blacklistedName.equalsIgnoreCase(name)) {
                                     continue matchLoop;
                                 }
@@ -168,7 +168,7 @@ public class HouseMatcher {
         });
     }
     @SubscribeEvent
-    public void onLocation(LocationEvent event) {
+    public void onLocation(final LocationEvent event) {
         if (!enabled) return;
         server = event.getServer();
         if (targets.contains(server)) {

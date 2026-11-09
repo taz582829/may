@@ -18,13 +18,13 @@ import java.util.List;
 public class BlockBreakData {
     Minecraft mc = Minecraft.getMinecraft();
     @SubscribeEvent
-    public void onPacketReceived(PacketEvent.Receive event) {
+    public void onPacketReceived(final PacketEvent.Receive event) {
         if (event.getPacket() instanceof S23PacketBlockChange) {
-            S23PacketBlockChange packet = (S23PacketBlockChange) event.getPacket();
-            IBlockState state = packet.blockState;
-            BlockPos bp = packet.getBlockPosition();
+            final S23PacketBlockChange packet = (S23PacketBlockChange) event.getPacket();
+            final IBlockState state = packet.blockState;
+            final BlockPos bp = packet.getBlockPosition();
             if (state.getBlock() == null || state.getBlock().getMaterial() == Material.air) {
-                AxisAlignedBB bb = new AxisAlignedBB(
+                final AxisAlignedBB bb = new AxisAlignedBB(
                         bp.getX(),
                         bp.getY(),
                         bp.getZ(),
@@ -32,14 +32,14 @@ public class BlockBreakData {
                         bp.getY() + 4.5,
                         bp.getZ() + 4.5
                 );
-                List<EntityPlayer> entities = mc.theWorld.getEntitiesWithinAABB(
+                final List<EntityPlayer> entities = mc.theWorld.getEntitiesWithinAABB(
                         EntityPlayer.class,
                         bb
                 );
-                EntityPlayer breaker = getBreaker(entities);
+                final EntityPlayer breaker = getBreaker(entities);
                 if (breaker == null) return;
 
-                BlockBreakEvent blockBreakEvent = new BlockBreakEvent(
+                final BlockBreakEvent blockBreakEvent = new BlockBreakEvent(
                         breaker,
                         bp,
                         state
@@ -49,14 +49,14 @@ public class BlockBreakData {
         }
     }
 
-    private EntityPlayer getBreaker(List<EntityPlayer> candidates) {
+    private EntityPlayer getBreaker(final List<EntityPlayer> candidates) {
         EntityPlayer candidate = null;
         candidates.sort(Comparator.comparingLong(obj -> {
-            AnticheatData.Entry data = AnticheatData.getEntry(obj.getUniqueID());
+            final AnticheatData.Entry data = AnticheatData.getEntry(obj.getUniqueID());
             return System.currentTimeMillis() - data.lastSwingAtBlock;
         }));
-        for (EntityPlayer player : candidates) {
-            AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
+        for (final EntityPlayer player : candidates) {
+            final AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
             if (System.currentTimeMillis() - data.lastSwingAtBlock < 300) {
                 candidate = player;
             }

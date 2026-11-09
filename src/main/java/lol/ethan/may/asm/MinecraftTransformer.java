@@ -3,6 +3,8 @@ package lol.ethan.may.asm;
 import lol.ethan.may.events.*;
 import lol.ethan.may.events.gui.GuiCloseEvent;
 import lol.ethan.may.events.gui.GuiOpenEvent;
+import lol.ethan.may.events.user.KeyboardEvent;
+import lol.ethan.may.events.user.MouseEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
@@ -26,7 +28,7 @@ public class MinecraftTransformer extends Transformer {
                     a.dup();
                     a.invokespecial(Type.getInternalName(TickEvent.Post.class), "<init>",
                             "()V", false);
-                    postEvent(a);
+                    a.postEvent();
                     a.pop();
                 }));
                 method.instructions.insert(asm(a -> {
@@ -34,16 +36,36 @@ public class MinecraftTransformer extends Transformer {
                     a.dup();
                     a.invokespecial(Type.getInternalName(TickEvent.Pre.class), "<init>",
                             "()V", false);
-                    postEvent(a);
+                    a.postEvent();
                     a.pop();
                 }));
+                for (final AbstractInsnNode insn : method.instructions.toArray()) {
+                    if (insn instanceof MethodInsnNode) {
+                        final MethodInsnNode mn = (MethodInsnNode) insn;
+                        if (mn.owner.equals(Type.getInternalName(Mouse.class)) && mn.name.equals("next")) {
+                            final Label top = new Label();
+                            final LabelNode ln = new LabelNode(top);
+                            top.info = ln;
+
+                            method.instructions.insertBefore(mn, ln);
+                            method.instructions.insert(mn.getNext(), asm(a -> {
+                                a.anew(MouseEvent.class);
+                                a.dup();
+                                a.invokespecial(MouseEvent.class, "<init>", "()V");
+                                a.postEvent();
+                                a.invokevirtual(Event.class, "isCancelled", "()Z");
+                                a.ifne(top);
+                            }));
+                        }
+                    }
+                }
             }
             if (method.name.equals("func_152348_aa") || method.name.equals("dispatchKeypresses")) {
                 for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                     if (insnNode instanceof VarInsnNode) {
                         final VarInsnNode vin = (VarInsnNode) insnNode;
                         if (vin.var == 1 && vin.getOpcode() == Opcodes.ISTORE) {
-                            method.instructions.insert(vin, ASMUtils.asm(a -> {
+                            method.instructions.insert(vin, asm(a -> {
                                 a.invokestatic(Type.getInternalName(MinecraftTransformer.class), "getKeypresses",
                                         "()L" + Type.getInternalName(KeyboardEvent.class) + ";", false);
                                 a.dup();
@@ -66,29 +88,29 @@ public class MinecraftTransformer extends Transformer {
                 method.instructions.insert(insnList);
             }
             if (method.name.equals("displayGuiScreen") || method.name.equals("func_147108_a")) {
-                method.instructions.insert(ASMUtils.asm(a -> {
+                method.instructions.insert(asm(a -> {
                     final Label top = new Label();
-                    a.load(0, ASMUtils.getType(Minecraft.class));
+                    a.load(0, Type.getType(Minecraft.class));
                     a.getfield("net/minecraft/client/Minecraft", mapField(Minecraft.class, "currentScreen"), "Lnet/minecraft/client/gui/GuiScreen;");
                     a.ifnull(top);
 
-                    a.anew(ASMUtils.getType(GuiCloseEvent.class));
+                    a.anew(Type.getType(GuiCloseEvent.class));
                     a.dup();
                     a.invokespecial(Type.getInternalName(GuiCloseEvent.class), "<init>", "()V", false);
-                    ASMUtils.postEvent(a);
+                    a.postEvent();
                     a.pop();
 
                     a.mark(top);
 
-                    a.anew(ASMUtils.getType(GuiOpenEvent.class));
+                    a.anew(Type.getType(GuiOpenEvent.class));
                     a.dup();
-                    a.load(1, ASMUtils.getType(GuiScreen.class));
+                    a.load(1, Type.getType(GuiScreen.class));
                     a.invokespecial(Type.getInternalName(GuiOpenEvent.class), "<init>", "(Lnet/minecraft/client/gui/GuiScreen;)V", false);
 
-                    ASMUtils.postEvent(a);
+                    a.postEvent();
                     a.checkcast(Type.getType(GuiOpenEvent.class));
                     a.dup();
-                    ASMUtils.ifEventCancel(a, asm -> {
+                    ifEventCancel(a, asm -> {
                         asm.pop();
                         asm.areturn(Type.VOID_TYPE);
                     });

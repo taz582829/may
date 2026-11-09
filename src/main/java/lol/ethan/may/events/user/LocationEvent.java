@@ -1,5 +1,6 @@
-package lol.ethan.may.events;
+package lol.ethan.may.events.user;
 
+import lol.ethan.may.events.Event;
 import net.hypixel.data.type.GameType;
 import net.hypixel.data.type.ServerType;
 

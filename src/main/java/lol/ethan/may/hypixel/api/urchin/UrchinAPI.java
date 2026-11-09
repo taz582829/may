@@ -6,17 +6,16 @@ import lol.ethan.may.utils.Cache;
 import lol.ethan.may.utils.HttpUtils;
 import lol.ethan.may.utils.JsonUtils;
 import lol.ethan.may.utils.MayStringUtils;
+import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.*;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class UrchinAPI {
     private static final Cache<String, UrchinTagsResponse> urchinTags = new Cache<>(10 * 60 * 1000);
@@ -48,7 +47,11 @@ public class UrchinAPI {
         for (final TagsItem tag : tags) {
             comp.appendText("\n");
             final ChatComponentText newComponent = new ChatComponentText(Entry.SHORT_PREFIX);
-            final ChatStyle style = new ChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§7" + tag.getReason())));
+            final ChatStyle style = new ChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§7" + tag.getReason() + "\n§eClick to suggest in chat!")));
+            style.setChatClickEvent(new ClickEvent(
+                    ClickEvent.Action.SUGGEST_COMMAND,
+                    StringUtils.stripControlCodes(res.getDisplayname() + " has " + tags.size() + " Urchin tags: " + tags.stream().map(TagsItem::toString).collect(Collectors.joining(", ")))
+            ));
             final long timestamp = tag.getAddedOn();
             //String addedBy = tag.getAddedByUsername();
             final String ago = MayStringUtils.getTimeSince(timestamp, System.currentTimeMillis());

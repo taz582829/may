@@ -13,7 +13,7 @@ public class UnblockAllMods extends Command {
     }
 
     @Override
-    public void execute(String[] args) {
+    public void execute(final String[] args) {
         ApolloUtils.setModSetting(ModFreelook.ENABLED, Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build());
         ApolloUtils.setModSetting(ModAutoTextHotkey.ENABLED, Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build());
         ApolloUtils.setModStatus("speclook", null);

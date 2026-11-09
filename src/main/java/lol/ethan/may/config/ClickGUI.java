@@ -91,6 +91,7 @@ public class ClickGUI extends GuiScreen {
 
     @Override
     public void drawScreen(final int mouseX, final int mouseY, final float pt) {
+        drawDefaultBackground();
         HUDHelper.drawRect(this.x, this.y, xSize, ySize, this.backgroundColor);
         this.fontRendererObj.drawStringWithShadow("May", this.x + 10, this.y + 10, this.mayTextColor.getRGB());
 

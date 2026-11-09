@@ -65,7 +65,7 @@ public class CommandHandler {
             } else {
                 for (final Command cmd : commands) {
                     if (!cmd.matches(cmdName)) continue;
-                    String[] suggestions = cmd.getTabCompletes(cmdArgs);
+                    final String[] suggestions = cmd.getTabCompletes(cmdArgs);
                     if (suggestions == null) continue;
 
                     lastSuggestions = suggestions;
@@ -75,7 +75,7 @@ public class CommandHandler {
         }
     }
     @SubscribeEvent
-    public void onChatSend(ChatEvent.Send event) {
+    public void onChatSend(final ChatEvent.Send event) {
         final String msg = event.getMessage();
         if (!msg.startsWith("/")) return;
         final String[] parts = msg.substring(1).trim().split(" ");

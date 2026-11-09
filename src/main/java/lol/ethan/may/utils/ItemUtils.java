@@ -50,9 +50,9 @@ public class ItemUtils {
         display.setTag("Name", nbtName);
         item.setTagInfo("display", display);
     }
-    public static String getGiveCode(ItemStack itemStack) {
-        boolean a = itemStack.getTagCompound() != null && !itemStack.getTagCompound().hasNoTags();
-        boolean b = itemStack.getMetadata() == 0 && !a;
+    public static String getGiveCode(final ItemStack itemStack) {
+        final boolean a = itemStack.getTagCompound() != null && !itemStack.getTagCompound().hasNoTags();
+        final boolean b = itemStack.getMetadata() == 0 && !a;
         return Item.itemRegistry.getNameForObject(itemStack.getItem()).toString()
           + ((itemStack.stackSize == 1 || itemStack.stackSize == 0) && b ? ""
              : " " + itemStack.stackSize
@@ -60,31 +60,31 @@ public class ItemUtils {
                   : " " + itemStack.getMetadata()
                     + (a ? " " + itemStack.getTagCompound().toString() : "")));
     }
-    public static ItemStack getFromGiveCode(String code) {
+    public static ItemStack getFromGiveCode(final String code) {
         if (code == null || code.isEmpty())
             return null;
-        String[] args = code.split(" ", 4);
-        Item item = Item.itemRegistry.getObject(new ResourceLocation(args[0]));
+        final String[] args = code.split(" ", 4);
+        final Item item = Item.itemRegistry.getObject(new ResourceLocation(args[0]));
         if (item != null) {
             int i;
             try {
                 i = args.length >= 2 ? CommandBase.parseInt(args[1]) : 1;
-            } catch (NumberInvalidException e1) {
+            } catch (final NumberInvalidException e1) {
                 i = 1;
             }
             int j;
             try {
                 j = args.length >= 3 ? CommandBase.parseInt(args[2]) : 0;
-            } catch (NumberInvalidException e1) {
+            } catch (final NumberInvalidException e1) {
                 j = 0;
             }
-            ItemStack itemstack = new ItemStack(item, i, j);
+            final ItemStack itemstack = new ItemStack(item, i, j);
 
             if (args.length == 4) {
                 try {
                     itemstack.setTagCompound(
                             ItemUtils.toJson(args[3].replace("&",  "§")));
-                } catch (NBTException e) {
+                } catch (final NBTException e) {
                 }
             }
             return itemstack;
@@ -92,21 +92,21 @@ public class ItemUtils {
         return null;
     }
 
-    public static NBTTagCompound toJson(String json) throws NBTException {
+    public static NBTTagCompound toJson(final String json) throws NBTException {
         return validate(JsonToNBT.getTagFromJson(json));
     }
 
     /**
      * Remove " of keys
      */
-    public static NBTTagCompound validate(NBTTagCompound tag) throws NBTException {
-        NBTTagCompound newTag = new NBTTagCompound();
+    public static NBTTagCompound validate(final NBTTagCompound tag) throws NBTException {
+        final NBTTagCompound newTag = new NBTTagCompound();
         tag.getKeySet().forEach(key -> {
             NBTBase base = tag.getTag(key);
             if (base instanceof NBTTagCompound)
                 try {
                     base = validate((NBTTagCompound) base);
-                } catch (NBTException e) {
+                } catch (final NBTException e) {
                 }
             else if (base instanceof NBTTagList) {
                 base = validate((NBTTagList) base);
@@ -116,17 +116,17 @@ public class ItemUtils {
         return newTag;
     }
 
-    private static NBTTagList validate(NBTTagList tag) {
+    private static NBTTagList validate(final NBTTagList tag) {
         if (tag.getTagType() == 9) { // list
-            NBTTagList nlist = new NBTTagList();
+            final NBTTagList nlist = new NBTTagList();
             forEachInNBTTagList(tag, base -> nlist.appendTag(validate((NBTTagList) base)));
             return nlist;
         } else if (tag.getTagType() == 10) { // tag
-            NBTTagList nlist = new NBTTagList();
+            final NBTTagList nlist = new NBTTagList();
             forEachInNBTTagList(tag, base -> {
                 try {
                     nlist.appendTag(validate((NBTTagCompound) base));
-                } catch (NBTException e) {
+                } catch (final NBTException e) {
                     nlist.appendTag(base);
                 }
             });
@@ -134,7 +134,7 @@ public class ItemUtils {
         } else
             return tag;
     }
-    public static void forEachInNBTTagList(NBTTagList list, Consumer<NBTBase> consumer) {
+    public static void forEachInNBTTagList(final NBTTagList list, final Consumer<NBTBase> consumer) {
         for (int i = 0; i < list.tagCount(); i++)
             consumer.accept(list.get(i));
     }

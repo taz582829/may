@@ -2,7 +2,7 @@ package lol.ethan.may.hypixel.skywars;/*
 package lol.ethan.may.hypixel.skywars;
 
 import com.mojang.authlib.GameProfile;
-import lol.ethan.may.events.LocationEvent;
+import lol.ethan.may.events.user.LocationEvent;
 import lol.ethan.may.events.Rend;
 import lol.ethan.may.hypixel.Denicker;
 import lol.ethan.may.hypixel.HypixelUtils;

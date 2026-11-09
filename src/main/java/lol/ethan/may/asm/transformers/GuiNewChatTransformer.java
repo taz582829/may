@@ -1,5 +1,6 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers;
 
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.ChatEvent;
 import lol.ethan.may.events.Event;
 import net.minecraft.client.gui.GuiNewChat;

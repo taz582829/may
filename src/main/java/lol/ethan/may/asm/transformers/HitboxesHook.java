@@ -1,5 +1,6 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers;
 
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.config.Config;
 import lol.ethan.may.utils.ColorUtils;
 import net.minecraft.client.renderer.GlStateManager;
@@ -25,7 +26,7 @@ public class HitboxesHook extends Transformer {
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
             if (!method.name.equals("func_85094_b") && !method.name.equals("renderDebugBoundingBox")) continue;
-            method.instructions.insert(ASMUtils.asm(a -> {
+            method.instructions.insert(asm(a -> {
                 a.load(1, Type.getType(Entity.class));
                 a.load(2, Type.DOUBLE_TYPE);
                 a.load(4, Type.DOUBLE_TYPE);

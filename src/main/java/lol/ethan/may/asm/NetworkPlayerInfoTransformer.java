@@ -26,8 +26,8 @@ public class NetworkPlayerInfoTransformer extends Transformer {
                 if (insnNode instanceof FieldInsnNode) {
                     final FieldInsnNode fn = (FieldInsnNode) insnNode;
                     if ((fn.name.equals("displayName") || fn.name.equals("field_178872_h")) && fn.getOpcode() == Opcodes.GETFIELD) {
-                        method.instructions.insert(insnNode, ASMUtils.asm(a -> {
-                            a.load(0, ASMUtils.getType(NetworkPlayerInfo.class));
+                        method.instructions.insert(insnNode, asm(a -> {
+                            a.load(0, Type.getType(NetworkPlayerInfo.class));
                             a.invokestatic(Type.getInternalName(NetworkPlayerInfoTransformer.class), "may$formatTabName",
                                     formatNameDesc, false);
                         }));
@@ -38,8 +38,8 @@ public class NetworkPlayerInfoTransformer extends Transformer {
             if (method.name.equals("getResponseTime") || method.name.equals("func_178853_c")) {
                 for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                     if (insnNode.getOpcode() < Opcodes.IRETURN || insnNode.getOpcode() > Opcodes.RETURN) continue;
-                    method.instructions.insertBefore(insnNode, ASMUtils.asm(a -> {
-                        a.load(0, ASMUtils.getType(NetworkPlayerInfo.class));
+                    method.instructions.insertBefore(insnNode, asm(a -> {
+                        a.load(0, Type.getType(NetworkPlayerInfo.class));
                         a.invokestatic(Type.getInternalName(NetworkPlayerInfoTransformer.class), "may$setPlayerPing", "(IL" + Type.getInternalName(NetworkPlayerInfo.class) + ";)I", false);
                     }));
                 }

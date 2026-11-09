@@ -45,7 +45,7 @@ public class HttpUtils {
                     Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
                 }
                 return target;
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
         });

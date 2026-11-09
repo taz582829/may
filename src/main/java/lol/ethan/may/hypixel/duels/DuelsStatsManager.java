@@ -39,7 +39,7 @@ public class DuelsStatsManager {
                             if (denick == null) {
                                 targetUUID = profile.getId();
 
-                                this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
+                                this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()));
                             } else {
                                 targetUUID = UUID.fromString(denick.uuid);
                             }
@@ -75,8 +75,6 @@ public class DuelsStatsManager {
                             final Denicker.DenickResult denick = Denicker.getDenick(profile.getName());
                             if (denick == null) {
                                 targetUUID = profile.getId();
-
-                                this.tabStats.setDisplayName(playerInfo, ScorePlayerTeam.formatPlayerName(playerInfo.getPlayerTeam(), playerInfo.getGameProfile().getName()) + " §c[N]");
                             } else {
                                 targetUUID = UUID.fromString(denick.uuid);
                             }
@@ -88,7 +86,6 @@ public class DuelsStatsManager {
                             HypixelAPI.getPlayer(targetUUID).thenAccept(res ->
                                     this.mc.addScheduledTask(() -> {
                                         try {
-                                            this.tabStats.refreshPlayer(profile.getId(), res.player, "bedwars");
                                             DuelsUtils.showDuelsStats(res.player, DuelsUtils.DuelsMode.BEDWARS);
                                         } catch (final Exception e) {
                                             e.printStackTrace();

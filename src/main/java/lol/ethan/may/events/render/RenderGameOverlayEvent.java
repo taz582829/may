@@ -6,7 +6,7 @@ public class RenderGameOverlayEvent {
     public static class Pre extends Event {
         private final float partialTicks;
 
-        public Pre(float partialTicks) {
+        public Pre(final float partialTicks) {
             this.partialTicks = partialTicks;
         }
 
@@ -17,7 +17,7 @@ public class RenderGameOverlayEvent {
     public static class Post extends Event {
         private final float partialTicks;
 
-        public Post(float partialTicks) {
+        public Post(final float partialTicks) {
             this.partialTicks = partialTicks;
         }
 

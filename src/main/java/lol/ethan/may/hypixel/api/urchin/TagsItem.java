@@ -45,4 +45,9 @@ public class TagsItem{
 	public long getAddedOn(){
 		return this.addedOn;
 	}
+
+	@Override
+	public String toString() {
+		return tagType;
+	}
 }

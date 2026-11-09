@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 public class RenderModelEvent extends Event {
     private final EntityLivingBase entity;
 
-    public RenderModelEvent(EntityLivingBase entity) {
+    public RenderModelEvent(final EntityLivingBase entity) {
         this.entity = entity;
     }
 
@@ -15,12 +15,12 @@ public class RenderModelEvent extends Event {
     }
 
     public static class Pre extends RenderModelEvent {
-        public Pre(EntityLivingBase entity) {
+        public Pre(final EntityLivingBase entity) {
             super(entity);
         }
     }
     public static class Post extends RenderModelEvent {
-        public Post(EntityLivingBase entity) {
+        public Post(final EntityLivingBase entity) {
             super(entity);
         }
     }

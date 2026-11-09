@@ -10,7 +10,7 @@ public class BlockBreakEvent extends Event {
     private final BlockPos blockPos;
     private final IBlockState state;
 
-    public BlockBreakEvent(EntityPlayer player, BlockPos blockPos, IBlockState state) {
+    public BlockBreakEvent(final EntityPlayer player, final BlockPos blockPos, final IBlockState state) {
         this.player = player;
         this.blockPos = blockPos;
         this.state = state;

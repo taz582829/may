@@ -3,7 +3,7 @@ package lol.ethan.may.config;
 public class ConfigEvent {
     private boolean cancelled = false;
 
-    public void setCancelled(boolean status) {
+    public void setCancelled(final boolean status) {
         cancelled = status;
     }
 

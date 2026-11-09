@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import lol.ethan.may.Entry;
 import lol.ethan.may.config.Config;
 import lol.ethan.may.events.*;
+import lol.ethan.may.events.user.GameStartEvent;
+import lol.ethan.may.events.user.LocationEvent;
 import lol.ethan.may.hypixel.HypixelUtils;
 import lol.ethan.may.hypixel.api.HypixelAPI;
 import lol.ethan.may.hypixel.api.aurora.AuroraAPI;

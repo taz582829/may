@@ -23,7 +23,7 @@ public class MiddleClickShop {
             "Upgrades & Traps",
             "Utility",
             "Guns",
-            "frost-test-gui"
+            "Entry-test-gui"
     );
     @SubscribeEvent
     public void onSlotClick(final SlotClickEvent event) {

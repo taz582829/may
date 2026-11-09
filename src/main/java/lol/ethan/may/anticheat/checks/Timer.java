@@ -14,10 +14,10 @@ public class Timer extends AnticheatFlag {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.Post event) {
+    public void onTick(final TickEvent.Post event) {
         if (mc.theWorld == null) return;
-        for (EntityPlayer player : mc.theWorld.playerEntities) {
-            AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
+        for (final EntityPlayer player : mc.theWorld.playerEntities) {
+            final AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
             if (data.verticalMoveSpeed < 0 && data.verticalMoveSpeed > -1.) {
                 Entry.debug(player.getName() + " is moving at " + data.verticalMoveSpeed + " bps");
             }

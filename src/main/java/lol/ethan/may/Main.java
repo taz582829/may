@@ -83,7 +83,7 @@ public final class Main {
                 final JarEntry entry = e.nextElement();
                 final String name = entry.getName();
                 if (name.endsWith(".class") && name.startsWith("lol/ethan/may/")) {
-                    try (InputStream in = jar.getInputStream(entry)) {
+                    try (final InputStream in = jar.getInputStream(entry)) {
                         classBytes.put(name.substring(0, name.length() - 6).replace('/', '.'), readAll(in));
                     }
                 }
@@ -92,15 +92,14 @@ public final class Main {
         boolean progress = true;
         while (!classBytes.isEmpty() && progress) {
             progress = false;
-            Iterator<Map.Entry<String, byte[]>> it = classBytes.entrySet().iterator();
+            final Iterator<Map.Entry<String, byte[]>> it = classBytes.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry<String, byte[]> entry = it.next();
+                final Map.Entry<String, byte[]> entry = it.next();
                 try {
                     define.invoke(target, entry.getKey(), entry.getValue(), 0, entry.getValue().length, null);
                     it.remove();
                     progress = true;
-                } catch (Throwable ignored) {
-                }
+                } catch (final Throwable ignored) {}
             }
         }
         if (!classBytes.isEmpty()) {

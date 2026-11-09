@@ -6,7 +6,7 @@ public enum MinecraftClient {
     VANILLA("ave");
 
     public final String className;
-    MinecraftClient(String className) {
+    MinecraftClient(final String className) {
         this.className = className;
     }
 }

@@ -1,5 +1,6 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers;
 
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.config.Config;
 import lol.ethan.may.events.render.RenderWorldEvent;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -24,12 +25,12 @@ public class EntityRendererTransformer extends Transformer {
                     if (!(insnNode instanceof LdcInsnNode)) continue;
                     final LdcInsnNode ldc = (LdcInsnNode) insnNode;
                     if ("hand".equals(ldc.cst)) {
-                        method.instructions.insertBefore(ldc, ASMUtils.asm(a -> {
-                            a.anew(ASMUtils.getType(RenderWorldEvent.class));
+                        method.instructions.insertBefore(ldc, asm(a -> {
+                            a.anew(Type.getType(RenderWorldEvent.class));
                             a.dup();
                             a.load(2, Type.FLOAT_TYPE);
                             a.invokespecial(Type.getInternalName(RenderWorldEvent.class), "<init>", "(F)V", false);
-                            ASMUtils.postEvent(a);
+                            a.postEvent();
                             a.pop();
                         }));
                     }

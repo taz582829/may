@@ -26,70 +26,70 @@ public class ApolloUtils {
     static {
         try {
             channelRead0 = NetworkManager.class.getDeclaredMethod("channelRead0", ChannelHandlerContext.class, Packet.class);
-        } catch (NoSuchMethodException e) {
+        } catch (final NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void resetSettings(SimpleOption<?> option) {
-        ConfigurableSettings settings = ConfigurableSettings.newBuilder()
+    public static void resetSettings(final SimpleOption<?> option) {
+        final ConfigurableSettings settings = ConfigurableSettings.newBuilder()
                 .setApolloModule(option.getKey())
                 .setEnable(false)
                 .build();
-        OverrideConfigurableSettingsMessage msg = OverrideConfigurableSettingsMessage.newBuilder()
+        final OverrideConfigurableSettingsMessage msg = OverrideConfigurableSettingsMessage.newBuilder()
                 .addConfigurableSettings(settings)
                 .build();
 
         sendPacket(msg);
     }
-    public static void sendPacket(OverrideConfigurableSettingsMessage message) {
-        byte[] bytes = Any.pack(message).toByteArray();
-        S3FPacketCustomPayload packet = new S3FPacketCustomPayload("lunar:apollo", new PacketBuffer(Unpooled.wrappedBuffer(bytes)));
+    public static void sendPacket(final OverrideConfigurableSettingsMessage message) {
+        final byte[] bytes = Any.pack(message).toByteArray();
+        final S3FPacketCustomPayload packet = new S3FPacketCustomPayload("lunar:apollo", new PacketBuffer(Unpooled.wrappedBuffer(bytes)));
         mc.addScheduledTask(() -> {
-            NetHandlerPlayClient handler = mc.getNetHandler();
+            final NetHandlerPlayClient handler = mc.getNetHandler();
             if (handler == null) return;
-            NetworkManager manager = handler.getNetworkManager();
+            final NetworkManager manager = handler.getNetworkManager();
             channelRead0.setAccessible(true);
             try {
                 channelRead0.invoke(manager, null, packet);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (final IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
         });
     }
-    public static void setModStatus(String mod, Boolean enabled) {
-        Value value = (enabled == null)
+    public static void setModStatus(final String mod, final Boolean enabled) {
+        final Value value = (enabled == null)
                 ? Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build()
                 : Value.newBuilder().setBoolValue(enabled).build();
-        ConfigurableSettings modSetting = ConfigurableSettings.newBuilder()
+        final ConfigurableSettings modSetting = ConfigurableSettings.newBuilder()
                 .setApolloModule("mod_setting").setEnable(true).build();
-        ConfigurableSettings target = ConfigurableSettings.newBuilder()
+        final ConfigurableSettings target = ConfigurableSettings.newBuilder()
                 .setApolloModule(mod).setEnable(true)
                 .putProperties("enabled", value)
                 .build();
 
-        OverrideConfigurableSettingsMessage msg = OverrideConfigurableSettingsMessage.newBuilder()
+        final OverrideConfigurableSettingsMessage msg = OverrideConfigurableSettingsMessage.newBuilder()
                 .addConfigurableSettings(modSetting)
                 .addConfigurableSettings(target)
                 .build();
         sendPacket(msg);
     }
-    public static void setModSetting(SimpleOption<Boolean> option, Value value) {
-        ConfigurableSettings settings = ConfigurableSettings.newBuilder()
+    public static void setModSetting(final SimpleOption<Boolean> option, final Value value) {
+        final ConfigurableSettings settings = ConfigurableSettings.newBuilder()
                 .setApolloModule("mod_setting")
                 .setEnable(true)
                 .putProperties(option.getKey(), value)
                 .build();
         System.out.println(settings);
-        OverrideConfigurableSettingsMessage message =
+        final OverrideConfigurableSettingsMessage message =
                 OverrideConfigurableSettingsMessage.newBuilder()
                         .addConfigurableSettings(settings)
                         .build();
 
         sendPacket(message);
     }
-    public static ConfigurableSettings createModuleMessage(String module, Map<String, Value> properties) {
-        ConfigurableSettings.Builder moduleBuilder = ConfigurableSettings.newBuilder()
+    public static ConfigurableSettings createModuleMessage(final String module, final Map<String, Value> properties) {
+        final ConfigurableSettings.Builder moduleBuilder = ConfigurableSettings.newBuilder()
                 .setApolloModule(module)
                 .setEnable(true);
 

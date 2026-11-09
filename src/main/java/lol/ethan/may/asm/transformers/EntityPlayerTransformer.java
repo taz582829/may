@@ -1,11 +1,10 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers;
 
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.player.NameFormatEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 

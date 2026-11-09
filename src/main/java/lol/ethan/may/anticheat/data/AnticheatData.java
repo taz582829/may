@@ -129,7 +129,7 @@ public class AnticheatData {
     public void onBlockBreak(final BlockBreakEvent event) {
         final EntityPlayer player = event.getPlayer();
 
-        Entry data = getEntry(player.getUniqueID());
+        final Entry data = getEntry(player.getUniqueID());
         data.breakDelay = 5;
     }
 
