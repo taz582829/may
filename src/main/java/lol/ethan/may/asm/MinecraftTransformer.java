@@ -1,6 +1,9 @@
 package lol.ethan.may.asm;
 
-import lol.ethan.may.events.*;
+import lol.ethan.may.events.Event;
+import lol.ethan.may.events.EventBus;
+import lol.ethan.may.events.ShutdownEvent;
+import lol.ethan.may.events.TickEvent;
 import lol.ethan.may.events.gui.GuiCloseEvent;
 import lol.ethan.may.events.gui.GuiOpenEvent;
 import lol.ethan.may.events.user.KeyboardEvent;

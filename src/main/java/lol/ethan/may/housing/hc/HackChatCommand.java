@@ -2,7 +2,6 @@ package lol.ethan.may.housing.hc;
 
 import lol.ethan.may.Entry;
 import lol.ethan.may.commands.Command;
-import net.minecraft.util.BlockPos;
 
 import java.util.Arrays;
 import java.util.Set;

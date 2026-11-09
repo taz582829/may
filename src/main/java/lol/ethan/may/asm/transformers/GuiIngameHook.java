@@ -1,16 +1,10 @@
 package lol.ethan.may.asm.transformers;
 
 import lol.ethan.may.asm.Transformer;
-import lol.ethan.may.events.EventBus;
-import lol.ethan.may.events.ScoreboardLineEvent;
 import lol.ethan.may.events.render.RenderGameOverlayEvent;
 import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.scoreboard.Team;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 public class GuiIngameHook extends Transformer {

@@ -1,7 +1,6 @@
 package lol.ethan.may.commands;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.UnpooledHeapByteBuf;
 import lol.ethan.may.Entry;
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.PacketEvent;
@@ -15,10 +14,8 @@ import net.minecraft.network.Packet;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.lang.reflect.Field;
-import java.nio.charset.CharacterCodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;

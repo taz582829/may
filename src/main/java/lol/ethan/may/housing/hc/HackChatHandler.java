@@ -1,15 +1,18 @@
 package lol.ethan.may.housing.hc;
 
 import com.google.gson.JsonObject;
-import com.neovisionaries.ws.client.*;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
 import lol.ethan.may.Entry;
+import lol.ethan.may.events.EventBus;
+import lol.ethan.may.events.PacketEvent;
+import lol.ethan.may.events.SubscribeEvent;
 import lol.ethan.may.events.user.ClientDisconnectFromServerEvent;
 import lol.ethan.may.utils.JsonUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C01PacketChatMessage;
-import lol.ethan.may.events.EventBus;
-import lol.ethan.may.events.PacketEvent;
-import lol.ethan.may.events.SubscribeEvent;
 
 import java.io.IOException;
 import java.util.*;

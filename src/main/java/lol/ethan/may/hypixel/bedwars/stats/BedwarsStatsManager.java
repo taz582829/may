@@ -21,9 +21,7 @@ import lol.ethan.may.utils.JsonUtils;
 import lol.ethan.may.utils.TimeUtils;
 import net.hypixel.data.type.GameType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import org.apache.commons.lang3.StringEscapeUtils;
 

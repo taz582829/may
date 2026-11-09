@@ -1,7 +1,7 @@
 package lol.ethan.may.asm;
 
-import lol.ethan.may.events.user.ClientDisconnectFromServerEvent;
 import lol.ethan.may.events.PacketEvent;
+import lol.ethan.may.events.user.ClientDisconnectFromServerEvent;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.util.IChatComponent;

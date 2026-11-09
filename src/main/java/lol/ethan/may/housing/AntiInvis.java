@@ -1,6 +1,5 @@
 package lol.ethan.may.housing;
 
-import com.sun.tools.javah.Gen;
 import lol.ethan.may.config.Config;
 import lol.ethan.may.events.Priority;
 import lol.ethan.may.events.SubscribeEvent;
@@ -10,14 +9,11 @@ import lol.ethan.may.events.player.RenderLivingEvent;
 import lol.ethan.may.events.render.RenderModelEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 public class AntiInvis {
     public static final Set<EntityPlayer> INVISIBLE = new HashSet<>();

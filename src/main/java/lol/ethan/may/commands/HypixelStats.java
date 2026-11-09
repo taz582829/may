@@ -5,6 +5,7 @@ import lol.ethan.may.hypixel.HypixelUtils;
 import lol.ethan.may.hypixel.api.HypixelAPI;
 import lol.ethan.may.hypixel.bedwars.BedwarsUtils;
 import lol.ethan.may.hypixel.duels.DuelsUtils;
+import lol.ethan.may.rbw.RankedUtils;
 import lol.ethan.may.utils.MojangAPI;
 
 import java.util.UUID;
@@ -51,12 +52,15 @@ public class HypixelStats extends Command {
                         DuelsUtils.showDuelsStats(res.player, mode);
                         break;
                     }
+                    case "rbw":
+                        RankedUtils.showRankedStats(ign);
+                        break;
                     default: {
                         HypixelUtils.showGeneralStats(res.player);
                     }
                 }
             }).exceptionally(ex -> {
-                Entry.debug("failed to build stats for " + profile.getDashedUUID() + ": " + ex);
+                Entry.chat("§cFailed to get stats for " + profile.name + " (" + profile.getDashedUUID() + ")!");
                 ex.printStackTrace();
                 return null;
             });

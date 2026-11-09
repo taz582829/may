@@ -1,8 +1,8 @@
 package lol.ethan.may.housing;
 
 import lol.ethan.may.Entry;
-import lol.ethan.may.events.user.MouseEvent;
 import lol.ethan.may.events.SubscribeEvent;
+import lol.ethan.may.events.user.MouseEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

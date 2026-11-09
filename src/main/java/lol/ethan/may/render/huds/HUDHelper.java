@@ -9,9 +9,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import java.awt.*;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class HUDHelper {
 
