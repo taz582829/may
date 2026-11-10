@@ -18,13 +18,13 @@ public class ConfigCommand extends Command {
             return;
         }
         final String arg1 = args[0].trim();
-        if (arg1.equalsIgnoreCase("folder")) {
+        if ("folder".equalsIgnoreCase(arg1)) {
             try {
                 Desktop.getDesktop().open(Entry.FILE_PATH);
             } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
-        } else if (arg1.equalsIgnoreCase("file")) {
+        } else if ("file".equalsIgnoreCase(arg1)) {
             try {
                 Desktop.getDesktop().open(Config.getConfigFile());
             } catch (final Exception e) {

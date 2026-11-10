@@ -9,6 +9,6 @@ public class TagUtils {
         return HypixelUtils.isOnHypixel() &&
                 LocationData.getGameType() == GameType.TNTGAMES &&
                 LocationData.getMode() != null &&
-                LocationData.getMode().equalsIgnoreCase("tntag");
+                "tntag".equalsIgnoreCase(LocationData.getMode());
     }
 }

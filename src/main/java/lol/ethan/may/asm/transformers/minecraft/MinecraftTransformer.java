@@ -1,5 +1,6 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers.minecraft;
 
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.Event;
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.ShutdownEvent;
@@ -25,7 +26,7 @@ public class MinecraftTransformer extends Transformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (method.name.equals("runTick") || method.name.equals("func_71407_l")) {
+            if ("runTick".equals(method.name) || "func_71407_l".equals(method.name)) {
                 insertBeforeReturn(method, asm(a -> {
                     a.anew(Type.getType(TickEvent.Post.class));
                     a.dup();
@@ -45,7 +46,7 @@ public class MinecraftTransformer extends Transformer {
                 for (final AbstractInsnNode insn : method.instructions.toArray()) {
                     if (insn instanceof MethodInsnNode) {
                         final MethodInsnNode mn = (MethodInsnNode) insn;
-                        if (mn.owner.equals(Type.getInternalName(Mouse.class)) && mn.name.equals("next")) {
+                        if (mn.owner.equals(Type.getInternalName(Mouse.class)) && "next".equals(mn.name)) {
                             final Label top = new Label();
                             final LabelNode ln = new LabelNode(top);
                             top.info = ln;
@@ -63,7 +64,7 @@ public class MinecraftTransformer extends Transformer {
                     }
                 }
             }
-            if (method.name.equals("func_152348_aa") || method.name.equals("dispatchKeypresses")) {
+            if ("func_152348_aa".equals(method.name) || "dispatchKeypresses".equals(method.name)) {
                 for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                     if (insnNode instanceof VarInsnNode) {
                         final VarInsnNode vin = (VarInsnNode) insnNode;
@@ -85,12 +86,12 @@ public class MinecraftTransformer extends Transformer {
                     }
                 }
             }
-            if (method.name.equals("func_71405_e") || method.name.equals("shutdownMinecraftApplet")) {
+            if ("func_71405_e".equals(method.name) || "shutdownMinecraftApplet".equals(method.name)) {
                 final InsnList insnList = new InsnList();
                 insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(MinecraftTransformer.class), "onShutdown", "()V"));
                 method.instructions.insert(insnList);
             }
-            if (method.name.equals("displayGuiScreen") || method.name.equals("func_147108_a")) {
+            if ("displayGuiScreen".equals(method.name) || "func_147108_a".equals(method.name)) {
                 method.instructions.insert(asm(a -> {
                     final Label top = new Label();
                     a.load(0, Type.getType(Minecraft.class));

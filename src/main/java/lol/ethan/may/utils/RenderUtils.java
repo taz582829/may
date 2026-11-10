@@ -57,9 +57,9 @@ public class RenderUtils {
     public static double[] posToRenderCoords(final Entity entity) {
         final Timer timer = RenderUtils.getTimer();
         final float pt = timer.renderPartialTicks;
-        final double renderX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) pt;
-        final double renderY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) pt;
-        final double renderZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) pt;
+        final double renderX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * pt;
+        final double renderY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * pt;
+        final double renderZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * pt;
         return new double[]{renderX, renderY, renderZ};
     }
 

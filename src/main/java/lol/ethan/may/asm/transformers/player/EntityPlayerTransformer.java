@@ -1,4 +1,4 @@
-package lol.ethan.may.asm.transformers;
+package lol.ethan.may.asm.transformers.player;
 
 import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.player.NameFormatEvent;
@@ -19,7 +19,7 @@ public class EntityPlayerTransformer extends Transformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (!method.name.equals("getDisplayName") && !method.name.equals("func_145748_c_")) continue;
+            if (!"getDisplayName".equals(method.name) && !"func_145748_c_".equals(method.name)) continue;
             insertBeforeReturn(method, asm(a -> {
                 final int tempSlot = method.maxLocals;
                 method.maxLocals++;

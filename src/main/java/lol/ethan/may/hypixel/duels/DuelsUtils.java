@@ -280,9 +280,9 @@ public class DuelsUtils {
                 message.appendText(" §fPing: " + ping);
             }
 
-            final boolean addKit = key.equalsIgnoreCase("sw") || key.equalsIgnoreCase("blitz");
+            final boolean addKit = "sw".equalsIgnoreCase(key) || "blitz".equalsIgnoreCase(key);
             if (addKit) {
-                final String formattedKit = formatKit(key.equalsIgnoreCase("sw")
+                final String formattedKit = formatKit("sw".equalsIgnoreCase(key)
                         ? JsonUtils.getString(duelsStats, "sw_duels_kit_new3", "kit_mini_solo_armorer")
                         : JsonUtils.getString(duelsStats, "blitz_duels_kit", "knight"));
 
@@ -312,7 +312,7 @@ public class DuelsUtils {
     @SubscribeEvent
     public void onChat(final ChatEvent.Received event) {
         if (LocationData.getMode() == null) return;
-        if (event.getMessage().getUnformattedText().trim().equals("Eliminate your opponents!") && !LocationData.getMode().toLowerCase().contains("bedwars")) {
+        if ("Eliminate your opponents!".equals(event.getMessage().getUnformattedText().trim()) && !LocationData.getMode().toLowerCase().contains("bedwars")) {
             pregame = false;
         }
     }

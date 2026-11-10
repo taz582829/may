@@ -55,12 +55,7 @@ public class Button extends Component {
         final int boxY = componentY + (this.componentHeight - 10) / 2;
 
         HUDHelper.drawRect(boxX, boxY, 10, 10, this.enabled ? ENABLED_COLOR : DISABLED_COLOR);
-        this.mc.fontRendererObj.drawStringWithShadow(
-                this.name,
-                componentX + 12,
-                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2f,
-                -1
-        );
+        drawName(componentX, componentY);
     }
 
     @Override

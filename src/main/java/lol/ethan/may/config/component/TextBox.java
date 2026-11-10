@@ -21,16 +21,16 @@ public abstract class TextBox<T> extends Component {
     public T value;
     public T defaultValue;
     public boolean hidden;
-    public TextBox(final String name, final Category category) {
+    protected TextBox(final String name, final Category category) {
         super(name, category);
     }
-    public TextBox(final String name, final Category category, final T value) {
+    protected TextBox(final String name, final Category category, final T value) {
         super(name, category);
         this.value = value;
         defaultValue = value;
         this.field.setText(value.toString());
     }
-    public TextBox(final String name, final Category category, final boolean hidden) {
+    protected TextBox(final String name, final Category category, final boolean hidden) {
         super(name, category);
         this.hidden = hidden;
         defaultValue = null;
@@ -91,7 +91,7 @@ public abstract class TextBox<T> extends Component {
         final int textInfoHeight = guiY + guiHeight / 2;
 
         HUDHelper.drawRect(2, 2, this.resetTextLength + 2, this.componentHeight, this.resetButtonColor);
-        this.mc.fontRendererObj.drawStringWithShadow("Reset", 2, (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2f, -1);
+        this.mc.fontRendererObj.drawStringWithShadow("Reset", 2, (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2.0f, -1);
         this.field.setMaxStringLength(Integer.MAX_VALUE);
         this.field.xPosition = (sr.getScaledWidth() / 2) - (this.field.getWidth() / 2);
         this.field.yPosition = guiY + guiHeight / 2 - 10;
@@ -109,7 +109,7 @@ public abstract class TextBox<T> extends Component {
         this.mc.fontRendererObj.drawStringWithShadow(
                 this.name + " §f(" + (this.hidden ? (shown.isEmpty() ? "§cEmpty§f" : "§cHidden§f") : (shown.isEmpty() ? "§cEmpty§f" : shown)) + ")",
                 componentX + 12,
-                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2f,
+                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2.0f,
                 -1
         );
     }

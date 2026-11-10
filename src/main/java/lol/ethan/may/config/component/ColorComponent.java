@@ -40,7 +40,7 @@ public class ColorComponent extends Button {
         this.mc.fontRendererObj.drawStringWithShadow(
                 this.name,
                 componentX + 12,
-                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2f,
+                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2.0f,
                 -1
         );
     }

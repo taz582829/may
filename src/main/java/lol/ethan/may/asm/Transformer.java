@@ -1,6 +1,8 @@
 package lol.ethan.may.asm;
 
 import lol.ethan.may.Entry;
+import lol.ethan.may.config.Config;
+import lol.ethan.may.config.component.Button;
 import lol.ethan.may.events.Event;
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.mappings.Mappings;
@@ -25,11 +27,11 @@ import java.util.function.Consumer;
 public abstract class Transformer implements ClassFileTransformer {
     public String[] targets;
 
-    public Transformer(final String... targets) {
+    protected Transformer(final String... targets) {
         if (targets == null) return;
         this.targets = Arrays.stream(targets).map(t -> t.replace("/", ".")).toArray(String[]::new);
     }
-    public Transformer(final Class<?>... targets) {
+    protected Transformer(final Class<?>... targets) {
         this.targets = Arrays.stream(targets).map(Class::getName).toArray(String[]::new);
     }
 
@@ -166,11 +168,17 @@ public abstract class Transformer implements ClassFileTransformer {
         body.accept(a);
         return temp.instructions;
     }
+    public InsnList getConfigFieldValue(final String cfgName) {
+        return asm(a -> {
+            a.getstatic(Config.class, cfgName, "L" + Type.getInternalName(Button.class) + ";");
+            a.getfield(Button.class, "enabled", "Z");
+        });
+    }
 
     public void logCalls(final MethodNode node) {
         System.out.println("___________________________________________________________________");
         System.out.println("Logging calls for " + node.name + " " + node.desc);
-        System.out.println("\u0000\n\u0000");
+        System.out.println("\n");
         final Textifier printer = new Textifier();
         node.accept(new TraceMethodVisitor(printer));
         final StringWriter writer = new StringWriter();

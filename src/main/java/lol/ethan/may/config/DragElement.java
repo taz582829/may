@@ -37,16 +37,16 @@ public class DragElement extends GuiScreen {
 
     public void mouseClicked(final int mX, final int mY, final int button) {
         if (button == 0) {
-            dragOffsetX = (float) mX - x;
-            dragOffsetY = (float) mY - y;
+            dragOffsetX = mX - x;
+            dragOffsetY = mY - y;
             dragging = true;
         }
     }
 
     public void mouseClickMove(final int mX, final int mY, final int button, final long timeSinceLastClick) {
         if (button == 0) {
-            x = (float) mX - dragOffsetX;
-            y = (float) mY - dragOffsetY;
+            x = mX - dragOffsetX;
+            y = mY - dragOffsetY;
         }
     }
 

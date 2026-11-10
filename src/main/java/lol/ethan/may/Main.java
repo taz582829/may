@@ -32,7 +32,7 @@ public final class Main {
     public static ClassLoader findMinecraftLoader(final Instrumentation inst) {
         try {
             for (final Class<?> clazz : inst.getAllLoadedClasses()) {
-                if (!clazz.getName().replace("/", ".").equals("net.minecraft.client.Minecraft")) continue;
+                if (!"net.minecraft.client.Minecraft".equals(clazz.getName().replace("/", "."))) continue;
                 return clazz.getClassLoader();
             }
         } catch (final Exception e) {

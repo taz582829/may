@@ -1,5 +1,6 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers.player;
 
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.PacketEvent;
 import lol.ethan.may.events.user.ClientDisconnectFromServerEvent;
 import net.minecraft.network.NetworkManager;
@@ -17,7 +18,7 @@ public class NetworkManagerHook extends Transformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (method.name.equals("sendPacket") || method.name.equals("func_179288_a") || method.name.equals("func_179290_a")) {
+            if ("sendPacket".equals(method.name) || "func_179288_a".equals(method.name) || "func_179290_a".equals(method.name)) {
                 method.instructions.insert(asm(a -> {
                     a.anew(Type.getType(PacketEvent.Send.class));
                     a.dup();
@@ -36,7 +37,7 @@ public class NetworkManagerHook extends Transformer {
                     a.store(1, Type.getType(Packet.class));
                 }));
             }
-            if (method.name.equals("channelRead0") && method.desc.equals("(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/Packet;)V")) {
+            if ("channelRead0".equals(method.name) && "(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/Packet;)V".equals(method.desc)) {
                 method.instructions.insert(asm(a -> {
                     a.anew(Type.getType(PacketEvent.Receive.class));
                     a.dup();
@@ -55,7 +56,7 @@ public class NetworkManagerHook extends Transformer {
                     a.store(2, Type.getType(Packet.class));
                 }));
             }
-            if (!method.name.equals("func_150718_a") && !method.name.equals("closeChannel")) continue;
+            if (!"func_150718_a".equals(method.name) && !"closeChannel".equals(method.name)) continue;
             method.instructions.insert(asm(a -> {
                 a.anew(Type.getType(ClientDisconnectFromServerEvent.class));
                 a.dup();

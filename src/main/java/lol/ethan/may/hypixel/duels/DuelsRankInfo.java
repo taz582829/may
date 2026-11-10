@@ -133,11 +133,11 @@ public class DuelsRankInfo {
         }
 
         public static String parseRank(final String color) {
-            if (color.equals("§7")) return "§7Non";
-            else if (color.equals("§a")) return "§aVIP§f/§aVIP§6+";
-            else if (color.equals("§b")) return "§bMVP§f/§bMVP§c+";
-            else if (color.equals("§6")) return "§6MVP§c++";
-            else if (color.equals("§c")) return "§cYoutube§f/§cStaff";
+            if ("§7".equals(color)) return "§7Non";
+            else if ("§a".equals(color)) return "§aVIP§f/§aVIP§6+";
+            else if ("§b".equals(color)) return "§bMVP§f/§bMVP§c+";
+            else if ("§6".equals(color)) return "§6MVP§c++";
+            else if ("§c".equals(color)) return "§cYoutube§f/§cStaff";
             else return color + "?";
         }
     }

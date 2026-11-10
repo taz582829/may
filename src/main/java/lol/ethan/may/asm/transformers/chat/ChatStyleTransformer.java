@@ -1,4 +1,4 @@
-package lol.ethan.may.asm.transformers;
+package lol.ethan.may.asm.transformers.chat;
 
 import lol.ethan.may.asm.Transformer;
 import net.minecraft.event.ClickEvent;
@@ -17,7 +17,7 @@ public class ChatStyleTransformer extends Transformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (method.name.equals("getChatHoverEvent")) {
+            if ("getChatHoverEvent".equals(method.name)) {
                 insertBeforeReturn(method, asm(a -> {
                     a.load(0, Type.getType(ChatStyle.class));
                     a.invokestatic(ChatStyleTransformer.class, "may$getChatHoverEvent", "(Lnet/minecraft/event/HoverEvent;Lnet/minecraft/util/ChatStyle;)Lnet/minecraft/event/HoverEvent;");
@@ -31,7 +31,7 @@ public class ChatStyleTransformer extends Transformer {
         if (clickEvent == null) return hoverEvent;
 
         final ClickEvent.Action action = clickEvent.getAction();
-        if (!(action.equals(ClickEvent.Action.OPEN_FILE) || action.equals(ClickEvent.Action.OPEN_URL) || action.equals(ClickEvent.Action.RUN_COMMAND))) {
+        if (!(action == ClickEvent.Action.OPEN_FILE || action == ClickEvent.Action.OPEN_URL || action == ClickEvent.Action.RUN_COMMAND)) {
             return hoverEvent;
         }
         final String actionMessage = "§e" + (action == ClickEvent.Action.RUN_COMMAND ? "Runs " : "Opens ") + clickEvent.getValue() + " on click.";

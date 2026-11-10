@@ -184,7 +184,7 @@ public class BedwarsUtils {
 
     @SubscribeEvent
     public void onChat(final ChatEvent.Received event) {
-        if (event.getMessage().getUnformattedText().trim().equals("Protect your bed and destroy the enemy beds.")) {
+        if ("Protect your bed and destroy the enemy beds.".equals(event.getMessage().getUnformattedText().trim())) {
             ticksSinceGameStart = 0;
             gameStarted = true;
             EventBus.postEvent(new GameStartEvent(GameStartEvent.Mode.BEDWARS));

@@ -1,4 +1,4 @@
-package lol.ethan.may.asm.transformers;
+package lol.ethan.may.asm.transformers.render;
 
 import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.config.Config;
@@ -41,7 +41,7 @@ public class EntityRendererTransformer extends Transformer {
                 for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                     if (!(insnNode instanceof MethodInsnNode)) continue;
                     min = (MethodInsnNode) insnNode;
-                    if (!min.name.equals("isPotionActive")) continue;
+                    if (!"isPotionActive".equals(min.name)) continue;
                     method.instructions.set(min, new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(EntityRendererTransformer.class), "updateLightmap_CancelNightVision", "(L" + Type.getInternalName(EntityPlayerSP.class) + ";L" + Type.getInternalName(Potion.class) + ";)Z"));
                 }
             }
@@ -49,7 +49,7 @@ public class EntityRendererTransformer extends Transformer {
                 for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                     if (!(insnNode instanceof MethodInsnNode)) continue;
                     min = (MethodInsnNode) insnNode;
-                    if (!min.name.equals("isPotionActive")) continue;
+                    if (!"isPotionActive".equals(min.name)) continue;
                     method.instructions.set(min, new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(EntityRendererTransformer.class), "updateFogColor_CancelNightVision", "(L" + Type.getInternalName(EntityLivingBase.class) + ";L" + Type.getInternalName(Potion.class) + ";)Z"));
                 }
             }

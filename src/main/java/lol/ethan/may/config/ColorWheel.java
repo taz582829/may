@@ -49,10 +49,10 @@ public class ColorWheel extends GuiScreen {
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         GlStateManager.enableBlend();
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        Gui.drawScaledCustomSizeModalRect(getX(), getY(), 0.0f, 0.0f, image.getWidth(), image.getHeight(), 200, 200, (float) image.getWidth(), (float) image.getHeight());
+        Gui.drawScaledCustomSizeModalRect(getX(), getY(), 0.0f, 0.0f, image.getWidth(), image.getHeight(), 200, 200, image.getWidth(), image.getHeight());
         pick(i, i1);
         final String hex = String.format("#%06X", hoveredColor);
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(hex, (float) getX() + (float) (200 - fontRendererObj.getStringWidth(hex)) / 2.0f, (float) (getY() - 10), hoveredColor);
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(hex, getX() + (200 - fontRendererObj.getStringWidth(hex)) / 2.0f, (getY() - 10), hoveredColor);
     }
 
     protected void mouseClicked(final int i, final int i1, final int i2) {
@@ -85,8 +85,8 @@ public class ColorWheel extends GuiScreen {
     }
 
     private int snap(final int offset, final int max) {
-        final float t = (float) (offset - 4) / 191.0f;
-        final int p = Math.round(t * (float) (max - 1));
+        final float t = (offset - 4) / 191.0f;
+        final int p = Math.round(t * (max - 1));
         return Math.max(0, Math.min(max - 1, p));
     }
 }

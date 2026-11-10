@@ -18,7 +18,7 @@ public class Timer extends AnticheatFlag {
         if (mc.theWorld == null) return;
         for (final EntityPlayer player : mc.theWorld.playerEntities) {
             final AnticheatData.Entry data = AnticheatData.getEntry(player.getUniqueID());
-            if (data.verticalMoveSpeed < 0 && data.verticalMoveSpeed > -1.) {
+            if (data.verticalMoveSpeed < 0 && data.verticalMoveSpeed > -1.0) {
                 Entry.debug(player.getName() + " is moving at " + data.verticalMoveSpeed + " bps");
             }
         }

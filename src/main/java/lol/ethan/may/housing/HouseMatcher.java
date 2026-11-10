@@ -31,19 +31,19 @@ import java.util.concurrent.Executors;
 
 public class HouseMatcher {
     private static final Minecraft mc = Minecraft.getMinecraft();
-    public static int currentHouse = 0;
+    public static int currentHouse;
     public static final List<String> targets = new ArrayList<>();
-    public static long timeStarted = 0;
+    public static long timeStarted;
     public static boolean enabled;
     public static String server;
     public static int lastHouseIdx;
-    public static int cycles = 0;
-    public static boolean joining = false;
-    public static boolean resetting = false;
+    public static int cycles;
+    public static boolean joining;
+    public static boolean resetting;
     public static long timeOfNextReset;
     public static long timeOfLimbo;
-    public static long timeUntilSwap = 0;
-    public static int timesJoined = 0;
+    public static long timeUntilSwap;
+    public static int timesJoined;
     private static int houseCount;
     private static final List<String> excluded = new ArrayList<>();
     private static final File excludedFile = new File(Entry.FILE_PATH, "matcher_excluded.txt");
@@ -134,7 +134,7 @@ public class HouseMatcher {
                     EventBus.unsubscribe(this);
                     TimeUtils.setTickDelay(() -> {
                         final String title = GuiUtils.getTitle();
-                        if (!StringUtils.stripControlCodes(title).trim().equalsIgnoreCase("My Houses")) return;
+                        if (!"My Houses".equalsIgnoreCase(StringUtils.stripControlCodes(title).trim())) return;
                         if (!(Minecraft.getMinecraft().currentScreen instanceof GuiContainer)) return;
                         final GuiContainer container = (GuiContainer) Minecraft.getMinecraft().currentScreen;
                         final IInventory playerInv = Minecraft.getMinecraft().thePlayer.inventory;

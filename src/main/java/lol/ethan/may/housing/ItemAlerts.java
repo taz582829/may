@@ -119,7 +119,7 @@ public class ItemAlerts {
     public void onChat(final ChatEvent.Received event) {
         if (event.getMessage().getUnformattedText().startsWith("Unable to locate sign at ")) {
             event.setCancelled(true);
-        } else if (event.getMessage().getUnformattedText().trim().equals("* First person to type /collect will earn free coins!")) {
+        } else if ("* First person to type /collect will earn free coins!".equals(event.getMessage().getUnformattedText().trim())) {
             final int randomTime = RandomUtils.nextInt(100, 500);
             TimeUtils.setTimeout(() -> mc.addScheduledTask(() -> mc.thePlayer.sendChatMessage("/collect")), randomTime);
         }

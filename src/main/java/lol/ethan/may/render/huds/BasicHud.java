@@ -31,16 +31,16 @@ public abstract class BasicHud {
     public float[] overrideCoords(final float x, final float y) {
         return new float[]{x, y};
     }
-    public BasicHud(final boolean enabled, final float x, final float y) {
+    protected BasicHud(final boolean enabled, final float x, final float y) {
         this.enabled = enabled;
         this.x = x;
         this.y = y;
     }
-    public BasicHud(final float x, final float y) {
+    protected BasicHud(final float x, final float y) {
         this.x = x;
         this.y = y;
     }
-    public BasicHud(final boolean enabled) {
+    protected BasicHud(final boolean enabled) {
         this.enabled = enabled;
     }
 

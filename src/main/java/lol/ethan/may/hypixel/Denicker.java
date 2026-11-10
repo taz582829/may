@@ -58,7 +58,7 @@ public class Denicker {
                     final String msg = t.getMessage();
                     if (msg.equals("no denick found for " + profile.getId())) {
                         Entry.chat(Entry.PREFIX + displayName + " §fis nicked!");
-                    } else if (msg.equals("could not tab denick because getNetHandler() or getPlayerInfoMap() are null")) {
+                    } else if ("could not tab denick because getNetHandler() or getPlayerInfoMap() are null".equals(msg)) {
                         return null;
                     } else {
                         t.printStackTrace();

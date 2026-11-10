@@ -44,6 +44,12 @@ public class MayInstructionAdapter extends InstructionAdapter {
     public void invokespecial(final Class<?> owner, final String name, final String descriptor) {
         super.invokespecial(Type.getInternalName(owner), name, descriptor, false);
     }
+    public void getfield(final Class<?> owner, final String name, final String desc) {
+        super.getfield(Type.getInternalName(owner), name, desc);
+    }
+    public void getstatic(final Class<?> owner, final String name, final String desc) {
+        super.getstatic(Type.getInternalName(owner), name, desc);
+    }
 
     public void invokevirtual(final Class<?> owner, final String name, final String descriptor, final boolean isInterface) {
         super.invokevirtual(Type.getInternalName(owner), name, descriptor, isInterface);

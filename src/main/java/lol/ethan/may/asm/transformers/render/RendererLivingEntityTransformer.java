@@ -1,5 +1,6 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers.render;
 
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.player.RenderLivingEvent;
 import lol.ethan.may.events.render.RenderModelEvent;
 import lol.ethan.may.housing.AntiInvis;
@@ -8,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -25,11 +27,11 @@ public class RendererLivingEntityTransformer extends Transformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (method.desc.equals("(Lnet/minecraft/entity/EntityLivingBase;DDDLcom/llamalad7/mixinextras/injector/wrapoperation/Operation;)V")) {
+            if ("(Lnet/minecraft/entity/EntityLivingBase;DDDLcom/llamalad7/mixinextras/injector/wrapoperation/Operation;)V".equals(method.desc)) {
                 for (final AbstractInsnNode abstractNode : method.instructions) {
                     if (abstractNode instanceof MethodInsnNode) {
                         final MethodInsnNode mn = (MethodInsnNode) abstractNode;
-                        if (mn.name.equals("bridge$getDisplayNameComponent")) {
+                        if ("bridge$getDisplayNameComponent".equals(mn.name)) {
                             method.instructions.insertBefore(mn, asm(a -> {
                                 a.pop();
                                 a.load(1, Type.getType(EntityLivingBase.class));
@@ -44,7 +46,7 @@ public class RendererLivingEntityTransformer extends Transformer {
                         }
                     }
                 }
-            } else if (method.name.equals("canRenderName")) {
+            } else if ("canRenderName".equals(method.name)) {
                 method.instructions.insert(asm(a -> {
                     final Label isNotPlayer = new Label();
 
@@ -63,7 +65,7 @@ public class RendererLivingEntityTransformer extends Transformer {
                     a.mark(isInvis);
                     a.mark(isNotPlayer);
                 }));
-            } else if (method.name.equals("doRender") && method.desc.equals("(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V")) {
+            } else if ("doRender".equals(method.name) && "(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V".equals(method.desc)) {
                 insertBeforeReturn(method, asm(a -> {
                     a.anew(Type.getType(RenderLivingEvent.Post.class));
                     a.dup();
@@ -94,7 +96,7 @@ public class RendererLivingEntityTransformer extends Transformer {
                     postEvent(a);
                     ifEventCancel(a, asm -> asm.areturn(Type.VOID_TYPE));
                 }));
-            } else if (method.name.equals("renderModel") && method.desc.equals("(Lnet/minecraft/entity/EntityLivingBase;FFFFFF)V")) {
+            } else if ("renderModel".equals(method.name) && "(Lnet/minecraft/entity/EntityLivingBase;FFFFFF)V".equals(method.desc)) {
                 insertBeforeReturn(method, asm(a -> {
                     a.anew(Type.getType(RenderModelEvent.Post.class));
                     a.dup();
@@ -104,7 +106,6 @@ public class RendererLivingEntityTransformer extends Transformer {
                             "(Lnet/minecraft/entity/EntityLivingBase;)V", false);
                     postEvent(a);
                     a.pop();
-                    //ifEventCancel(a, asm -> asm.areturn(Type.VOID_TYPE));
                 }));
                 method.instructions.insert(asm(a -> {
                     a.anew(Type.getType(RenderModelEvent.Pre.class));

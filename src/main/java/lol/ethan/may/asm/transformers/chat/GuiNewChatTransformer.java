@@ -1,4 +1,4 @@
-package lol.ethan.may.asm.transformers;
+package lol.ethan.may.asm.transformers.chat;
 
 import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.ChatEvent;
@@ -18,7 +18,7 @@ public class GuiNewChatTransformer extends Transformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (method.name.equals("printChatMessageWithOptionalDeletion") || method.name.equals("func_146234_a")) {
+            if ("printChatMessageWithOptionalDeletion".equals(method.name) || "func_146234_a".equals(method.name)) {
                 method.instructions.insert(asm(a -> {
                     a.anew(Type.getType(ChatEvent.Received.class));
                     a.dup();

@@ -64,15 +64,15 @@ public class HypixelAPI {
             if (rankField == null) {
                 return "§7" + ign;
             }
-            if (rankField.equals("prefix")) return player.prefix + " " + ign;
+            if ("prefix".equals(rankField)) return player.prefix + " " + ign;
 
             final String rank = player.getClass().getDeclaredField(rankField).get(player).toString();
 
             final StringBuilder builder = new StringBuilder();
-            if (rankField.equalsIgnoreCase("rank")) {
-                if (rank.equalsIgnoreCase("admin") || rank.equalsIgnoreCase("game_master")) return "§c[§6ዞ§c] " + ign;
+            if ("rank".equalsIgnoreCase(rankField)) {
+                if ("admin".equalsIgnoreCase(rank) || "game_master".equalsIgnoreCase(rank)) return "§c[§6ዞ§c] " + ign;
                 else return "§c[§fYOUTUBE§c] " + ign;
-            } else if (rankField.equalsIgnoreCase("monthlyPackageRank")) {
+            } else if ("monthlyPackageRank".equalsIgnoreCase(rankField)) {
                 final boolean aquaPlus = "aqua".equalsIgnoreCase(player.monthlyRankColor);
                 if (aquaPlus) {
                     builder.append("§b[MVP");
@@ -81,7 +81,7 @@ public class HypixelAPI {
                 EnumChatFormatting plusColor = EnumChatFormatting.getValueByName(player.rankPlusColor);
                 if (plusColor == null) plusColor = EnumChatFormatting.RED;
                 builder.append(plusColor).append("++").append(aquaPlus ? "§b]" : "§6]").append(" ").append(ign);
-            } else if (rankField.equalsIgnoreCase("newPackageRank") || rankField.equalsIgnoreCase("packageRank")) {
+            } else if ("newPackageRank".equalsIgnoreCase(rankField) || "packageRank".equalsIgnoreCase(rankField)) {
                 switch (rank) {
                     case "VIP":
                         builder.append("§a[VIP]");
@@ -107,7 +107,7 @@ public class HypixelAPI {
         }
     }
     public static double getNetworkLevel(final long exp) {
-        return (Math.sqrt(exp + 15312.5) - 125/ Math.sqrt(2))/(25*Math.sqrt(2));
+        return (Math.sqrt(exp + 15312.5) - 125/ 1.4142135623730951)/(25* 1.4142135623730951);
     }
     public static String formatNetworkLevel(final double nwl) {
         final String color;
@@ -173,7 +173,7 @@ public class HypixelAPI {
         final String text = "[" + level + starIcon + "]";
 
         PrestigeScheme scheme = null;
-        if (colorScheme.contains("random") || colorScheme.equalsIgnoreCase("default")) {
+        if (colorScheme.contains("random") || "default".equalsIgnoreCase(colorScheme)) {
             scheme = PrestigeSchemes.SCHEMES.get(key);
         } else {
             for (final Map.Entry<Integer, PrestigeScheme> s : PrestigeSchemes.SCHEMES.entrySet()) {

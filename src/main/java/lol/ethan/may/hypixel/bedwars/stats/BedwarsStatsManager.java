@@ -41,7 +41,7 @@ public class BedwarsStatsManager {
     @SubscribeEvent
     public void onChat(final ChatEvent.Received event) {
         final String msg = event.getMessage().getUnformattedText().trim();
-        if (msg.startsWith("Protect your bed and destroy the enemy bed") || msg.equals("bw-test") || msg.equals("You will respawn in 10 seconds!")) {
+        if (msg.startsWith("Protect your bed and destroy the enemy bed") || "bw-test".equals(msg) || "You will respawn in 10 seconds!".equals(msg)) {
             this.inBedwars = true;
             Entry.debug("in bedwars");
 

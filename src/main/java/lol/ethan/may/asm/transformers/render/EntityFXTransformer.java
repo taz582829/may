@@ -1,4 +1,4 @@
-package lol.ethan.may.asm.transformers;
+package lol.ethan.may.asm.transformers.render;
 
 import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.render.RenderParticleEvent;
@@ -16,7 +16,7 @@ public class EntityFXTransformer extends Transformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (method.name.equals("renderParticle")) {
+            if ("renderParticle".equals(method.name)) {
                 insertBeforeReturn(method, asm(a -> {
                     a.anew(Type.getType(RenderParticleEvent.Post.class));
                     a.dup();
@@ -29,7 +29,6 @@ public class EntityFXTransformer extends Transformer {
                     a.postEvent();
                     a.pop();
                 }));
-                //int local = method.maxLocals++;
                 method.instructions.insert(asm(a -> {
                     a.anew(Type.getType(RenderParticleEvent.Pre.class));
                     a.dup();

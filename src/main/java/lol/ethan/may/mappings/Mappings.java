@@ -89,7 +89,7 @@ public class Mappings {
             }
             for (final String line : Mappings.readLines("/mappings/joined.srg")) {
                 final String full;
-                if (line.equals("searge,name,side,desc")) continue;
+                if ("searge,name,side,desc".equals(line)) continue;
                 if (line.startsWith("FD: ")) {
                     p = line.substring(4).trim().split("\\s+");
                     full = p[1];
@@ -158,7 +158,7 @@ public class Mappings {
     }
 
     private static String superOf(final String internalName) {
-        if (internalName.equals("java/lang/Object")) return null;
+        if ("java/lang/Object".equals(internalName)) return null;
         final String cached = superCache.get(internalName);
         if (cached != null) return cached;
         String result = null;

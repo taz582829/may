@@ -14,13 +14,13 @@ public abstract class AnticheatFlag {
     public final EnumChatFormatting color;
     public int threshold;
 
-    public AnticheatFlag(final String name, final int threshold, final EnumChatFormatting color) {
+    protected AnticheatFlag(final String name, final int threshold, final EnumChatFormatting color) {
         this.name = name;
         this.threshold = threshold;
         this.color = color;
     }
 
-    public AnticheatFlag(final int threshold, final EnumChatFormatting color) {
+    protected AnticheatFlag(final int threshold, final EnumChatFormatting color) {
         name = getClass().getSimpleName();
         this.threshold = threshold;
         this.color = color;

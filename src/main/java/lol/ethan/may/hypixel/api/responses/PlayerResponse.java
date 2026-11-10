@@ -42,7 +42,7 @@ public class PlayerResponse extends Response {
         public String getRankField() {
             if (prefix != null) return "prefix";
             if (rank != null) return "rank";
-            if (monthlyPackageRank != null && !this.monthlyPackageRank.equalsIgnoreCase("NONE")) return "monthlyPackageRank";
+            if (monthlyPackageRank != null && !"NONE".equalsIgnoreCase(this.monthlyPackageRank)) return "monthlyPackageRank";
             if (newPackageRank != null) return "newPackageRank";
             if (packageRank != null) return "packageRank";
             return null;

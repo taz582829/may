@@ -1,5 +1,6 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers.player;
 
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.player.PlayerListEvent;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
@@ -17,11 +18,11 @@ public class NetHandlerPlayClientTransformer extends Transformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (!method.name.equals("handlePlayerListItem") && !method.name.equals("func_147256_a")) continue;
+            if (!"handlePlayerListItem".equals(method.name) && !"func_147256_a".equals(method.name)) continue;
             for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                 if (!(insnNode instanceof MethodInsnNode)) continue;
                 final MethodInsnNode mn = (MethodInsnNode) insnNode;
-                if (mn.name.equals("put")) {
+                if ("put".equals(mn.name)) {
                     method.instructions.insert(mn, asm(a -> {
                         a.pop();
                         a.anew(Type.getType(PlayerListEvent.Add.class));
@@ -31,7 +32,7 @@ public class NetHandlerPlayClientTransformer extends Transformer {
                         a.postEvent();
                     }));
                 }
-                if (!mn.name.equals("remove")) continue;
+                if (!"remove".equals(mn.name)) continue;
                 method.instructions.insert(mn, asm(a -> {
                     a.pop();
                     a.anew(Type.getType(PlayerListEvent.Remove.class));

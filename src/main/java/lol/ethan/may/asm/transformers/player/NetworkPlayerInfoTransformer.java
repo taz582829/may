@@ -1,5 +1,6 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers.player;
 
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.EventBus;
 import lol.ethan.may.events.player.PlayerPingEvent;
 import lol.ethan.may.events.player.RenderPlayerInTabEvent;
@@ -25,7 +26,7 @@ public class NetworkPlayerInfoTransformer extends Transformer {
             for (final AbstractInsnNode insnNode : method.instructions) {
                 if (insnNode instanceof FieldInsnNode) {
                     final FieldInsnNode fn = (FieldInsnNode) insnNode;
-                    if ((fn.name.equals("displayName") || fn.name.equals("field_178872_h")) && fn.getOpcode() == Opcodes.GETFIELD) {
+                    if (("displayName".equals(fn.name) || "field_178872_h".equals(fn.name)) && fn.getOpcode() == Opcodes.GETFIELD) {
                         method.instructions.insert(insnNode, asm(a -> {
                             a.load(0, Type.getType(NetworkPlayerInfo.class));
                             a.invokestatic(Type.getInternalName(NetworkPlayerInfoTransformer.class), "may$formatTabName",
@@ -35,7 +36,7 @@ public class NetworkPlayerInfoTransformer extends Transformer {
                     }
                 }
             }
-            if (method.name.equals("getResponseTime") || method.name.equals("func_178853_c")) {
+            if ("getResponseTime".equals(method.name) || "func_178853_c".equals(method.name)) {
                 for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                     if (insnNode.getOpcode() < Opcodes.IRETURN || insnNode.getOpcode() > Opcodes.RETURN) continue;
                     method.instructions.insertBefore(insnNode, asm(a -> {

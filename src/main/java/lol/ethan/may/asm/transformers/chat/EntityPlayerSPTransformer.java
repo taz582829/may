@@ -1,4 +1,4 @@
-package lol.ethan.may.asm.transformers;
+package lol.ethan.may.asm.transformers.chat;
 
 import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.ChatEvent;

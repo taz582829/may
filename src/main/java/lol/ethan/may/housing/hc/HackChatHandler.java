@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 public class HackChatHandler {
     private static String nick = "ethan";
     private static final Set<String> onlineSet = new HashSet<>();
-    public static boolean toggled = false;
+    public static boolean toggled;
     public static void setNick(final String nick) {
         HackChatHandler.nick = nick;
     }
@@ -62,19 +62,19 @@ public class HackChatHandler {
                         final HackChatEvent.Chat event = new HackChatEvent.Chat(response.nick, response.text, response.color);
                         Entry.chat(event.buildMessage());
                         EventBus.postEvent(event);
-                    } else if (response.cmd.equals("onlineAdd")) {
+                    } else if ("onlineAdd".equals(response.cmd)) {
                         final HackChatEvent.OnlineAdd event = new HackChatEvent.OnlineAdd(response.nick);
                         Entry.chat(event.buildMessage());
                         EventBus.postEvent(event);
-                    } else if (response.cmd.equals("onlineRemove")) {
+                    } else if ("onlineRemove".equals(response.cmd)) {
                         final HackChatEvent.OnlineRemove event = new HackChatEvent.OnlineRemove(response.nick);
                         Entry.chat(event.buildMessage());
                         EventBus.postEvent(event);
-                    } else if (response.cmd.equals("info")) {
+                    } else if ("info".equals(response.cmd)) {
                         final HackChatEvent.Info event = new HackChatEvent.Info(response.text);
                         Entry.chat(event.buildMessage());
                         EventBus.postEvent(event);
-                    } else if (response.cmd.equals("onlineSet")) {
+                    } else if ("onlineSet".equals(response.cmd)) {
                         final HackChatEvent.OnlineSet event = new HackChatEvent.OnlineSet(response.nicks);
                         onlineSet.clear();
                         onlineSet.addAll(response.nicks);

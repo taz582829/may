@@ -25,7 +25,7 @@ public class HUDMove extends Component {
         this.mc.fontRendererObj.drawStringWithShadow(
                 "§aClick to move this HUD!",
                 componentX + 12,
-                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2f,
+                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2.0f,
                 -1
         );
     }

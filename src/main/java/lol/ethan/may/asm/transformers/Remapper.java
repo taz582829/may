@@ -1,8 +1,14 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers;
 
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.mappings.Mappings;
 import org.objectweb.asm.Handle;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
+
+import java.lang.instrument.IllegalClassFormatException;
+import java.security.ProtectionDomain;
 
 public class Remapper extends Transformer {
     public Remapper() {
@@ -45,6 +51,6 @@ public class Remapper extends Transformer {
 
     @Override
     public boolean shouldTransform(final String name) {
-        return name.startsWith("lol.ethan.may.") && !name.startsWith("lol.ethan.may.mappings.") && !name.startsWith("lol.ethan.may.shaded") && !name.equals("lol.ethan.may.Main");
+        return name.startsWith("lol.ethan.may.") && !name.startsWith("lol.ethan.may.mappings.") && !name.startsWith("lol.ethan.may.shaded") && !"lol.ethan.may.Main".equals(name);
     }
 }

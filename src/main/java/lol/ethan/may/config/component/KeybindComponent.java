@@ -40,7 +40,7 @@ public class KeybindComponent extends Component {
         this.mc.fontRendererObj.drawStringWithShadow(
                 this.name + " (" + (this.listening ? "?" : keybind) + ")",
                 componentX + 12,
-                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2f,
+                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2.0f,
                 -1
         );
     }

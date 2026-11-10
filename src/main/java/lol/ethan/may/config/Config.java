@@ -93,7 +93,7 @@ public class Config {
     public static Button middleClickShop = new Button("Middle Click Shop", Category.Bedwars, true);
     public static StringTextBox urchinKey = new StringTextBox("Urchin API Key", Category.General, true);
     public static Button clearNightVision = new Button("Clear Night Vision", Category.General, true);
-    public static Button bowDistance = new Button("Bow Distance in Chat", Category.Bedwars, true);
+    public static Button bowDistance = new Button("Bow Distance in Chat", Category.General, true);
     public static Button modifyPlayerHitboxes = new Button("Modify Player Hitboxes", Category.Hitboxes, true);
     public static Button modifyArrowHitboxes = new Button("Modify Arrow Hitboxes", Category.Hitboxes, true);
     public static Button accuratePlayerHitboxes = new Button("Accurate Player Hitboxes", Category.Hitboxes, false);
@@ -104,18 +104,11 @@ public class Config {
     public static HUDComponent testHud = new HUDComponent("Test HUD", Category.General, new TestHUD(10.0f, 10.0f));
     public static Button hideXP = new Button("Hide XP Bar", Category.General, false, "hides xp bar (useful as a nick hider)");
     public static Button antiInvis = new Button("Anti Invis", Category.Housing);
-    public static Button housingEsp = new Button("Housing ESP", Category.Housing);
-    public static Button housingEspFilled = new Button("Filled Box ESP", Category.Housing) {
-        @Override
-        public boolean shouldDraw() {
-            return housingEsp.enabled;
-        }
-    };
+    public static ChoiceComponent housingEspChoice = new ChoiceComponent("Housing ESP", Category.Housing, "Filled", "Outline", "Disabled");
     public static Button housingEspInvisOnly = new Button("Invis Only ESP", Category.Housing) {
-
         @Override
         public boolean shouldDraw() {
-            return Config.housingEsp.enabled;
+            return Config.housingEspChoice.value != 2;
         }
     };
     public static NumberTextBox matcherTimeBetweenCycles = new NumberTextBox("Time Between Matcher Cycles", Category.Housing, NumberTextBox.TextBoxType.INT, 75);

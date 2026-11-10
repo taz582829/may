@@ -1,5 +1,6 @@
-package lol.ethan.may.asm;
+package lol.ethan.may.asm.transformers.minecraft;
 
+import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.WorldEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -15,7 +16,7 @@ public class WorldTransformer extends Transformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (!method.desc.equals("(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V")) continue;
+            if (!"(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V".equals(method.desc)) continue;
             method.instructions.insert(asm(a -> {
                 a.load(0, Type.getType(Minecraft.class));
                 a.getfield("net/minecraft/client/Minecraft", mapField(Minecraft.class, "theWorld"), "L" + Type.getInternalName(WorldClient.class) + ";");

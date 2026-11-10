@@ -25,7 +25,7 @@ public class BadNBTEditor extends GuiScreen {
         }
         if (currentItem.getItem() == Items.skull) {
             final ItemSkull skull = (ItemSkull) currentItem.getItem();
-            loadFromName = new GuiButton(1, sr.getScaledWidth() / 2 - 50, (int) ((double) sr.getScaledHeight() / 1.5), 50, 20, "Load");
+            loadFromName = new GuiButton(1, sr.getScaledWidth() / 2 - 50, (int) (sr.getScaledHeight() / 1.5), 50, 20, "Load");
             buttonList.add(loadFromName);
         }
     }

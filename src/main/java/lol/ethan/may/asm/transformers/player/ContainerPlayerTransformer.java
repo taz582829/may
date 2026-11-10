@@ -1,4 +1,4 @@
-package lol.ethan.may.asm.transformers;
+package lol.ethan.may.asm.transformers.player;
 
 import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.housing.HousingUtils;
@@ -16,7 +16,7 @@ public class ContainerPlayerTransformer extends Transformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (method.name.equals("isItemValid")) {
+            if ("isItemValid".equals(method.name)) {
                 method.instructions.insert(asm(a -> {
                     final Label skip = new Label();
                     a.load(1, Type.getType(ItemStack.class));

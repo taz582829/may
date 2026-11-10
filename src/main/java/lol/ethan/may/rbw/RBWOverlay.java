@@ -30,7 +30,7 @@ public class RBWOverlay {
     @SubscribeEvent
     public void onChat(final ChatEvent.Received event) {
         final String msg = event.getUnformattedMessage().trim();
-        if ((msg.startsWith("Enemy Team: ") || msg.startsWith("Sending you to ") || msg.equals("won the vote!") || msg.startsWith("Allowed All Game:")) && isOnRanked()) {
+        if ((msg.startsWith("Enemy Team: ") || msg.startsWith("Sending you to ") || "won the vote!".equals(msg) || msg.startsWith("Allowed All Game:")) && isOnRanked()) {
             TimeUtils.setTickDelay(() -> {
                 for (final NetworkPlayerInfo playerInfo : mc.getNetHandler().getPlayerInfoMap()) {
                     final GameProfile profile = playerInfo.getGameProfile();

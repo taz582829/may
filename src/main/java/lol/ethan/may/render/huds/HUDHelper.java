@@ -88,13 +88,13 @@ public class HUDHelper {
         final ScaledResolution sr = new ScaledResolution(mc);
 
         final float screenWidth = sr.getScaledWidth();
-        return (screenWidth / 2f) - (fr.getStringWidth(text) / 2f);
+        return (screenWidth / 2.0f) - (fr.getStringWidth(text) / 2.0f);
     }
     public static float getCenteredY() {
         final ScaledResolution sr = new ScaledResolution(mc);
 
         final float screenHeight = sr.getScaledHeight();
-        return (screenHeight / 2f);
+        return (screenHeight / 2.0f);
     }
     public static void drawCenteredText(final String text) {
         drawCenteredText(text, getCenteredY());
@@ -103,14 +103,14 @@ public class HUDHelper {
         final ScaledResolution sr = new ScaledResolution(mc);
 
         final float screenWidth = sr.getScaledWidth();
-        final float x = (screenWidth / 2f) - (fr.getStringWidth(text) / 2f);
+        final float x = (screenWidth / 2.0f) - (fr.getStringWidth(text) / 2.0f);
         Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text, x, y, 0xFFFFFF);
     }
     public static void drawCenteredText(final String text, final float y, final Color color) {
         final ScaledResolution sr = new ScaledResolution(mc);
 
         final float screenWidth = sr.getScaledWidth();
-        final float x = (screenWidth / 2f) - (fr.getStringWidth(text) / 2f);
+        final float x = (screenWidth / 2.0f) - (fr.getStringWidth(text) / 2.0f);
         Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text, x, y, color.getRGB());
     }
     public static int getTextWidth(final String text) {
@@ -132,10 +132,10 @@ public class HUDHelper {
         return Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
     }
     public static void drawRoundedRect(double left, double top, double right, double bottom, final double radius, final int color) {
-        final float alpha = (float)(color >> 24 & 255) / 255.0F;
-        final float red = (float)(color >> 16 & 255) / 255.0F;
-        final float green = (float)(color >> 8 & 255) / 255.0F;
-        final float blue = (float)(color & 255) / 255.0F;
+        final float alpha = (color >> 24 & 255) / 255.0F;
+        final float red = (color >> 16 & 255) / 255.0F;
+        final float green = (color >> 8 & 255) / 255.0F;
+        final float blue = (color & 255) / 255.0F;
 
         if (left < right) {
             final double i = left;

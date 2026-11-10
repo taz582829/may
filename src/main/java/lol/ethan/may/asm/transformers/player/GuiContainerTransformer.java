@@ -1,4 +1,4 @@
-package lol.ethan.may.asm.transformers;
+package lol.ethan.may.asm.transformers.player;
 
 import lol.ethan.may.Entry;
 import lol.ethan.may.asm.Transformer;
@@ -28,7 +28,7 @@ public class GuiContainerTransformer extends Transformer {
             for (final AbstractInsnNode insnNode : method.instructions.toArray()) {
                 if (insnNode instanceof MethodInsnNode) {
                     final MethodInsnNode mn = (MethodInsnNode) insnNode;
-                    if (mn.owner.equals(Type.getInternalName(PlayerControllerMP.class)) && (mn.name.equals("func_78753_a") || mn.name.equals("windowClick"))) {
+                    if (mn.owner.equals(Type.getInternalName(PlayerControllerMP.class)) && ("func_78753_a".equals(mn.name) || "windowClick".equals(mn.name))) {
                         final int eventLocal = method.maxLocals;
                         method.maxLocals++;
 

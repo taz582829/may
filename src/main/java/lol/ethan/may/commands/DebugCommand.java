@@ -21,13 +21,13 @@ public class DebugCommand extends Command {
             return;
         }
         final String arg1 = args[0].trim().toLowerCase();
-        if (arg1.equalsIgnoreCase("teams")) {
+        if ("teams".equalsIgnoreCase(arg1)) {
             final StringBuilder builder = new StringBuilder("§7" + ChatUtils.getChatBreak() + "\n");
             for (final ScorePlayerTeam team : mc.theWorld.getScoreboard().getTeams()) {
                 final String displayName = team.getColorPrefix() + team.getColorSuffix();
                 if (args.length >= 2) {
                     final String arg2 = args[1];
-                    if (arg2.equalsIgnoreCase("filter")) {
+                    if ("filter".equalsIgnoreCase(arg2)) {
                         if (isTeamValid(team)) {
                             builder.append(Entry.SHORT_PREFIX)
                                     .append(team.getTeamName())
@@ -55,13 +55,13 @@ public class DebugCommand extends Command {
             }
             builder.append("§7").append(ChatUtils.getChatBreak());
             Entry.chat(builder);
-        } else if (arg1.equalsIgnoreCase("players")) {
+        } else if ("players".equalsIgnoreCase(arg1)) {
             final StringBuilder builder = new StringBuilder("§7" + ChatUtils.getChatBreak() + "\n");
             for (final NetworkPlayerInfo playerInfo : mc.getNetHandler().getPlayerInfoMap()) {
                 final GameProfile profile = playerInfo.getGameProfile();
                 if (args.length >= 2) {
                     final String arg2 = args[1];
-                    if (arg2.equalsIgnoreCase("filter")) {
+                    if ("filter".equalsIgnoreCase(arg2)) {
                         if (profile.getId().version() != 2) {
                             builder.append(Entry.SHORT_PREFIX)
                                     .append(profile.getName())

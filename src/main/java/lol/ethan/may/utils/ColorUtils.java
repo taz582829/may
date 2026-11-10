@@ -28,52 +28,52 @@ public class ColorUtils {
     public static String colorToHex(final String color) {
         final String c;
         final String string = c = color.length() == 1 ? color : String.valueOf(color.charAt(1));
-        if (c.equalsIgnoreCase("0")) {
+        if ("0".equalsIgnoreCase(c)) {
             return "000000";
         }
-        if (c.equalsIgnoreCase("1")) {
+        if ("1".equalsIgnoreCase(c)) {
             return "0000AA";
         }
-        if (c.equalsIgnoreCase("2")) {
+        if ("2".equalsIgnoreCase(c)) {
             return "00AA00";
         }
-        if (c.equalsIgnoreCase("3")) {
+        if ("3".equalsIgnoreCase(c)) {
             return "00AAAA";
         }
-        if (c.equalsIgnoreCase("4")) {
+        if ("4".equalsIgnoreCase(c)) {
             return "AA0000";
         }
-        if (c.equalsIgnoreCase("5")) {
+        if ("5".equalsIgnoreCase(c)) {
             return "AA00AA";
         }
-        if (c.equalsIgnoreCase("6")) {
+        if ("6".equalsIgnoreCase(c)) {
             return "FFAA00";
         }
-        if (c.equalsIgnoreCase("7")) {
+        if ("7".equalsIgnoreCase(c)) {
             return "AAAAAA";
         }
-        if (c.equalsIgnoreCase("8")) {
+        if ("8".equalsIgnoreCase(c)) {
             return "555555";
         }
-        if (c.equalsIgnoreCase("9")) {
+        if ("9".equalsIgnoreCase(c)) {
             return "5555FF";
         }
-        if (c.equalsIgnoreCase("a")) {
+        if ("a".equalsIgnoreCase(c)) {
             return "55FF55";
         }
-        if (c.equalsIgnoreCase("b")) {
+        if ("b".equalsIgnoreCase(c)) {
             return "55FFFF";
         }
-        if (c.equalsIgnoreCase("c")) {
+        if ("c".equalsIgnoreCase(c)) {
             return "FF5555";
         }
-        if (c.equalsIgnoreCase("d")) {
+        if ("d".equalsIgnoreCase(c)) {
             return "FF55FF";
         }
-        if (c.equalsIgnoreCase("e")) {
+        if ("e".equalsIgnoreCase(c)) {
             return "FFFF55";
         }
-        if (c.equalsIgnoreCase("f")) {
+        if ("f".equalsIgnoreCase(c)) {
             return "FFFFFF";
         }
         return "FFFFFF";

@@ -15,7 +15,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 public class PitClassicNuker {
-    public static boolean enabled = false;
+    public static boolean enabled;
     Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
@@ -23,7 +23,7 @@ public class PitClassicNuker {
         if (enabled && Entry.getServerIP().contains("pitclassic")) {
             final BlockPos center = mc.thePlayer.getPosition();
             final double radius = 4.5;
-            final int r = (int) Math.ceil(radius);
+            final int r = 5;
 
             final BlockPos min = center.add(-r, -r, -r);
             final BlockPos max = center.add(r, r, r);
@@ -56,7 +56,7 @@ public class PitClassicNuker {
     }
     @SubscribeEvent
     public void onChat(final ChatEvent.Send event) {
-        if (event.getMessage().equals("!nuke")) {
+        if ("!nuke".equals(event.getMessage())) {
             event.setCancelled(true);
             enabled = !enabled;
             Entry.chat(enabled);

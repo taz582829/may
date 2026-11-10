@@ -57,7 +57,7 @@ public class SkywarsTabStats extends TabStats {
 
             kdr = (double) kills / (deaths == 0 ? 1 : deaths);
             final String rawKit = JsonUtils.getString(swStats, "activeKit_" + (isMini ? "MINI" : "SOLO"), "§cNone");
-            kit = rawKit.equals("§cNone") ? rawKit : this.formatKit(rawKit);
+            kit = "§cNone".equals(rawKit) ? rawKit : this.formatKit(rawKit);
             ping = 1;
             AuroraAPI.getPing(UUID.fromString(UUIDUtils.dashUUID(player.uuid))).whenComplete((res, err) -> {
                 if (!res.isSuccess()) return;

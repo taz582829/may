@@ -6,6 +6,16 @@ import lol.ethan.may.anticheat.checks.NoBreakDelay;
 import lol.ethan.may.anticheat.data.AnticheatData;
 import lol.ethan.may.asm.*;
 import lol.ethan.may.asm.transformers.*;
+import lol.ethan.may.asm.transformers.chat.ChatStyleTransformer;
+import lol.ethan.may.asm.transformers.chat.EntityPlayerSPTransformer;
+import lol.ethan.may.asm.transformers.chat.GuiNewChatTransformer;
+import lol.ethan.may.asm.transformers.fixes.SkinManagerTransformer;
+import lol.ethan.may.asm.transformers.fixes.YggdrasilTransformer;
+import lol.ethan.may.asm.transformers.lunar.ModTransformer;
+import lol.ethan.may.asm.transformers.minecraft.MinecraftTransformer;
+import lol.ethan.may.asm.transformers.minecraft.WorldTransformer;
+import lol.ethan.may.asm.transformers.player.*;
+import lol.ethan.may.asm.transformers.render.*;
 import lol.ethan.may.commands.*;
 import lol.ethan.may.config.Config;
 import lol.ethan.may.config.component.Component;
@@ -85,11 +95,12 @@ public final class Entry {
     }
 
     private static Minecraft getMinecraft() {
+        final Class<?> mcClass = Minecraft.class;
         try {
-            return (Minecraft) Minecraft.class.getMethod("getMinecraft").invoke(null);
+            return (Minecraft) mcClass.getMethod("getMinecraft").invoke(null);
         } catch (final Exception e) {
             try {
-                return (Minecraft) Minecraft.class.getMethod("func_71410_x").invoke(null);
+                return (Minecraft) mcClass.getMethod("func_71410_x").invoke(null);
             } catch (final Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -108,7 +119,6 @@ public final class Entry {
     }
 
     public static void load(final Instrumentation i, final ClassLoader loader) throws Exception {
-
         nanoTime = System.nanoTime();
         Entry.loader = loader;
         inst = i;
@@ -340,7 +350,7 @@ public final class Entry {
         CommandHandler.register(new SimulateCommand());
 
         final long nanoTimeNow = System.nanoTime();
-        final double diff = (((double) nanoTimeNow / 1000000.0) - ((double) nanoTime / 1000000.0)) / 1000.0;
+        final double diff = ((nanoTimeNow / 1000000.0) - (nanoTime / 1000000.0)) / 1000.0;
         Entry.chat(Entry.PREFIX + "injection finished! took " + String.format("%.2fs", diff));
 
         try {

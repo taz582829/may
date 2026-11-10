@@ -1,4 +1,4 @@
-package lol.ethan.may.asm.transformers;
+package lol.ethan.may.asm.transformers.render;
 
 import lol.ethan.may.asm.Transformer;
 import lol.ethan.may.events.render.RenderGameOverlayEvent;
@@ -17,12 +17,12 @@ public class GuiIngameHook extends Transformer {
     @Override
     public void transform(final ClassNode node) {
         for (final MethodNode method : node.methods) {
-            if (method.name.equals("renderGameOverlay") || method.name.equals("func_175180_a")) {
+            if ("renderGameOverlay".equals(method.name) || "func_175180_a".equals(method.name)) {
                 insertBeforeReturn(method, asm(a -> {
                     a.anew(Type.getType(RenderGameOverlayEvent.Post.class));
                     a.dup();
                     a.load(1, Type.FLOAT_TYPE);
-                    a.invokespecial(RenderGameOverlayEvent.Pre.class, "<init>", "(F)V");
+                    a.invokespecial(RenderGameOverlayEvent.Post.class, "<init>", "(F)V");
                     a.postEvent();
                     a.pop();
                 }));

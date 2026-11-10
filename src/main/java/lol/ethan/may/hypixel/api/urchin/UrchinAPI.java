@@ -57,7 +57,7 @@ public class UrchinAPI {
             final String ago = MayStringUtils.getTimeSince(timestamp, System.currentTimeMillis());
             final String tagText = MayStringUtils.capitalizeText(tag.getTagType());
             newComponent.appendText(getTagColor(tag.getTagType()) + tagText + " §8(" + ago + ")");
-            if (!tag.getTagType().equals("Replays Needed")) {
+            if (!"Replays Needed".equals(tag.getTagType())) {
                 newComponent.setChatStyle(style);
             }
 
@@ -80,7 +80,7 @@ public class UrchinAPI {
         }
     }
     public static String getTagIcon(final String tag) {
-        if (tag.equals("caution")) return EnumChatFormatting.GOLD + "⚠" + EnumChatFormatting.RESET;
+        if ("caution".equals(tag)) return EnumChatFormatting.GOLD + "⚠" + EnumChatFormatting.RESET;
         return getTagColor(tag) + "✹" + EnumChatFormatting.RESET;
     }
 }

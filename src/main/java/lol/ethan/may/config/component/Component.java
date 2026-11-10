@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import lol.ethan.may.config.Category;
 import lol.ethan.may.config.ClickGUI;
 import lol.ethan.may.config.ConfigEvent;
+import lol.ethan.may.render.huds.HUDHelper;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -18,11 +19,11 @@ public abstract class Component {
     public final Minecraft mc = Minecraft.getMinecraft();
     public float x, y;
 
-    public Component(final String name, final Category category) {
+    protected Component(final String name, final Category category) {
         this.name = name;
         this.category = category;
     }
-    public Component(final String name, final Category category, final String description) {
+    protected Component(final String name, final Category category, final String description) {
         this.name = name;
         this.category = category;
         this.description = new ArrayList<>(Arrays.asList(description.split("\n")));
@@ -49,4 +50,12 @@ public abstract class Component {
     }
     public abstract JsonElement serialize();
     public abstract void load(JsonElement element);
+    protected void drawName(final int componentX, final int componentY) {
+        this.mc.fontRendererObj.drawStringWithShadow(
+                this.name,
+                componentX + 12,
+                componentY + (this.componentHeight - this.mc.fontRendererObj.FONT_HEIGHT) / 2.0f,
+                -1
+        );
+    }
 }

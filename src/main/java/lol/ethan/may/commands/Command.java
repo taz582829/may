@@ -13,11 +13,11 @@ public abstract class Command {
     public String prefix = "/";
     public List<String> aliases = new ArrayList<>();
 
-    public Command(final String name) {
+    protected Command(final String name) {
         this.name = name;
     }
 
-    public Command(final String name, final String... aliases) {
+    protected Command(final String name, final String... aliases) {
         this.name = name;
         this.aliases.add(name);
         this.aliases.addAll(Arrays.asList(aliases));

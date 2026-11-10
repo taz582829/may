@@ -55,7 +55,7 @@ public class AntiInvis {
                 GL11.GL_SRC_ALPHA,
                 GL11.GL_ONE_MINUS_SRC_ALPHA
         );
-        GlStateManager.color(1F, 1F, 1F, 0.4F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 0.4F);
     }
     @SubscribeEvent
     public void onRenderModelPost(final RenderModelEvent.Post event) {
@@ -64,7 +64,7 @@ public class AntiInvis {
         }
         final EntityPlayer player = (EntityPlayer) event.getEntity();
         if (!AntiInvis.INVISIBLE.contains(player)) return;
-        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableBlend();
     }
 
